@@ -1,0 +1,133 @@
+#set($layout="login.vm")
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>XinyinTech</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="" />
+        <meta name="author" content="stilearning" />
+        <!-- google font -->
+		<link rel="shortcut icon" href="$request.getContextPath()/stilearn2.0/img/custom/favicon.png"/>
+        <link href="$request.getContextPath()/stilearn2.0/styles/aclonica-regular.css" rel="stylesheet" />
+        <!-- styles -->
+        <link href="$request.getContextPath()/stilearn2.0/styles/bootstrap.css" rel="stylesheet" />
+        <link href="$request.getContextPath()/stilearn2.0/styles/bootstrap-responsive.css" rel="stylesheet" />
+        <link href="$request.getContextPath()/stilearn2.0/styles/stilearn1.0/stilearn.css" rel="stylesheet" />
+        <link href="$request.getContextPath()/stilearn2.0/styles/stilearn-helper.css" rel="stylesheet" />
+        <link href="$request.getContextPath()/stilearn2.0/styles/stilearn-icon.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+    <body>
+        <!-- section header -->
+        <header class="header" data-spy="affix" data-offset-top="0">
+            <!--nav bar helper-->
+            <div class="navbar-helper">
+                <div class="row-fluid">
+                    <!--panel site-name-->
+                    <div class="span2">
+                        <div class="panel-sitename">
+                            <h2><a href="$request.getContextPath()/login.shtml"><span class="color-teal">Xinyin</span>Tech</a></h2>
+                        </div>
+                    </div>
+                    <!--/panel name-->
+                </div>
+            </div><!--/nav bar helper-->
+        </header>
+        <!-- section content -->
+        <section class="section">
+            <div class="container">
+                <div class="signin-form row-fluid">
+                    <!--Sign In-->
+                    <div class="span6 offset3">
+                        <div class="box corner-all">
+                            <div class="box-header grd-teal color-white corner-top">
+                                <span>用户登录</span>
+                            </div>
+                            <div class="box-body bg-white">
+                                <form id="sign-in" method="post" action="$request.getContextPath()/login.shtml" class="form-horizontal"/>
+									<br/>
+                                    <div class="control-group" >
+                                        <label class="control-label span3" >用户名</label>
+                                        <div class="control-text span7">
+                                            <input type="text" class="input-block-level" data-validate="{required: true, messages:{required:'请输入用户名'}}" 
+												name="username" id="login_username" autocomplete="off" maxlength="20" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label span3" >密码</label>
+                                        <div class="control-text span7">
+                                            <input type="password" class="input-block-level" data-validate="{required: true, messages:{required:'请输入密码'}}" 
+												name="password" id="login_password" autocomplete="off" maxlength="20" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="pull-right helper-font-32">
+                                            <a href="#" rel="tooltip-left" title="Sign in using twitter account"><i class="socialico-twitter-sign color-blue"></i></a>
+                                            <a href="#" rel="tooltip-left" title="Sign in using facebook account"><i class="socialico-facebook-sign color-sky"></i></a>
+                                        </div>
+                                        <label class="checkbox">
+                                            <input type="checkbox" data-form="uniform" name="remember_me" id="remember_me_yes" value="yes" /> 记住用户名和密码
+                                        </label>
+                                    </div>
+                                    <div class="control-group">
+                                        <input type="submit" class="btn btn-block btn-large btn-primary" value="登录" />
+                                        <p class="recover-account"><a href="#modal-recover" class="link" data-toggle="modal">找回密码</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div><!--/Sign In-->
+                </div><!-- /row -->
+            </div><!-- /container -->
+            
+            <!-- modal recover -->
+            <div id="modal-recover" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-recoverLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="modal-recoverLabel">找回密码</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="form-recover" method="post" class="form-horizontal"/>
+                        <div class="control-group">
+							<label class="control-label" style="width:160px;">用户名或邮箱地址</label>
+                            <div class="controls">
+                                <input type="text" name="recover"
+									data-validate="{required: true, email:true, messages:{required:'请输入电子邮件', email:'请输入有效的电子邮件地址'}}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+                    <input type="submit" form="form-recover" class="btn btn-primary" value="发送重置链接" />
+                </div>
+            </div><!-- /modal recover-->
+        </section>
+        <!-- javascript
+        ================================================== -->
+        <script src="$request.getContextPath()/stilearn2.0/scripts/custom/jquery.js"></script>
+        <script src="$request.getContextPath()/stilearn2.0/scripts/custom/bootstrap.js"></script>
+        <script src="$request.getContextPath()/stilearn2.0/scripts/custom/jquery.uniform.js"></script>
+        <script src="$request.getContextPath()/stilearn2.0/scripts/custom/jquery.metadata.js"></script>
+        <script src="$request.getContextPath()/stilearn2.0/scripts/custom/jquery.validate.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // try your js
+                // uniform
+                //$('[data-form=uniform]').uniform();
+                // validate
+                $('#sign-in').validate();
+                $('#sign-up').validate();
+                $('#form-recover').validate();
+            })
+			
+        </script>
+		##登录失败
+		#if($msg)
+			<script type="text/javascript">
+				var msg = "<label for='login_password' generated='true' class='text-error helper-font-small'>$!msg</label>";
+				$("#login_password").after(msg);
+            </script>
+		#end
+    </body>
+</html>

@@ -1,0 +1,106 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/user/recommend.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnEdit" onclick="agree();">
+						同意申请 <i class="glyphicon glyphicon-check"></i></button>
+					<button type="button" class="btn btn-success" id="btnAuth" onclick="reject();">
+						拒绝申请 <i class="glyphicon glyphicon-ban-circle"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">学生</th>
+						<th style="text-align:center;">班级</th>
+						<th style="text-align:center;">被推荐老师</th>
+						<th style="text-align:center;">审批状态</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+						<th style="text-align:center;">备注</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="10" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/user/recommend/";
+// 同意申请
+function agree(){
+	bootbox.confirm("确认同意？",function(sure){
+		if(sure){
+			var id;
+        	$("table.tablesorter tbody tr").each(function(){
+        		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+        			id = $(this).find("td:eq(0)").text();
+        			return false;
+        		}
+        	});
+			AjaxPost(globleUrl+"modify.shtml",{"id":id,isThroughApproval:1},function(msg){
+				initTableSorter(globleUrl+"data.shtml");
+				btnInit();
+				bootbox.alert(msg,function(){});
+			}); 
+		}
+	});
+}
+// 拒绝申请
+function reject(){
+	bootbox.confirm("确认拒绝？",function(sure){
+		if(sure){
+			var id;
+        	$("table.tablesorter tbody tr").each(function(){
+        		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+        			id = $(this).find("td:eq(0)").text();
+        			return false;
+        		}
+        	});
+			AjaxPost(globleUrl+"modify.shtml",{"id":id,isThroughApproval:2},function(msg){
+				initTableSorter(globleUrl+"data.shtml");
+				btnInit();
+				bootbox.alert(msg,function(){});
+			}); 
+		}
+	});
+}
+</script>

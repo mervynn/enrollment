@@ -1,0 +1,66 @@
+#set($layout="/wap/user/order/result.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>订单提交成功</title>
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" charset="utf-8" href="$request.getContextPath()/wap/css/header.css">
+	<link rel="stylesheet" type="text/css" charset="utf-8" href="$request.getContextPath()/wap/css/index.css">
+</head>
+  <body>
+    <div id="viewport">
+      <div id="m_common_header">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">订单提交成功</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class=" current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+      <div class="common-wrapper">
+          <div class="order-success">
+            <div class="suc-icon"></div>
+            <h3>提交成功，您已完成在线报名！</h3>
+            <div class="num">订单号码：$!orderId</div>
+			<div class="num">订单金额：￥$!totalFee</div>
+            <div class="tip">请到[石狮青少年活动中心]现场完成现金结算，否则一定时间内会被系统自动取消的哦！</div>
+            <div class="btns">
+              <a href="$request.getContextPath()/wap/user/order/list.shtml" class="btn">查看订单</a>
+              <a href="$request.getContextPath()/wap/index.shtml" class="btn">回首页</a></div>
+          </div>
+      </div>
+    </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

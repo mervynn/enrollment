@@ -1,0 +1,196 @@
+#set($layout="/wap/user/order/detail.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>订单详情</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/neworder.css?v=14" charset="gbk">
+    <link rel="stylesheet" type="text/css" charset="utf-8" href="$request.getContextPath()/wap/css/header.css?v=2.1">
+    <link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+</head>
+  <body id="body">
+    <a name="top"></a>
+    <header></header>
+    <title>订单详情</title>
+    <!--头部-->
+    <header class="jd-header">
+      <div class="jd-header-bar">
+        <div id="m_common_header_goback" class="jd-header-icon-back">
+          <span></span>
+        </div>
+        <div class="jd-header-title">订单详情</div>
+        <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+          <span></span>
+        </div>
+      </div>
+      <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+        <li id="m_common_header_shortcut_m_index">
+          <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+            <span class="shortcut-home"></span>
+            <strong>首页</strong></a>
+        </li>
+        <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+          <a href="$request.getContextPath()/wap/classtype.shtml">
+            <span class="shortcut-categories"></span>
+            <strong>分类搜索</strong></a>
+        </li>
+        <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+          <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+            <span class="shortcut-cart"></span>
+            <strong>选课车</strong></a>
+        </li>
+        <li id="m_common_header_shortcut_h_home" class=" current">
+          <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+            <span class="shortcut-my-account"></span>
+            <strong>个人中心</strong></a>
+        </li>
+      </ul>
+    </header>
+    <div class="common-wrapper pad55">
+      <!-- 通知中心 -->
+      <div id="makeLocation" style="display:none">
+        <div class="order-remind" id="orderRemind" style="display: none;">
+          <div class="order-remind-flex" id="orderRemindFlex">
+            <em class="order-remind-flex-pic-left"></em>
+            <span class="order-remind-flex-text">在线支付订单需在6小时内支付，否则订单将被取消。</span>
+            <em class="order-remind-flex-pic-right" id="closeRemind"></em>
+          </div>
+        </div>
+      </div>
+      <div id="remind-tip-pop" class="shipping-pop-floor">
+        <div class="cover-floor"></div>
+        <div id="remind-info-box" class="ship-info-box">
+          <h4 class="ship-tit"></h4>
+          <div class="ship-iteam"></div>
+          <p class="ship-ftw">我知道了</p></div>
+      </div>
+      <!-- 通知中心 结束-->
+      <!--订单信息栏-->
+      <div class="m step1 border-1px">
+        <div class="order-info-box">
+          <div class="mt  cf">
+            <div class="floatL">订单号:
+              <span class="s1-num">$!orderInfo.id</span></div>
+          </div>
+        </div>
+        <!--物流信息栏-->
+        <a id="orderTrack" class="a-link bdt-1px">
+          <div class="mc">
+            <div class="s1-l">
+              <div class="cf car-box">
+                <span class="car-icon"></span>
+                <p class="flex-content">感谢您在石狮青少年中心选课，欢迎您再次光临！</p></div>
+              <span class="s-point"></span>
+            </div>
+          </div>
+        </a>
+		#if($!orderInfo.status == 2)
+			<div class="signet"></div>
+		#end
+      </div>
+      <!--用户地址栏-->
+      <div class="step2 border-1px">
+        <div class="m step2-in ">
+          <div class="mt">
+            <div class="s2-name">
+              <i>
+              </i>$!studentInfo.name</div>
+            <div class="s2-phone">
+              <i>
+              </i>$!studentInfo.idcardNo</div>
+          </div>
+          <div class="mc step2-in-con">$!studentInfo.address</div></div>
+        <b class="s2-borderT"></b>
+        <b class="s2-borderB"></b>
+      </div>
+      <!--商品列表-->
+      <div class="m step3 border-1px">
+        <div class="mt cf">
+          <span class="shop-icon"></span>
+          <a id="shop" >
+            <span class="shop-name"></span>
+            <span class="s-point change-arrow"></span>
+          </a>
+        </div>
+        <div class="mc">
+			#set($suffix = ".shtml")
+			#foreach($obj in $classList)
+			  <a href="$request.getContextPath()/wap/class/detail/$obj.id$suffix" class="a-link">
+                <div class="s-item bdt-1px" style="display: block;">
+                  <div class="pdiv">
+                    <div class="sitem-l">
+                      <div class="sl-img-box">
+                        <div class="sl-img">
+                          <img src="$!obj.picture"></div>
+                      </div>
+                    </div>
+                    <div class="sitem-m">
+                      <p class="sitem-m-txt">$!obj.remarks</p>
+                      <p class="s3-num">x1</p></div>
+                    <div class="sitem-r">¥$!obj.tuitionFee</div></div>
+                </div>
+              </a>
+			#end
+          <div class="step3-more" style="display: none;">
+            <strong>还有
+              <i>0</i>件</strong>
+            <span class="s3-down"></span>
+          </div>
+        </div>
+      </div>
+      <!-- 联系客服 -->
+      <!-- 联系客服 -->
+      <div class="step4-contact bdb-1px" id="dongdong">
+        <a class="contact-a" id="contactCustom">
+          <i>
+          </i>联系客服</a>
+      </div>
+      <!--label展示-->
+      <div class="step5 border-1px">
+        <div class="s5-item-w bdb-1px">
+          <div class="s-item size15">
+            <div class="sitem-l">商品总额</div>
+            <div class="sitem-r">¥$!orderInfo.totalMoney</div></div>
+        </div>
+        <div class="s5-sum">
+          <div>实付款:
+            <span>¥$!orderInfo.totalMoney</span></div>
+          <p>下单时间:$!orderInfo.createDate</p>
+        </div>
+      </div>
+      <!--底部按钮 根据状态判断按钮显示个数 具体按钮是不是显示服务端下发字段判断-->
+    </div>
+    <!-- 确认收货弹框 -->
+    <div class="floor-w"></div>
+    <div class="jump-block shortblock" id="confirmPopup">
+      <span>是否确认已收到货品？</span>
+      <div class="cf">
+        <div class="cancel-button-box" id="cancelConfirmGoods">
+          <div class="cancel-button">取消</div></div>
+        <div class="true-button" id="confirmGoods">确定</div></div>
+    </div>
+    <!-- 取消订单弹框 -->
+    <div class="jump-block" id="cancelPopup">
+      <span>取消订单后，存在促销关系的子订单及优惠可能会一并取消。是否继续？</span>
+      <div class="cf">
+        <div class="cancel-button-box" id="cancel">
+          <div class="cancel-button">取消</div></div>
+        <div class="true-button" id="confirmCancel">确定</div></div>
+    </div>
+    <!-- 删除订单弹框 -->
+    <div class="jump-block shortblock" id="deletePopup">
+      <span>确认删除此订单？</span>
+      <div class="cf">
+        <div class="cancel-button-box" id="cancelDelete">
+          <div class="cancel-button">取消</div></div>
+        <div class="true-button" id="confirmDelete">确定</div></div>
+    </div>
+    <span class="black-content" id="tip"></span>
+  </body>
+    <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

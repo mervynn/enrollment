@@ -1,0 +1,66 @@
+#set($layout="/wap/index.vm")
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>会员登录</title>
+    <link rel="stylesheet" href="./css/mlogin.min.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon-precomposed" href="./img/favicon.png" /></head>
+  <body>
+    <!--禁止chrome自动填充-->
+    <input type="text" name="username" style="display:none;">
+    <input type="password" name="password" style="display:none;">
+    <header id="header" style="display:block;">
+      <span class="icon icon-goback"></span>会员登录</header>
+    <section class="page">
+      <div class="wrap loginPage">
+        <div class="input-container">
+          <input id="phonenumber" class="acc-input username txt-input J_ping" type="text" placeholder="已验证手机" autocomplete="off" onblur="CtoH(this);" report-eventid="MLoginRegister_Username">
+          <i class="icon icon-clear"></i>
+        </div>
+        <div class="input-container">
+          <input id="password" type="password" class="acc-input password txt-input J_ping" placeholder="请输入密码" autocomplete="off" report-eventid="MLoginRegister_Password" onkeyup="CtoH(this);">
+          <i class="icon icon-clear"></i>
+          <label for="onOff_pwd" class="label-checkbox J_ping" report-eventid="MLoginRegister_Plaintext">
+            <input id="onOff_pwd" type="checkbox">
+            <div class="checkbtn">
+              <span class="b-text">abc</span>
+              <span class="b-pwd">...</span></div>
+          </label>
+        </div>
+        <div id="input-code" class="input-container" style="display:;">
+          <input id="code" class="acc-input imgverify" type="text" placeholder="请输入验证码" autocomplete="off" onkeyup="CtoH(this);" size="11" maxlength="6">
+          <span class="code-box">
+            <img id="imgCode" src="./verify.shtml" alt=""></span>
+          <i class="icon icon-clear"></i>
+        </div>
+        <div class="notice">&nbsp;</div>
+        <a href="javascript:;" id="loginBtn" class="btn J_ping" report-eventid="MLoginRegister_Login">登 录</a>
+        <div class="quick-nav clearfix">
+          <a href="javascript:;" class="J_ping findpwd" report-eventid="MLoginRegister_FindPassword">
+            <i class="icon icon-clock"></i>找回密码</a>
+          <a href="javascript:;" class="J_ping quickReg" report-eventid="MLoginRegister_PhoneRegister">
+            <i class="icon icon-reg"></i>快速注册</a>
+        </div>
+    </section>
+    <div class="pop-dialog" style="display:none;">
+      <div class="pop-body">
+        <p class="pop-msg">您的账号存在安全风险，请前往电脑版验证账号</p>
+        <div class="pop-btns">
+          <a href="javascript:;" class="btn-pop btn-cancel">取消</a>
+          <a href="javascript:;" class="btn-pop btn-continue">继续注册</a></div>
+      </div>
+    </div>
+    <script>
+		var	_need_ck = true;
+    </script>
+    <script src="./js/zepto.min.js"></script>
+    <script src="./js/mlogin.min.js"></script>
+  </body>
+</html>

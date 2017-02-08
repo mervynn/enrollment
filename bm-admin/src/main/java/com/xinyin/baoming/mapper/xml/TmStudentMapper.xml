@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TmStudentMapper">
+	<!--实体映射-->
+	<resultMap id="tmStudentResultMap" type="com.xinyin.baoming.model.vo.TmStudent">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--证件类型-->
+		<result property="cardType" column="card_type" />
+		<!--身份证号码-->
+		<result property="idcardNo" column="idcard_no" />
+		<!--姓名-->
+		<result property="name" column="name" />
+		<!--性别-->
+		<result property="sex" column="sex" />
+		<!--是否石狮本地-->
+		<result property="isLocalOrNot" column="is_local_or_not" />
+		<!--家长姓名-->
+		<result property="parentName" column="parent_name" />
+		<!--家长手机号码-->
+		<result property="parentPhonenumber" column="parent_phonenumber" />
+		<!--所在学校id-->
+		<result property="schoolId" column="school_id" />
+		<!--就读年级-->
+		<result property="grade" column="grade" />
+		<!--头像-->
+		<result property="pictureUrl" column="picture_url" />
+		<!--出生日期-->
+		<result property="birthDate" column="birth_date" />
+		<!--家庭地址-->
+		<result property="address" column="address" />
+		<!--学籍号-->
+		<result property="studentCode" column="student_code" />
+		<!--是否是低保户-->
+		<result property="isLowincome" column="is_lowincome" />
+		<!--家庭电话-->
+		<result property="homePhone" column="home_phone" />
+		<!--账号id-->
+		<result property="accountId" column="account_id" />
+		<!--是否黑名单-->
+		<result property="isBlacklist" column="is_blacklist" />
+		<!--黑名单原因-->
+		<result property="blacklistReason" column="blacklist_reason" />
+		<!--黑名单原因图片-->
+		<result property="blacklistReasonUrl" column="blacklist_reason_url" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	card_type,	idcard_no,	name,	sex,	is_local_or_not,	parent_name,parent_phonenumber,	school_id,	grade,	picture_url,	birth_date,	address,	
+		 student_code,	is_lowincome,	home_phone,	account_id,	is_blacklist,	blacklist_reason,	blacklist_reason_url,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tmStudentResultMap">
+		 SELECT
+		 ts.id,	tc1.name card_type,	ts.idcard_no,	ts.name,tc2.name sex,	tc3.name is_local_or_not,	ts.parent_name,	tsc.name school_id,	tc6.name grade,	ts.picture_url,
+		 ts.birth_date,	ts.address,	ts.student_code,	tc4.name is_lowincome,	ts.home_phone,	ts.account_id,	tc5.name is_blacklist,	ts.blacklist_reason,
+		 ts.blacklist_reason_url,	ts.create_by,	ts.create_date,	ts.update_by,	ts.update_date,	ts.remarks,ts.parent_phonenumber
+		 FROM tm_student ts left join tm_school tsc
+		 on ts.school_id = tsc.id left join tc_code tc1
+		 on ts.card_type = tc1.sort and tc1.code = '7' left join tc_code tc2
+		 on ts.sex = tc2.sort and tc2.code = '4' left join tc_code tc3
+		 on ts.is_local_or_not = tc3.sort and tc3.code = '1' left join tc_code tc4
+		 on ts.is_lowincome = tc4.sort and tc4.code = '1' left join tc_code tc5
+		 on ts.is_blacklist = tc5.sort and tc5.code = '1' left join tc_code tc6
+		 on ts.grade = tc6.sort and tc6.code = '8'
+		 WHERE 1=1
+			<if test="id != null">
+				and ts.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="cardType != null">
+				and tc1.name like concat('%',#{cardType,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="idcardNo != null">
+				and ts.idcard_no like concat('%',#{idcardNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="name != null">
+				and ts.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="sex != null">
+				and tc2.name like concat('%',#{sex,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isLocalOrNot != null">
+				and tc3.name like concat('%',#{isLocalOrNot,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="parentName != null">
+				and ts.parent_name like concat('%',#{parentName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="parentPhonenumber != null">
+				and ts.parent_phonenumber like concat('%',#{parentPhonenumber,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="schoolId != null">
+				and tsc.name like concat('%',#{schoolId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="grade != null">
+				and tc6.name like concat('%',#{grade,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="pictureUrl != null">
+				and ts.picture_url like concat('%',#{pictureUrl,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="birthDate != null">
+				and ts.birth_date like concat('%',#{birthDate,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="address != null">
+				and ts.address like concat('%',#{address,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentCode != null">
+				and ts.student_code like concat('%',#{studentCode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isLowincome != null">
+				and tc4.name like concat('%',#{isLowincome,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="homePhone != null">
+				and ts.home_phone like concat('%',#{homePhone,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="accountId != null">
+				and ts.account_id like concat('%',#{accountId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isBlacklist != null">
+				and tc5.name like concat('%',#{isBlacklist,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="blacklistReason != null">
+				and ts.blacklist_reason like concat('%',#{blacklistReason,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="blacklistReasonUrl != null">
+				and ts.blacklist_reason_url like concat('%',#{blacklistReasonUrl,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and ts.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and ts.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and ts.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and ts.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and ts.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="tmStudentResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_student
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="cardType != null">
+				and card_type = #{cardType,jdbcType=VARCHAR}
+			</if>
+			<if test="idcardNo != null">
+				and idcard_no = #{idcardNo,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				and sex = #{sex,jdbcType=VARCHAR}
+			</if>
+			<if test="isLocalOrNot != null">
+				and is_local_or_not = #{isLocalOrNot,jdbcType=VARCHAR}
+			</if>
+			<if test="parentName != null">
+				and parent_name = #{parentName,jdbcType=VARCHAR}
+			</if>
+			<if test="parentPhonenumber != null">
+				and parent_phonenumber = #{parentPhonenumber,jdbcType=VARCHAR}
+			</if>
+			<if test="schoolId != null">
+				and school_id = #{schoolId,jdbcType=VARCHAR}
+			</if>
+			<if test="grade != null">
+				and grade = #{grade,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="birthDate != null">
+				and birth_date = #{birthDate,jdbcType=VARCHAR}
+			</if>
+			<if test="address != null">
+				and address = #{address,jdbcType=VARCHAR}
+			</if>
+			<if test="studentCode != null">
+				and student_code = #{studentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="isLowincome != null">
+				and is_lowincome = #{isLowincome,jdbcType=VARCHAR}
+			</if>
+			<if test="homePhone != null">
+				and home_phone = #{homePhone,jdbcType=VARCHAR}
+			</if>
+			<if test="accountId != null">
+				and account_id = #{accountId,jdbcType=VARCHAR}
+			</if>
+			<if test="isBlacklist != null">
+				and is_blacklist = #{isBlacklist,jdbcType=VARCHAR}
+			</if>
+			<if test="blacklistReason != null">
+				and blacklist_reason = #{blacklistReason,jdbcType=VARCHAR}
+			</if>
+			<if test="blacklistReasonUrl != null">
+				and blacklist_reason_url = #{blacklistReasonUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tmStudentResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_student
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tm_student
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TmStudent">
+		 DELETE FROM tm_student
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="cardType != null">
+				and card_type = #{cardType, jdbcType=VARCHAR}
+			</if>
+			<if test="idcardNo != null">
+				and idcard_no = #{idcardNo, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and name = #{name, jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				and sex = #{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="isLocalOrNot != null">
+				and is_local_or_not = #{isLocalOrNot, jdbcType=VARCHAR}
+			</if>
+			<if test="parentName != null">
+				and parent_name = #{parentName, jdbcType=VARCHAR}
+			</if>
+			<if test="parentPhonenumber != null">
+				and parent_phonenumber = #{parentPhonenumber,jdbcType=VARCHAR}
+			</if>
+			<if test="schoolId != null">
+				and school_id = #{schoolId, jdbcType=VARCHAR}
+			</if>
+			<if test="grade != null">
+				and grade = #{grade, jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl, jdbcType=VARCHAR}
+			</if>
+			<if test="birthDate != null">
+				and birth_date = #{birthDate, jdbcType=VARCHAR}
+			</if>
+			<if test="address != null">
+				and address = #{address, jdbcType=VARCHAR}
+			</if>
+			<if test="studentCode != null">
+				and student_code = #{studentCode, jdbcType=VARCHAR}
+			</if>
+			<if test="isLowincome != null">
+				and is_lowincome = #{isLowincome, jdbcType=VARCHAR}
+			</if>
+			<if test="homePhone != null">
+				and home_phone = #{homePhone, jdbcType=VARCHAR}
+			</if>
+			<if test="accountId != null">
+				and account_id = #{accountId, jdbcType=VARCHAR}
+			</if>
+			<if test="isBlacklist != null">
+				and is_blacklist = #{isBlacklist, jdbcType=VARCHAR}
+			</if>
+			<if test="blacklistReason != null">
+				and blacklist_reason = #{blacklistReason, jdbcType=VARCHAR}
+			</if>
+			<if test="blacklistReasonUrl != null">
+				and blacklist_reason_url = #{blacklistReasonUrl, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TmStudent">
+		 INSERT INTO tm_student
+ 		(id,	card_type,	idcard_no,	name,	sex,	is_local_or_not,	parent_name, parent_phonenumber,	school_id,	grade,	picture_url,
+ 			birth_date,	address,	student_code,	is_lowincome,	home_phone,	account_id,	is_blacklist,	blacklist_reason,	blacklist_reason_url,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{cardType},#{idcardNo},#{name},#{sex},#{isLocalOrNot},#{parentName},#{parentPhonenumber},#{schoolId},#{grade},#{pictureUrl},#{birthDate},#{address},#{studentCode},#{isLowincome},#{homePhone},#{accountId},#{isBlacklist},#{blacklistReason},#{blacklistReasonUrl},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TmStudent">
+		 INSERT INTO tm_student
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="cardType != null">
+				 card_type,
+			</if>
+			<if test="idcardNo != null">
+				 idcard_no,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="sex != null">
+				 sex,
+			</if>
+			<if test="isLocalOrNot != null">
+				 is_local_or_not,
+			</if>
+			<if test="parentName != null">
+				 parent_name,
+			</if>
+			<if test="parentPhonenumber != null">
+				 parent_phonenumber,
+			</if>
+			<if test="schoolId != null">
+				 school_id,
+			</if>
+			<if test="grade != null">
+				 grade,
+			</if>
+			<if test="pictureUrl != null">
+				 picture_url,
+			</if>
+			<if test="birthDate != null">
+				 birth_date,
+			</if>
+			<if test="address != null">
+				 address,
+			</if>
+			<if test="studentCode != null">
+				 student_code,
+			</if>
+			<if test="isLowincome != null">
+				 is_lowincome,
+			</if>
+			<if test="homePhone != null">
+				 home_phone,
+			</if>
+			<if test="accountId != null">
+				 account_id,
+			</if>
+			<if test="isBlacklist != null">
+				 is_blacklist,
+			</if>
+			<if test="blacklistReason != null">
+				 blacklist_reason,
+			</if>
+			<if test="blacklistReasonUrl != null">
+				 blacklist_reason_url,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="cardType!=null">
+				 #{cardType},
+			</if>
+			<if test="idcardNo!=null">
+				 #{idcardNo},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="sex!=null">
+				 #{sex},
+			</if>
+			<if test="isLocalOrNot!=null">
+				 #{isLocalOrNot},
+			</if>
+			<if test="parentName!=null">
+				 #{parentName},
+			</if>
+			<if test="parentPhonenumber != null">
+				 #{parentPhonenumber},
+			</if>
+			<if test="schoolId!=null">
+				 #{schoolId},
+			</if>
+			<if test="grade!=null">
+				 #{grade},
+			</if>
+			<if test="pictureUrl!=null">
+				 #{pictureUrl},
+			</if>
+			<if test="birthDate!=null">
+				 #{birthDate},
+			</if>
+			<if test="address!=null">
+				 #{address},
+			</if>
+			<if test="studentCode!=null">
+				 #{studentCode},
+			</if>
+			<if test="isLowincome!=null">
+				 #{isLowincome},
+			</if>
+			<if test="homePhone!=null">
+				 #{homePhone},
+			</if>
+			<if test="accountId!=null">
+				 #{accountId},
+			</if>
+			<if test="isBlacklist!=null">
+				 #{isBlacklist},
+			</if>
+			<if test="blacklistReason!=null">
+				 #{blacklistReason},
+			</if>
+			<if test="blacklistReasonUrl!=null">
+				 #{blacklistReasonUrl},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TmStudent">
+		 UPDATE tm_student
+ 		 <set> 
+			<if test="cardType != null">
+				 card_type = #{cardType},
+			</if>
+			<if test="idcardNo != null">
+				 idcard_no = #{idcardNo},
+			</if>
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="sex != null">
+				 sex = #{sex},
+			</if>
+			<if test="isLocalOrNot != null">
+				 is_local_or_not = #{isLocalOrNot},
+			</if>
+			<if test="parentName != null">
+				 parent_name = #{parentName},
+			</if>
+			<if test="parentPhonenumber != null">
+				 parent_phonenumber = #{parentPhonenumber},
+			</if>
+			<if test="schoolId != null">
+				 school_id = #{schoolId},
+			</if>
+			<if test="grade != null">
+				 grade = #{grade},
+			</if>
+			<if test="pictureUrl != null">
+				 picture_url = #{pictureUrl},
+			</if>
+			<if test="birthDate != null">
+				 birth_date = #{birthDate},
+			</if>
+			<if test="address != null">
+				 address = #{address},
+			</if>
+			<if test="studentCode != null">
+				 student_code = #{studentCode},
+			</if>
+			<if test="isLowincome != null">
+				 is_lowincome = #{isLowincome},
+			</if>
+			<if test="homePhone != null">
+				 home_phone = #{homePhone},
+			</if>
+			<if test="accountId != null">
+				 account_id = #{accountId},
+			</if>
+			<if test="isBlacklist != null">
+				 is_blacklist = #{isBlacklist},
+			</if>
+			<if test="blacklistReason != null">
+				 blacklist_reason = #{blacklistReason},
+			</if>
+			<if test="blacklistReasonUrl != null">
+				 blacklist_reason_url = #{blacklistReasonUrl},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tm_student
+		 SET 
+			card_type = #{cardType},
+			idcard_no = #{idcardNo},
+			name = #{name},
+			sex = #{sex},
+			is_local_or_not = #{isLocalOrNot},
+			parent_name = #{parentName},
+			parent_phonenumber = #{parentPhonenumber},
+			school_id = #{schoolId},
+			grade = #{grade},
+			picture_url = #{pictureUrl},
+			birth_date = #{birthDate},
+			address = #{address},
+			student_code = #{studentCode},
+			is_lowincome = #{isLowincome},
+			home_phone = #{homePhone},
+			account_id = #{accountId},
+			is_blacklist = #{isBlacklist},
+			blacklist_reason = #{blacklistReason},
+			blacklist_reason_url = #{blacklistReasonUrl},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+</mapper>

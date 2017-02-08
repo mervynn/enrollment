@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        #parse("/layout/builder.vm")
+    </head>
+    <body class="animated fadeIn">
+		<!-- section header -->
+		<header class="header">
+			#parse("/layout/header.vm")
+        </header>
+        <!-- content section -->
+        <section class="section">
+			<!-- DONT FORGET REPLACE IT FOR PRODUCTION! -->
+			<aside class="side-left">
+				#parse("/layout/left.vm")
+            </aside>
+			<div class="content">
+				<div class="content-header">
+					#parse("/layout/cheader.vm")
+                </div>
+				<!-- content-control -->
+                <div class="content-control">
+					#parse("/layout/ccontrol.vm")
+                </div>
+                <div class="content-body">
+                    $screen_content
+				</div>
+			</div>
+        </section>
+		<!-- side-right -->
+        <aside class="side-right">
+			#parse("/layout/right.vm")
+		</aside>
+        #parse("/layout/footer.vm")
+	</body>
+</html>

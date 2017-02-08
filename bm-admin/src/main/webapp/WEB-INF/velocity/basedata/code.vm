@@ -1,0 +1,185 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/basedata/code.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+    <div class="panel-heading bg-white">
+        <div class="panel-actions" >
+            <button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+                <i class="fa fa-expand"></i>
+            </button>
+            <button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <button data-close="#panel-tablesorter" title="close" class="btn-panel">
+                <i class="fa fa-times"></i>
+            </button>
+        </div><!-- /panel-actions -->
+        <h3 class="panel-title">&nbsp;</h3>
+    </div><!-- /panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+    		<div class="col-xs-12">
+    			<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnChooseAll" onclick="chooseAll();">
+						全选 <i class="fa fa-check"></i></button>
+    				<button type="button" class="btn btn-success" id="btnAdd" onclick="accessAddModule();"
+						data-toggle="modal" href="#editModal">
+						添加 <i class="fa fa-plus"></i></button>
+        			<button type="button" class="btn btn-success" id="btnEdit" onclick="accessEditModule(1);"
+						data-toggle="modal" href="#editModal">
+						修改 <i class="fa fa-edit"></i></button>
+        			<button type="button" class="btn btn-success" id="btnDel" onclick="doDel();">
+						删除 <i class="fa fa-times"></i></button>
+                </div>
+    		</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+    	</div>
+        <div class="table-responsive table-responsive-datatables">
+        	<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">常量代码</th>
+						<th style="text-align:center;">排序</th>
+						<th style="text-align:center;">常量名称</th>
+						<th style="text-align:center;">英文名称</th>
+						<th style="text-align:center;">类型</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+                <tfoot>
+                    <tr>
+                        <th colspan="5" class="ts-pager form-horizontal">
+                            #parse("/layout/page.vm")
+                        </th>
+                    </tr>
+                </tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+        </div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" tabindex="-1">
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">常量代码:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="code" required maxlength="3"/>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">排序:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="sort" required maxlength="3"/>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">常量名称:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="name" required maxlength="200"/>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">英文名称:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="englishName" required maxlength="64" />
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">类型:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="type" required maxlength="64" />
+								</div>
+                            </div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+							 取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button">
+							 保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/basedata/code/";
+title = "系统常量";
+
+// 进入添加
+function preAdd(){
+	$("#editModal input[name='code']").attr("readonly",false);
+	$("#editModal input[name='sort']").attr("readonly",false);
+}
+
+// 服务端校验
+function serverValid(validFlag,validSuccess,flag){
+	var code = $("input[name='code']");
+	var sort = $("input[name='sort']");
+	if(flag == 1 && $(code).val() != "" && $(sort).val() != ""){
+		jQuery.get("$request.getContextPath()/basedata/code/valid/" + $(code).val() + "/" + $(sort).val() + ".shtml",function(msg){
+			// 所有校验通过时
+			if(!msg && validFlag){
+				validSuccess(flag);
+			}else{
+				// 后台校验失败时，提示消息，文本变红
+				if(msg){
+					$(code).addClass("text-danger");
+					$(sort).addClass("text-danger");
+					if($(code).next().length==0){
+    					$(code).after("<label for='code' class='text-danger'>"+msg+"</label>");
+						$(sort).after("<label for='sort' class='text-danger'>"+msg+"</label>");
+    				}else{
+    					$(code).next().text(msg);
+						$(sort).next().text(msg);
+    					$(code).next().show();
+						$(sort).next().show();
+    				}
+				}
+			}
+		});
+	}else if(flag != 1 && validFlag){
+		validSuccess(flag);
+	}
+}
+
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='code']").val(msg.code);
+	$("#editModal input[name='sort']").val(msg.sort);
+	$("#editModal input[name='name']").val(msg.name);
+	$("#editModal input[name='englishName']").val(msg.englishName);
+	$("#editModal input[name='type']").val(msg.type);
+	$("#editModal input[name='code']").attr("readonly",true);
+	$("#editModal input[name='sort']").attr("readonly",true);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var code = $(this).find("td:eq(0)").text();
+		var sort = $(this).find("td:eq(1)").text();
+		var name = $(this).find("td:eq(2)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"code":code,"sort":sort,"name":name});
+		}
+	});
+	return idArr;
+}
+</script>

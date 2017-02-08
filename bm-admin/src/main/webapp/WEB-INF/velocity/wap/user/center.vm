@@ -1,0 +1,164 @@
+#set($layout="/wap/user/center.vm")
+<html>
+  <head>
+    <title>个人中心</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base2013.css?v=14" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/mycenter.css?v=14" charset="gbk">
+    <link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/header.css?v=14" charset="utf-8">
+</head>
+  <body id="body">
+    <a name="top"></a>
+    <header>
+      <!-- 通用头 div -->
+      <div id="m_common_header" style="min-height:45px;">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">个人中心</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class=" current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+    </header>
+    <a name="top"></a>
+    <div class="common-wrapper">
+      <div class="head-img">
+        <!--个人中心-个人区域-->
+        <div class="my-id-pic">
+          <img src="$request.getContextPath()/wap/img/575e6478Ndde43dd8.png"></div>
+        <a id="userimage">
+          <div class="my-info cf">
+            <span class="my-img">
+			  #if($!curStudent.pictureUrl != "")
+				<img src="$!curStudent.pictureUrl"></span>
+			  #else
+				<img src="../img/defaul.png"></span>
+			  #end
+            <div class="my-person-info">
+              <p class="my-jd-head-name">$user.id</p>
+              <p class="my-jd-head-type">$!curStudent.name</p>
+            </div>
+          </div>
+        </a>
+
+        <!--我的关注结束--></div>
+      <!--个人中心-个人区域结束-->
+      <!--个人中心-我的订单-->
+      <div class="myJD-content">
+        <ul class="bdbr-1px bdbt-1px">
+          <li class="myJD-banner bdbr-1px">
+            <a id="wodedingdan" href="./shoppingcart.shtml" class="myJD-link">
+              <div class="my-item cf">
+                <div class="fl">
+                  <span class="couponIn-icon w-15">
+                    <img src="$request.getContextPath()/wap/img/57147ba3Ne2fccde3.png"></span>
+                  <span class="myJD-Order">我的选课车</span></div>
+              </div>
+            </a>
+          </li>
+		  <li class="myJD-banner bdbr-1px">
+            <a id="wodedingdan" href="./order/list.shtml" class="myJD-link">
+              <div class="my-item cf">
+                <div class="fl">
+                  <span class="couponIn-icon w-15">
+                    <img src="$request.getContextPath()/wap/img/57147ba3Ne2fccde3.png"></span>
+                  <span class="myJD-Order">我的订单</span></div>
+                <div class="fr">
+                  <span class="myJD-AllOrder">全部订单</span>
+                  <span class="myJD-arrow"></span>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!--个人中心-服务反馈会员-->
+      <div class="myJD-content">
+        <ul class="in-list bdbr-1px bdbt-1px">
+          <a href="./student/list.shtml">
+            <li>
+              <div class="in-item  my-item">
+                <div class="couponIn-icon w-18">
+                  <img src="$request.getContextPath()/wap/img/57147bf1N90443ef3.png"/></div>
+                <div class="in-item-info my-item bdbr-1px ">
+                  <div class="fl">
+                    <span class="myJD-Order">学生资料管理</span></div>
+                  <div class="fr">
+                    <span class="myJD-arrow"></span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </a>
+		  <a href="./changepassword/one.shtml">
+            <li>
+              <div class="in-item  my-item">
+                <div class="couponIn-icon w-18">
+                  <img src="$request.getContextPath()/wap/img/57147bf1N90443ef3.png"/></div>
+                <div class="in-item-info my-item bdbr-1px ">
+                  <div class="fl">
+                    <span class="myJD-Order">修改密码</span></div>
+                  <div class="fr">
+                    <span class="myJD-arrow"></span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </a>
+		  <a href="../logout.shtml">
+            <li>
+              <div class="in-item  my-item">
+                <div class="couponIn-icon w-18">
+                  <img src="$request.getContextPath()/wap/img/57147bf1N90443ef3.png"/></div>
+                <div class="in-item-info my-item bdbr-1px ">
+                  <div class="fl">
+                    <span class="myJD-Order">退出登陆</span></div>
+                </div>
+              </div>
+            </li>
+          </a>
+        </ul>
+      </div>
+      <!--个人中心-服务反馈会员结束-->
+	  <div id="m_common_bottom" style="min-height:170px;">
+		<footer id="m_common_bottom_jd_footer" class="jd-footer">
+			<div class="jd-footer-copyright">Copyright © 2016 歆音科技xinyin.tech 版权所有 </div>
+		</footer>
+      </div>
+    </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

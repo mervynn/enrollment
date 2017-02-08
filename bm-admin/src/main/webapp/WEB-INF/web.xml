@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+
+	<display-name>admin</display-name>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring.xml</param-value>
+	</context-param> 
+	<!-- 字符集转换 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- XSS过滤器 会导致DB字段容量不够异常 暂不配置 -->
+	<!-- <filter>
+	     <filter-name>XssSqlFilter</filter-name>  
+	     <filter-class>com.gh.filter.XssFilter</filter-class>  
+	</filter>  
+	<filter-mapping>  
+	     <filter-name>XssSqlFilter</filter-name>  
+	     <url-pattern>/*</url-pattern>  
+	     <dispatcher>REQUEST</dispatcher>  
+	</filter-mapping>  -->
+	<!-- 用户权限过滤器 -->
+	<filter>
+	    <filter-name>userAuthorityFilter</filter-name>
+	    <filter-class>com.xinyin.baoming.filter.UserAuthorityFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	    <filter-name>userAuthorityFilter</filter-name>
+	    <url-pattern>*.shtml</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 防止spring内存溢出监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	<servlet>
+		<description>spring mvc servlet</description>
+		<servlet-name>rest</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				classpath:spring-mvc.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>rest</servlet-name>
+		<url-pattern>*.shtml</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>sequenceShare</servlet-name>
+		<servlet-class>com.xinyin.baoming.filter.SequenceServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<!-- 配置session超时时间，单位分钟 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<error-page>
+    	<error-code>403</error-code>
+    	<location>/403.jsp</location>
+  	</error-page>
+	<error-page>
+    	<error-code>404</error-code>
+    	<location>/404.jsp</location>
+  	</error-page>
+  	<error-page>
+    	<error-code>405</error-code>
+    	<location>/405.jsp</location>
+  	</error-page>
+  	<error-page>
+	    <error-code>500</error-code>
+	    <location>/500.jsp</location>
+  	</error-page>
+  	<error-page>
+	    <error-code>503</error-code>
+	    <location>/503.jsp</location>
+  	</error-page>
+</web-app>

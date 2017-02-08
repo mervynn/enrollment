@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TtRecommendMapper">
+	<!--实体映射-->
+	<resultMap id="ttRecommendResultMap" type="com.xinyin.baoming.model.vo.TtRecommend">
+		<!--内容编号-->
+		<id property="id" column="id" />
+		<!--学生id-->
+		<result property="studentId" column="student_id" />
+		<!--班级id-->
+		<result property="classId" column="class_id" />
+		<result property="teacherId" column="teacher_id" />
+		<!--是否通过审批-->
+		<result property="isThroughApproval" column="is_through_approval" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	student_id,	class_id,	teacher_id,	is_through_approval,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="ttRecommendResultMap">
+		 SELECT
+		 TR.id,	TS.name student_id,	concat(TCT.name,TC.`code`,'班') class_id,TT.NAME teacher_id,	TCO.NAME is_through_approval,	TR.create_by,	TR.create_date,	TR.update_by,	TR.update_date,	TR.remarks
+		 FROM tt_recommend TR LEFT JOIN TM_STUDENT TS
+		 ON TR.student_id = TS.id LEFT JOIN TM_CLASS TC
+		 ON TR.class_id = TC.ID LEFT JOIN TM_TEACHER TT
+		 ON TR.teacher_id = TT.id LEFT JOIN TC_CODE TCO
+		 ON TR.is_through_approval = TCO.`sort` AND TCO.code = '11' LEFT JOIN TM_CLASS_TYPE TCT
+		 ON TC.CLASS_TYPE_ID = TCT.ID
+		 WHERE 1=1
+			<if test="id != null">
+				and TR.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and TS.NAME like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classId != null">
+				and TC.remarks like concat('%',#{classId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="teacherId != null">
+				and TT.NAME like concat('%',#{teacherId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isThroughApproval != null">
+				and TCO.NAME like concat('%',#{isThroughApproval,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and TR.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and TR.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and TR.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and TR.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and TR.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="ttRecommendResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_recommend
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId,jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId,jdbcType=VARCHAR}
+			</if>
+			<if test="teacherId != null">
+				and teacher_id = #{teacherId,jdbcType=VARCHAR}
+			</if>
+			<if test="isThroughApproval != null">
+				and is_through_approval = #{isThroughApproval,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="ttRecommendResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_recommend
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tt_recommend
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TtRecommend">
+		 DELETE FROM tt_recommend
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId, jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId, jdbcType=VARCHAR}
+			</if>
+			<if test="teacherId != null">
+				and teacher_id = #{teacherId, jdbcType=VARCHAR}
+			</if>
+			<if test="isThroughApproval != null">
+				and is_through_approval = #{isThroughApproval, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TtRecommend">
+		 INSERT INTO tt_recommend
+ 		(id,	student_id,	class_id,	teacher_id,	is_through_approval,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{studentId},#{classId},#{teacherId},#{isThroughApproval},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TtRecommend">
+		 INSERT INTO tt_recommend
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="studentId != null">
+				 student_id,
+			</if>
+			<if test="classId != null">
+				 class_id,
+			</if>
+			<if test="teacherId != null">
+				 teacher_id,
+			</if>
+			<if test="isThroughApproval != null">
+				 is_through_approval,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="studentId!=null">
+				 #{studentId},
+			</if>
+			<if test="classId!=null">
+				 #{classId},
+			</if>
+			<if test="teacherId!=null">
+				 #{teacherId},
+			</if>
+			<if test="isThroughApproval!=null">
+				 #{isThroughApproval},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TtRecommend">
+		 UPDATE tt_recommend
+ 		 <set> 
+			<if test="studentId != null">
+				 student_id = #{studentId},
+			</if>
+			<if test="classId != null">
+				 class_id = #{classId},
+			</if>
+			<if test="teacherId != null">
+				 teacher_id = #{teacherId},
+			</if>
+			<if test="isThroughApproval != null">
+				 is_through_approval = #{isThroughApproval},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tt_recommend
+		 SET 
+			student_id = #{studentId},
+			class_id = #{classId},
+			teacher_id = #{teacherId},
+			is_through_approval = #{isThroughApproval},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+</mapper>

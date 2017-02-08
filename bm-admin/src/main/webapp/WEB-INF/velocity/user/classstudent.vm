@@ -1,0 +1,116 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/user/classstudent.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">班级</th>
+						<th style="text-align:center;">学生</th>
+						<th style="text-align:center;">证件号码</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="8" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" >
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">班级id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classId" number="true" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学生id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="studentId" number="true" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">备注:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remarks" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" >
+					保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/user/classstudent/";
+title = "班级学生关联表";
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal input[name='classId']").val(msg.classId);
+	$("#editModal input[name='studentId']").val(msg.studentId);
+	$("#editModal input[name='remarks']").val(msg.remarks);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+</script>

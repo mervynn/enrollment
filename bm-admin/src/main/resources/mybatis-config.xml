@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 强制指定MyBatis使用log4j作为日志日志框架，若不指定那么当部署到如Tomcat等应用容器时，
+		   会被容器设置为使用common-logging来记录日志，则无法打印出mybatis的SQL -->
+    <settings>
+        <setting name="logImpl" value="LOG4J" />
+    </settings>
+</configuration>

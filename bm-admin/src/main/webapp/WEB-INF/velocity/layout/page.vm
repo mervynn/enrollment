@@ -1,0 +1,12 @@
+<button type="button" class="btn btn-default btn-sm first"><i class="icon-step-backward fa fa-angle-double-left"></i></button>
+<button type="button" class="btn btn-default btn-sm prev"><i class="icon-arrow-left fa fa-angle-left"></i></button>
+<span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+<button type="button" class="btn btn-default btn-sm next"><i class="icon-arrow-right fa fa-angle-right"></i></button>
+<button type="button" class="btn btn-default btn-sm last"><i class="icon-step-forward fa fa-angle-double-right"></i></button>
+<select class="pagesize input-sm" title="Select page size">
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+</select>
+<select class="gotoPage pagenum input-sm" title="Select page number"></select>

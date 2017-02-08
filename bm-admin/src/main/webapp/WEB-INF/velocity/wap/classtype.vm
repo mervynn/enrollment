@@ -1,0 +1,123 @@
+#set($layout="/wap/classtype.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>班级类型</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <meta name="author" content="m.jd.com">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="description" content="班级类型">
+    <meta name="Keywords" content="班级类型">
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/layout2015.css" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/category_new.css" charset="gbk"></head>
+  <body class="hide-landing">
+    <a id="layout_top" name="top"></a>
+    <div search_land_searchtransformation_show="true" id="containerTop" class="top-bar-container" style="display: block; position: static;">
+      <header>
+        <div class="jd-header-bar 
+					#if($keyword)
+						on-focus
+					#else
+						on-blur
+				    #end
+					" id="layout_search_head">
+          <div id="layout_search_bar_cancel" class="jd-header-icon-cancel">
+            <span>取消</span></div>
+          <div id="layout_urlblack" class="jd-header-icon-back">
+            <span>返回</span></div>
+          <form action="$request.getContextPath()/wap/class/list.shtml" id="layout_searchForm" class="jd-header-search-form" method="post">
+            <div class="jd-header-search-box">
+              <div class="jd-header-search-input">
+                <input id="layout_newkeyword" maxlength="20" name="keyword" type="text" cleardefault="no" autocomplete="off" value="" placeholder="" class="hilight1">
+              <a href="javascript:void(0);" class="jd-header-icon-close" style="display:none;" id="layout_clear_keyword"></a>
+            </div>
+            <a href="javascript:void(0)" id="layout_search_submit" 
+							#if($!keyword == "")
+								style="display:none" 
+							#end
+						class="jd-header-icon-search"><span>搜索</span></a>
+          </form>
+          <div class="jd-header-icon-shortcut J_ping" report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="category" id="layout_jdKey">
+            <span>导航键</span></div>
+        </div>
+        <ul id="layout_jdBar" class="jd-header-shortcut" style="display: none;">
+          <li>
+            <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="category" href="$request.getContextPath()/wap/index.shtml">
+              <span class="shortcut-home"></span>
+              <strong>首页</strong></a>
+          </li>
+          <li class="current">
+            <a class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="category" href="$request.getContextPath()/wap/classtype.shtml">
+              <span class="shortcut-categories"></span>
+              <strong>分类搜索</strong></a>
+          </li>
+          <li>
+            <a class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="category" href="$request.getContextPath()/wap/user/shoppingcart.shtml">
+              <span class="shortcut-cart"></span>
+              <strong>选课车</strong></a>
+          </li>
+          <li>
+            <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="category" href="$request.getContextPath()/wap/user/center.shtml">
+              <span class="shortcut-my-account"></span>
+              <strong>个人中心</strong></a>
+          </li>
+        </ul>
+      </header>
+    </div>
+    <div id="categoryBody" class="category-viewport">
+      <div id="rootList" class="jd-category-tab">
+        <div style="overflow: hidden; height: 622px;" id="category8">
+          <ul style="transform: translateY(0px);" id="category7">
+			#set($suffix = ".shtml")
+			#foreach($obj in $leftTree)
+				#if($!lastParent.id == $!obj.id)
+			<li class="cur" m_index="1" m_cid="-10086">
+				#else
+			<li m_index="1" m_cid="-10086">	
+				#end
+				<a class="J_ping" report-eventparam="-10086" report-eventid="MCategory_1st" href="$request.getContextPath()/wap/classtype/$!obj.id$suffix">$!obj.name</a></li>
+			#end
+          </ul>
+        </div>
+      </div>
+      <div class="jd-category-content">
+        <div id="branchScroll" style="overflow: hidden; height: 622px;" class="jd-category-content-wrapper">
+          <div id="branchList" style="transform: translateY(0px);">
+            <div class="jd-category-div cur">
+              <h4>$!lastParent.name</h4>
+              <ul class="jd-category-style-1">
+				#foreach($obj in $rightTree)
+                <li>
+                  <a class="J_ping" report-eventparam="/products/0-44449999-655.html" report-eventid="MCategory_Recommend" id="branch_41" 
+						href="$request.getContextPath()/wap/classtype/$!obj.id$suffix">
+                    <img src="$!obj.pictureUrl" id="Imglazyload55">
+                    <span>$!obj.name</span></a>
+                </li>
+				#end
+              </ul>
+            </div>
+          </div>
+          <div id="category9" class="jd-category-loadfail" style="display:none;">
+            <div class="loadfail-content">
+              <div class="failing"></div>
+              <span>加载失败</span>
+              <a href="javascript:void(0);" id="category10" class="btn-loadfail"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="jd-loading-mask" search_land_searchtransformation_show="true" id="pageLoading"></div>
+    <footer search_land_searchtransformation_show="true" style="display: none;height ： 0px;"></footer>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

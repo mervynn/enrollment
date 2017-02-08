@@ -1,0 +1,28 @@
+<ul class="sidebar">
+    #foreach( $menu in $request.getSession().getAttribute("userMenuRoots") )
+		#if($menu.getMenus().size() != 0)
+        	<li>
+    			<a>
+                    <i class="sidebar-icon $menu.jsSel"></i>
+                    <span class="sidebar-text">$menu.menuName</span>
+                </a>
+    			<ul class="sidebar-child animated flipInY">
+            	#foreach($menu1 in $menu.getMenus())
+    				<li>
+                        <a href="$request.getContextPath()$menu1.menuHref" data-pjax=".content-body">
+                            <span class="sidebar-text">$menu1.menuName</span>
+                        </a>
+                    </li><!--/child-item-->
+    			#end
+                </ul>
+        	</li>
+		#else
+			<li>
+                <a href="$request.getContextPath()$menu.menuHref" data-pjax=".content-body">
+                    <i class="sidebar-icon $menu.jsSel"></i>
+                    <span class="sidebar-text">$menu.menuName</span>
+                </a>
+            </li><!--/sidebar-item-->
+		#end
+	#end
+</ul>

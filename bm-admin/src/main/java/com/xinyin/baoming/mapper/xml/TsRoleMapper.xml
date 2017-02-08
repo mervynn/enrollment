@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TsRoleMapper">
+	<resultMap id="BaseResultMap" type="com.xinyin.baoming.model.vo.TsRole" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap type="com.xinyin.baoming.model.vo.TsRoleAuth" id="authRoleRulesMap">
+	<result property="roleId" column="role_id"/>
+	<result property="menuId" column="menu_id"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, role_name, create_by, create_date, update_by, update_date
+  </sql>
+  <select id="selectAuthRoleList" resultMap="BaseResultMap" parameterType="com.xinyin.baoming.model.vo.TsUser">
+    select 
+    <include refid="Base_Column_List" />
+    from ts_role
+    where 1=1
+    <if test="roleId != null" >
+        AND role_id like concat('%',#{roleId,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="roleName != null" >
+        AND role_name like concat('%',#{roleName,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="createBy != null" >
+        AND create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="createDateStr != null" >
+        AND create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="updateBy != null" >
+        AND update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="updateDateStr != null" >
+        AND update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%') 
+      </if>
+  </select>
+  <select id="selectAllRoles" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ts_role
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ts_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ts_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xinyin.baoming.model.vo.TsRole" >
+    insert into ts_role (role_id, role_name, create_by, 
+      create_date, update_by, update_date
+      )
+    values (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TsRole" >
+    insert into ts_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      role_id,
+      role_name,
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{roleId,jdbcType=VARCHAR},
+      #{roleName,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR},
+      #{updateDate,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TsRole" >
+    update ts_role
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyin.baoming.model.vo.TsRole" >
+    update ts_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAuthRoleRules" resultMap="authRoleRulesMap" parameterType="java.lang.String">
+		SELECT
+			role_id,
+			menu_id
+		FROM
+			ts_role_auth
+		WHERE
+			role_id = #{roleId,jdbcType=VARCHAR}
+   </select>
+   <delete id="deleteRoleAuth" parameterType="java.lang.String">
+		DELETE FROM ts_role_auth WHERE role_id = #{roleId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insertRoleAuth" parameterType="com.xinyin.baoming.model.vo.TsRole">
+		INSERT INTO ts_role_auth (
+			role_id,
+			menu_id
+		) VALUES(
+			#{roleId,jdbcType=VARCHAR},
+			#{menuId,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

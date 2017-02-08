@@ -1,0 +1,121 @@
+#set($layout="/wap/user/getpassword/two.vm")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="yes" name="apple-touch-fullscreen"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>找回密码</title>
+    <link rel="stylesheet" href="../../css/mfindpwd.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon-precomposed" href="../../img/favicon.png"/>
+</head>
+<body>
+    <header id="header" style="display:block;"><span class="icon icon-goback"></span>找回密码</header>
+    <section class="page">
+        <div class="wrap findpwdPage">
+            <p class="page-notice">$noticeMsg</p>
+            <p class="page-txt"></p>
+            <div class="input-box">
+                <div class="input-container">
+                    <input id="mesCode" class="acc-input small-input J_ping" type="text" placeholder="请输入验证码" autocomplete="off" report-eventid="MLoginRegister_PhoneFindMsg">
+                    <i class="icon icon-clear"></i>
+                </div>
+                <button id="getMesCode" class="getMes-btn">获取短信验证码</button>
+            </div>
+            <a href="javascript:;" id="sureBtn" class="btn J_ping" report-eventid="MLoginRegister_FindPasswordNext">下一步</a>
+            <input type="hidden" value="0" id="showSwitch">
+            <div class="question-box">
+                <p id="retrieve-pwd">遇到问题？请<a href="tel:4006065500" class="J_ping" report-eventid="MLoginRegister_PhoneFindHelp">联系客服</a></p>
+                <p id="retrieveway" class="question clearfix">
+                    <a href="/cgi-bin/m/mfindpwdsendemail" class="J_ping" report-eventid="MLoginRegister_FindByMailClick">通过邮箱找回</a>
+                    <a href="tel:4006065500" class="J_ping" report-eventid="MLoginRegister_PhoneFindHelp">联系客服</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="toast-mask">
+        <div class="toast">
+        </div>
+    </div>
+</body>
+<script src="../../js/zepto.min.js"></script>
+<script src="../../js/findpwdCommon.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/wap/js/common.js"></script>
+<!---找回密码部分公用js-->
+<script>
+//底部遇到问题提示
+if($('#showSwitch').val()==1){
+    $('#retrieveway').show();
+    $('#retrieve-pwd').hide();
+}else{
+    $('#retrieveway').hide();
+    $('#retrieve-pwd').show();
+}
+
+//获取验证码
+function getCode(){
+	jQuery.ajax({
+		url: '../../sms/sendcode.shtml',
+		type:'get',
+		dataType:'json',
+		data:null,
+		success: function(res){
+            if(res.code==0){
+                toast("$noticeMsg");
+                timers(119);
+            }else{
+				toast(res.msg);
+            }
+		},
+		error: function(){
+			toast('网络有问题,请重新发送');
+		}
+	});
+}
+getCode();
+$('#getMesCode').on('click',function(){
+    if($(this).hasClass('getMes-btn-disable')){
+        return false;
+    }else{
+        getCode();
+    }
+});
+
+//发送数据
+var sendData ={};
+$('#sureBtn').click(function() {
+	if (!$(this).hasClass('btn-active')){
+        return false;
+	}else{
+        sendData.smscodee = $.trim($('#mesCode').val());
+        $.ajax({
+            url: '../../sms/verify.shtml',
+            type: 'post',
+            data : sendData,
+            dataType : 'json',
+            success:function(res){
+                if(res.code==0){
+                    setTimeout(function(){
+                        window.open(res.succcb,'_self');
+                    },100);
+                }else if(res.code==115){
+                    setTimeout(function(){
+                        window.open(res.succcb,'_self');
+                    },100);
+                }else{
+                    toast(res.msg);
+                }
+            },
+            error: function(){
+                toast('网络有问题，请重新发送');
+            }
+        });
+	}
+});
+</script>
+</html>

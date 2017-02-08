@@ -1,0 +1,155 @@
+#set($layout="/wap/user/order/edit.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>填写订单</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/main.css">
+	<link rel="stylesheet" href="$request.getContextPath()/wap/css/baseforpay.css">
+    <link rel="stylesheet" href="$request.getContextPath()/wap/css/pay.css">
+  <body id="body" class="s">
+    <a name="top"></a>
+    <header>
+      <div id="m_common_header">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">填写订单</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+    </header>
+    <div style="height: 100%; width: 100%; z-index: 1001; position: absolute; overflow: hidden; display: none; top: 0px; background: rgba(145, 145, 145, 0.0980392);" id="background"></div>
+    <input type="hidden" id="couponsId" value="">
+    <form method="post" action="/norder/submit.action?sid=9a6c83e6dfc9e89eb494ad5a81a258a9" id="orderForm">
+      <input type="hidden" name="submitVerify" value="3HizaLhJqSEz1tP8/YxJ42uepsstd4Zc">
+      <div class="common-wrapper">
+        <div class="w checkout" style="padding:0px;">
+          <div class="step1 border-1px">
+            <div class="m step1-in ">
+              <a href="../student/list.shtml" class="s-href">
+                <div class="mt_new">
+                  <div class="s1-name">
+                    <span id="address-name">$!student.name</span></div>
+                  <div class="s1-phone">
+                    <span id="address-mobile">$!account.phonenumber</span></div>
+                  <div class="s1-default" id="address-default" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">默认</div></div>
+                <div class="mc step1-in-con">
+                  <span id="address-where">证件号码：$!student.idcardNo</span></div>
+              </a>
+              <input type="hidden" id="addressId" value="137910577"></div>
+            <b class="s1-borderB"></b>
+            <span class="s-point"></span>
+          </div>
+          <div class="middle-box border-1px-top border-1px-bottom">
+          <div class="step3 s-list commodity-list">
+			#set($Integer = 0)
+			#set($totalFee = 0)
+			#foreach($obj in $classList)
+				#set($totalFee = $!{totalFee} + $Integer.parseInt($!{obj.tuitionFee}))
+			<div class="s-item bdb-1px" id="commodity_3141248">
+                <div class="box-container">
+                  <div class="sitem-l">
+                    <div class="sl-img sid-bdt">
+                      <img src="$!obj.picture" />
+                    </div>
+                  </div>
+                  <div class="sitem-m">
+                    <p class="sitem-m-txt">$!obj.remarks</p>
+                    <p class="sitem-btm-detail">
+                      <span>×1</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="sitem-r cost-price">￥$!obj.tuitionFee</div>
+			</div>
+			#end
+          </div>
+          <div class="step5 border-1px" id="yunfeeList" style="margin-bottom: 3.125em;">
+            <div class="s-item">
+              <div class="sitem-l">商品金额</div>
+              <div class="sitem-r">￥$totalFee</div></div>
+          </div>
+        </div>
+        <div class="pay-bar" id="pay-bar">
+          <div class="border-1px-top payb-con">实付款：
+            <span id="payMoney">￥
+              <span class="big-price">
+				</span>
+				#if($student.isLowincome == "1")
+					0
+				#else
+					$totalFee
+				#end
+			  .00</span></div>
+          <a class="payb-btn" href="./submit.shtml">提交订单</a>
+          <input type="hidden" id="sid" value="9a6c83e6dfc9e89eb494ad5a81a258a9">
+          <input type="hidden" id="pageSnapshotId" name="pageSnapshotId" value="1470997275041"></div>
+        <!-- 弹层 -->
+        <div class="popup-w" style="display:none;"></div>
+        <div class="singer_upgrade_jump_floor" id="message-dialog" style="display:none;">
+          <div class="singer_upgrade_jump_jump" id="jump_jump_upgrade_check2"></div>
+          <div class="jump_floor_info" id="jump_floor_info2">
+            <div class="singer-upgrade">
+              <span class="singer-upgrade-title" id="message-prompt"></span>
+            </div>
+            <!--5.0按钮-->
+            <div class="check-btn-double" id="check-btn-double" style="display:none;">
+              <div class="check-btn-cancel" id="check-btn11"></div>
+              <div class="check-btn-yes" id="check-btn22"></div>
+            </div>
+            <div class="check-btn-double" id="check-btn-single" style="display:none;">
+              <div class="check-btn-yes single" id="confirm-btn"></div>
+            </div>
+           </div>
+        </div>
+      </div>
+	  #if($errMsg)
+		<div class="prompt-window" id="pop_none_reply" style="">
+          <span class="prompt-text">$!errMsg</span></div>
+		</div>
+	  #end
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script>
+  	$("a").one("click",function(){
+      $(this).click(function (){return false;});
+    });
+  </script>
+</html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.gh.dao.OperationNewsWebsitesMapper" >
+  <resultMap id="BaseResultMap" type="com.gh.model.vo.OperationNewsWebsites" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="website_url" property="websiteUrl" jdbcType="VARCHAR" />
+    <result column="enabled" property="enabled" jdbcType="VARCHAR" />
+    <result column="news_url_regular_expression" property="newsUrlRegularExpression" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `name`, type, website_url,enabled, create_by, create_date, update_by, update_date, remarks
+  </sql>
+  <select id="selectNewsWebsitesList" resultMap="BaseResultMap" parameterType="com.gh.model.vo.OperationNewsWebsites">
+  	  SELECT
+	  ONW.id, ONW.`name`, ONW.website_url, SC1.`NAME` enabled, ONW.news_url_regular_expression,
+	  ONW.create_by, ONW.create_date, ONW.update_by, ONW.update_date, ONW.remarks
+	  FROM OPERATION_NEWS_WEBSITES ONW LEFT JOIN SYS_CODE SC1
+	  ON ONW.enabled = SC1.`SORT` AND SC1.CODE = '11'
+	  WHERE 1=1 
+	 <if test="id != null" >
+	      and ONW.id like concat('%',#{id,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="name != null" >
+	      and ONW.`name` like concat('%',#{name,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="websiteUrl != null" >
+	      and ONW.WEBSITE_URL like concat('%',#{websiteUrl,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="enabled != null" >
+	      and SC1.`NAME` like concat('%',#{enabled,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="newsUrlRegularExpression != null" >
+	      and ONW.NEWS_URL_REGULAR_EXPRESSION like concat('%',#{newsUrlRegularExpression,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createBy != null" >
+	 	and ONW.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createDateStr != null" >
+	 	and ONW.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateBy != null" >
+	 	and ONW.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateDateStr != null" >
+	 	and ONW.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="remarks != null" >
+	 	and ONW.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%') 
+	 </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from operation_news_websites
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from operation_news_websites
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gh.model.vo.OperationNewsWebsites" >
+    insert into operation_news_websites (id, `name`, website_url, 
+      create_by, create_date, update_by, enabled,
+      update_date, remarks)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{websiteUrl,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{enabled,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gh.model.vo.OperationNewsWebsites" >
+    insert into operation_news_websites
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      `name`,
+      website_url,
+      enabled,
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+      remarks,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR},
+      #{websiteUrl,jdbcType=VARCHAR},
+      #{enabled,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR},
+      #{updateDate,jdbcType=TIMESTAMP},
+      #{remarks,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gh.model.vo.OperationNewsWebsites" >
+    update operation_news_websites
+    <set >
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteUrl != null" >
+        website_url = #{websiteUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null" >
+        enabled = #{enabled,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gh.model.vo.OperationNewsWebsites" >
+    update operation_news_websites
+    set `name` = #{name,jdbcType=VARCHAR},
+      website_url = #{websiteUrl,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

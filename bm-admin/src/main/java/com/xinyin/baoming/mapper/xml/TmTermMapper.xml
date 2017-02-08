@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TmTermMapper">
+	<!--实体映射-->
+	<resultMap id="tmTermResultMap" type="com.xinyin.baoming.model.vo.TmTerm">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--学期名称-->
+		<result property="name" column="name" />
+		<!--学期开始时间-->
+		<result property="beginDate" column="begin_date" />
+		<!--学期结束时间-->
+		<result property="endDate" column="end_date" />
+		<!--学期状态-->
+		<result property="status" column="status" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	name,	begin_date,	end_date,	status,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tmTermResultMap">
+		 SELECT
+		 tt.id,	tt.name,	tt.begin_date,	tt.end_date,tc.name	status,tt.create_by,	tt.create_date,	tt.update_by,	tt.update_date,	tt.remarks
+		 FROM tm_term tt left join tc_code tc
+		 on tt.status = tc.`sort` and tc.code = '3' 
+		 WHERE 1=1
+			<if test="id != null">
+				and tt.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="name != null">
+				and tt.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="beginDate != null">
+				and tt.begin_date like concat('%',#{beginDate,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="endDate != null">
+				and tt.end_date like concat('%',#{endDate,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="status != null">
+				and tc.name like concat('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and tt.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and tt.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and tt.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and tt.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and tt.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="tmTermResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_term
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="beginDate != null">
+				and begin_date = #{beginDate,jdbcType=VARCHAR}
+			</if>
+			<if test="endDate != null">
+				and end_date = #{endDate,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tmTermResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_term
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tm_term
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TmTerm">
+		 DELETE FROM tm_term
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and name = #{name, jdbcType=VARCHAR}
+			</if>
+			<if test="beginDate != null">
+				and begin_date = #{beginDate, jdbcType=VARCHAR}
+			</if>
+			<if test="endDate != null">
+				and end_date = #{endDate, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TmTerm">
+		 INSERT INTO tm_term
+ 		(id,	name,	begin_date,	end_date,	status,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{name},#{beginDate},#{endDate},#{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TmTerm">
+		 INSERT INTO tm_term
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="beginDate != null">
+				 begin_date,
+			</if>
+			<if test="endDate != null">
+				 end_date,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="beginDate!=null">
+				 #{beginDate},
+			</if>
+			<if test="endDate!=null">
+				 #{endDate},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TmTerm">
+		 UPDATE tm_term
+ 		 <set> 
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="beginDate != null">
+				 begin_date = #{beginDate},
+			</if>
+			<if test="endDate != null">
+				 end_date = #{endDate},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tm_term
+		 SET 
+			name = #{name},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			status = #{status},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 变更学期状态 -->
+	<update id="updateTermStatus">
+		update tm_term set status = #{param2,jdbcType=VARCHAR} where status = #{param1,jdbcType=VARCHAR}
+	</update>
+</mapper>

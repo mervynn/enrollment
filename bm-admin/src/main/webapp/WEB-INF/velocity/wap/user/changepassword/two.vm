@@ -1,0 +1,139 @@
+#set($layout="/wap/user/changepassword/two.vm")
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>修改密码</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base.css?v=20130806100001" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/extend.css" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/loginPassword.css" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/header.css" charset="utf-8"></head>
+  <body id="body">
+    <a name="top"></a>
+    <header>
+      <div class="header w">
+        <div class="header-btn fr">
+          <a href="$request.getContextPath()/wap/user/center.shtml">
+            <img width="22" height="21" style="margin:1px 0;padding-top:2px;" src="$request.getContextPath()/wap/img/avatar.png"></a>
+          <a href="$request.getContextPath()/wap/index.shtml">
+            <img src="$request.getContextPath()/wap/img/home.png" style="margin:2px 0;padding-top:2px;"></a>
+        </div>
+      </div>
+    </header>
+    <div class="pay-pw">
+      <div class="blank"></div>
+      <div class="mt">修改密码</div>
+      <div class="mc">
+        <div class="set-pw">
+          <div class="step-pw">
+            <!--[D]当前步骤时各自在fir,sec,third 类旁加class on -->
+            <ul>
+              <li>
+                <span class="fir">1</span>
+                <br></li>
+              <li>
+                <span class="bar"></span>
+              </li>
+              <li>
+                <span class="sec on">2</span></li>
+            </ul>
+          </div>
+          <!--[D]当前步骤时在加class curr -->
+          <ul class="lst-sec">
+            <li>
+              <span>验证身份</span></li>
+            <li>
+              <span></span>
+            </li>
+            <li>
+              <span class="curr">修改登录密码</span></li>
+          </ul>
+        </div>
+        <form id="frm_resetPassword" action="$request.getContextPath()/wap/user/changepassword/dochangepassword.shtml" method="post">
+          <ul class="com-ul">
+            <li class="last">
+              <p class="type-line">
+                <label>设置登录密码：</label></p>
+              <p>
+                <input type="password" name="password" id="password" class="common-input wth98" placeholder="请输入密码" tip="密码由6-20位字符组成，包含至少两种以上的字母、数字或者半角字符，区分大小写。" notblank="notBlank" valuemissingtxt="密码不能为空" errorlabel="pwdError"></p>
+              <span id="strength_tip" style="display:none;font-size:.95em;color:#67738a">密码等级:
+                <span id="strength"></span></span>
+              <p>
+              </p>
+              <p id="pwdError" class="paypw-err"></p>
+              <p class="type-line">
+                <label>重新输入一遍：</label></p>
+              <p>
+                <input name="checkPassword" type="password" id="checkPassword" class="common-input wth98" placeholder="请再次输入密码" notblank="notBlank" valuemissingtxt="密码不能为空" errorlabel="confirmError" matchfor="password" matchfortxt="两次输入密码不一致"></p>
+              <p>
+              </p>
+              <p id="confirmError" class="paypw-err"></p>
+              <!--<p><a  id="btnResetPayPassword"   href="#" class="sub_btn">提交</a></p>"^(![\u4e00-\u9fa5])^(?!\d*$)^(?![a-zA-Z]*$).{6,20}$"-->
+              <button class="sub_btn" id="btnResetPassword">提交</button></li>
+          </ul>
+        </form>
+      </div>
+    </div>
+      <div id="m_common_bottom" style="min-height:170px;">
+    	<footer id="m_common_bottom_jd_footer" class="jd-footer">
+    		<div class="jd-footer-copyright">Copyright © 2016 歆音科技xinyin.tech 版权所有 </div>
+    	</footer>
+      </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script src="$request.getContextPath()/wap/js/modifyLoginPassword.js"></script>
+  <script type="text/javascript">
+  	var passwordBlur = function(){
+    	validateForm('frm_resetPassword',{loop:false,targetEnumId:$("#password").attr('id'),errorElClass:"com-inp-bd",errorShowClass:"paypw-err",showTip:true,tipClass:"paypw-msg"});
+    	validatePassword();
+    	isPasswordEqual();
+    };
+    var isPasswordEqual=function(){
+    	if($("#checkPassword").val()!=""){
+    		if($("#checkPassword").val()==$("#password").val()){
+    			$("#confirmError").hide();
+    		}
+    		else{
+                $("#confirmError").removeClass("paypw-msg");
+                $("#confirmError").addClass("paypw-err");
+    			$("#confirmError").html("\u4e24\u6b21\u8f93\u5165\u5bc6\u7801\u4e0d\u4e00\u81f4");//两次输入密码不一致
+    			$("#confirmError").show();
+    		}
+    	}
+    };
+    var checkPasswordBlur = function(){
+    	validateForm('frm_resetPassword',
+    	{loop:false,targetEnumId:$("#checkPassword").attr('id'),errorElClass:"com-inp-bd",errorShowClass:"paypw-err",showTip:true,tipClass:"paypw-msg"}
+    	);
+    };
+    
+     //表单提交
+    function formSubmit(){
+       if(!validateForm('frm_resetPassword',
+       				{loop:true,
+                	errorElClass:"com-inp-bd",
+                	errorShowClass:"paypw-err",
+                	showTip:true,
+                	tipClass:"paypw-msg"}))
+    	{
+    	   return false;
+    	}
+    	if(!validatePassword()){
+    		return false;
+    	}
+		$("#frm_resetPassword").submit();
+    }
+    
+    $(document).ready(function(){
+    	$('#password').blur(passwordBlur);
+    	$('#checkPassword').blur(checkPasswordBlur);
+    	$('#btnResetPassword').click(formSubmit);
+    });	
+  </script>
+</html>

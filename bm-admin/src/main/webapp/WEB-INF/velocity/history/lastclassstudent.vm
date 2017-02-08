@@ -1,0 +1,192 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/history/lastclassstudent.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnChooseAll" onclick="chooseAll();">
+						全选 <i class="fa fa-check"></i></button>
+					<button type="button" class="btn btn-success" id="btnRecommend" onclick="accessRecommend();"
+						data-toggle="modal" href="#listModal">
+						查看可推荐班级 <i class="fa fa-search"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">班级</th>
+						<th style="text-align:center;">学生</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+						<th style="text-align:center;">备注</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="8" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="listModal" data-validate="form" class="modal fade" >
+			<input type="hidden" name="id1"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">班级列表<strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="table-responsive table-responsive-datatables">
+                    			<table class=" table table-hover table-bordered">
+                    				<thead style="background-color:#ecf0f1;">
+                    					<tr>
+                    						<th style="text-align:center;">班级id</th>
+                    						<th style="text-align:center;">班级类别</th>
+                    						<th style="text-align:center;">班级代码</th>
+                    						<th style="text-align:center;">班级说明</th>
+                    					</tr>
+                    				</thead><!--/thead-->
+                    				<tbody>
+										#foreach($obj in $classList)
+											<tr style="display: table-row;">
+                                                <td onclick="doSel(this);">$!obj.id</td>
+												<td onclick="doSel(this);">$!obj.classTypeId</td>
+												<td onclick="doSel(this);">$!obj.code</td>
+												<td onclick="doSel(this);">$!obj.remarks</td>
+											</tr>
+										#end
+                    				</tbody><!--/tbody-->
+                    			</table><!--/table tools-->
+                    		</div><!--/table-responsive-->
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" onclick="doRecommend()" id="btnSure">
+					推荐 <i class="fa fa-thumbs-up"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/history/lastclassstudent/";
+title = "班级学生关联历史表";
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal input[name='classId']").val(msg.classId);
+	$("#editModal input[name='studentId']").val(msg.studentId);
+	$("#editModal input[name='remarks']").val(msg.remarks);
+}
+
+// 准备被推荐的学生数据
+function prapareDataOfStudent(){
+	var idArr=[];
+	$("table:eq(0) tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(2)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+
+// 准备要推荐的班级数据
+function prapareDataOfClass(){
+	var idArr=[];
+	$("table:eq(1) tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text() + $(this).find("td:eq(2)").text() + '班';
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+
+
+//进入推荐班级模式窗
+function accessRecommend(){
+	$("#btnSure").attr("disabled", true);
+	$("table:eq(1) tbody tr td").css("background-color", "");
+}
+
+// 执行推荐
+function doRecommend(){
+	bootbox.confirm("确认推荐选中课程？",function(sure){
+		if(sure){
+			var studentArr = prapareDataOfStudent();
+			var classArr = prapareDataOfClass();
+			AjaxPost(globleUrl+"recommend.shtml",{"studentList":JSON.stringify(studentArr),
+				"classList":JSON.stringify(classArr)},function(msg){
+				initTableSorter(globleUrl+"data.shtml");btnInit();
+				bootbox.alert(msg,function(){
+					$("#listModal").modal("hide");
+				});
+			}); 
+		}
+	});
+}
+
+// 行选择
+function doSel(obj) {
+	var selRow = $(obj).parent().find("td");
+	var allRows = $(obj).parent().parent().find("tr");
+	if ($(obj).css("background-color") != colorRgb) {
+		selRow.css("background-color", "#13A89E");
+	} else {
+		selRow.css("background-color", "");
+	}
+	var selNum = 0; // 被选择数量
+	$(allRows).each(function(){
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			selNum++;
+		}
+	});
+	if(selNum == 1){
+		$("#btnSure").attr("disabled", false);
+	} else if(selNum == 0){
+		$("#btnSure").attr("disabled", true);
+	}
+}
+</script>

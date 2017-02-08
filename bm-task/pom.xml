@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.xinyin.tech</groupId>
+    <artifactId>baoming</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>bm-task</artifactId>
+  <packaging>war</packaging>
+  <name>bm-task Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+  		<!-- 本地jar -->
+		<dependency>
+			<groupId>com.xinyin.tech</groupId>
+			<artifactId>cpdetector_1.0.5</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/cpdetector_1.0.5.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.xinyin.tech</groupId>
+			<artifactId>QRCode</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/QRCode.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.xinyin.tech</groupId>
+			<artifactId>Qrcodeen</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/Qrcodeen.jar</systemPath>
+		</dependency>
+	</dependencies>
+  <build>
+    <finalName>task</finalName>
+  </build>
+</project>

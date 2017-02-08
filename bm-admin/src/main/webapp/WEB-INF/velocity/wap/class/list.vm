@@ -1,0 +1,224 @@
+#set($layout="/wap/class/list.vm")
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<meta name="author" content="m.jd.com">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Pragma" content="no-cache">
+<title>
+选购课程
+</title>
+<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="../css/layout.css?v=jd201607281927" charset="gbk">
+<link rel="stylesheet" type="text/css" href="../css/search.css?v=jd201607281927" charset="gbk">
+</head>
+<body class="hide-landing">
+<div search_land_searchtransformation_show="1" class="viewports" style="overflow: hidden;">
+	<div id="layout_root" class="mjd-container">
+		<a id="layout_top" name="top"></a>
+		<div id="layout_head" class="mjd-header cover-info max-zindex" style="height: 45px; transform: translateY(0px);">
+			<div class="mjd-floor-item">
+				<header>
+				<div class="jd-header-bar 
+					#if($keyword)
+						on-focus
+					#else
+						on-blur
+				    #end
+					" id="layout_search_head">
+					<div id="layout_search_bar_cancel" class="jd-header-icon-cancel">
+						<span>取消</span>
+					</div>
+					<div id="layout_urlblack" class="jd-header-icon-back">
+						<span>返回</span>
+					</div>
+					<form action="$request.getContextPath()/wap/class/list.shtml" id="layout_searchForm" class="jd-header-search-form" method="post">
+						<div class="jd-header-search-box">
+							<div class="jd-header-search-input">
+								<input value="$!keyword" id="layout_newkeyword" maxlength="20" name="keyword" type="text" cleardefault="no" autocomplete="off" placeholder="" class="hilight1">
+								<input id="searchBtnEvent" name="searchBtnEvent" type="text" value="" style="display:none">
+								<input id="filter" name="filter" type="text" value="" style="display:none">
+							</div>
+							<a href="javascript:void(0);" class="jd-header-icon-close" style="display:none;" id="layout_clear_keyword"></a>
+						</div>
+						<a href="javascript:void(0)" id="layout_search_submit" 
+							#if($!keyword == "")
+								style="display:none" 
+							#end
+						class="jd-header-icon-search"><span>搜索</span></a>
+					</form>
+					<div class="jd-header-icon-shortcut J_ping" report-eventid="MCommonHead_NavigateButton" id="layout_jdKey">
+						<span>导航键</span>
+					</div>
+				</div>
+				<ul id="layout_jdBar" class="jd-header-shortcut" style="display: none">
+					<li class="current">
+					<a class="J_ping" report-eventid="MCommonHead_home" href="$request.getContextPath()/wap/index.shtml">
+					<span class="shortcut-home"></span>
+					<strong>首页</strong>
+					</a>
+					</li>
+					<li>
+					<a class="J_ping" report-eventid="MCommonHead_CategorySearch" href="$request.getContextPath()/wap/classtype.shtml">
+					<span class="shortcut-categories"></span>
+					<strong>分类搜索</strong>
+					</a>
+					</li>
+					<li>
+					<a class="J_ping" report-eventid="MCommonHead_Cart" href="$request.getContextPath()/wap/user/shoppingcart.shtml">
+					<span class="shortcut-cart"></span>
+					<strong>选课车</strong>
+					</a>
+					</li>
+					<li>
+					<a class="J_ping" report-eventid="MCommonHead_MYJD" page_name="search" href="$request.getContextPath()/wap/user/center.shtml">
+					<span class="shortcut-my-account"></span>
+					<strong>个人中心</strong>
+					</a>
+					</li>
+				</ul>
+				</header>
+			</div>
+			<ul id="searchSort16" class="new-search-tab bdr-bom">
+				<li  report-eventid="MList_Comprehensive" style = "display:none" submenu="moreSort" class="J_ping new-change-eleven new-sort-integrative 
+					#if($filter == "1")
+						active 
+					#end
+					" id="searchSort8">
+					<span>招生</span>
+				</li>
+				<li submenu="sales" class="new-change-eleven 
+					#if($filter == "2")
+						active 
+					#end
+					" id="searchSort9">
+					<span report-eventid="MList_SalesVolume" class="J_ping">剩余</span>
+				</li>
+				<li submenu="prcie" class="new-change-eleven new-sort-price 
+					#if($filter == "3.1" || $filter == "3.0")
+						active 
+					#end
+					" id="searchSort10">
+					<span report-eventid="MList_Price" 
+						#if($filter == "3.1")
+							class="J_ping arrow-down"
+						#else
+							class="J_ping arrow-up"
+						#end
+					>学费</span>
+				</li>
+				<li submenu="moreOption" class="new-change-eleven 
+					#if($filter == "4")
+						active 
+					#end
+					" id="searchSort15">
+					<span report-eventid="MList_Filter" class="J_ping">已满<span class="choose-icon"></span></span>
+				</li>
+			</ul>
+		</div>
+		<div id="search1" class="cover-space" "="" style="height: 87px;">
+		</div>
+		<div id="layout_content" class="mjd-content">
+			<div id="seach_list_root" class="mjd-floor list-pannel">
+				<div id="seach_list" class="search-list">
+					<div id="searchlist51" class="is-loading displayNone">
+						<em></em>
+					</div>
+					<ul id="searchlist44" class="searchlist-normal">
+						#set($url = ".shtml")
+						#foreach($obj in $list)
+							<li page="1" class="normal-list">
+								<a class=" j_ping" report-eventid="MList_Product" href="./detail/$obj.id$url">
+            						<div class="pro-img">
+            							<img style="opacity: 1; transition: opacity 0.5s ease-in;" src="$obj.picture" id="Imglazyload56" />
+            						</div>
+									<div class="product-info-box">
+										<div class="product-name">
+											<span>$obj.remarks</span>
+										</div>
+										<div class="product-code-m">
+    										<em>$!obj.classTypeId$!obj.code班($!obj.classTimeWeek)</em>
+    									</div>
+    									<div class="product-price-m">
+    										<em>¥<span class="big-price">$!obj.tuitionFee</span><span class="small-price">.00</span></em>
+    									</div>
+    									<div class="gray-pro-info">
+    										<span class="">剩余名额：</span><span>$!obj.remainAmount 人</span>
+    									</div>
+									</div>
+                                </a>
+    						</li>
+            			#end
+					</ul>
+					<div id="searchToast53" style="display: none;" class="mjdToastContainer">
+						<div class="pop-floor">
+							<div class="message-box content-box">
+								<div class="message-box-icon">
+									<i id="searchToast54" class="message-icon"></i>
+								</div>
+								<div id="searchToast55" class="message-box-content txt-align">
+								</div>
+							</div>
+						</div>
+					</div>
+					#if($enrolStageClose)
+						<div class="loading-box"><span class="">非选课阶段...</span></div>
+					#end
+					<div id="searchlist46" class="loading-box displayNone">
+						<span class="loading-pic"></span><span class="loading-text">加载中...</span>
+					</div>
+					<div id="searchlist47" class="no-more-product displayNone">
+					</div>
+					<div id="searchlist48" class="no-right-product displayNone">
+					</div>
+					<div id="searchlist49" class="page-num displayNone">
+						<span>0/0</span>
+					</div>
+					<span id="searchlist50" class="go-back-to-top displayNone"></span>
+				</div>
+			</div>
+			<div id="saerchLand" class="mjd-floor association-pannel">
+				<div id="search_land_searchland" class="search-land">
+				</div>
+			</div>
+			<div id="layout_space" class="mjd-floor bar-space" style="height: 0px;">
+			</div>
+		</div>
+		<div id="SearchCoverPannel7" class="mjd-floor cover-pannel displayNone">
+			<div class="cover-floor ">
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/wap/js/common.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#searchSort16").find("li").click(function(){
+			var filter = $(this).find("span").text();
+			if(filter == "招生"){
+				$("#filter").val(1);
+			}else if(filter == "剩余"){
+				$("#filter").val(2);
+			}else if(filter == "学费"){
+				if("J_ping arrow-up" == $(this).find("span").attr("class")){
+					$("#filter").val("3.1");
+				}else{
+					$("#filter").val("3.0");
+				}
+			}else{
+				$("#filter").val(4);
+			}
+			$("#layout_searchForm").submit();
+		})
+	});
+</script>
+</html>

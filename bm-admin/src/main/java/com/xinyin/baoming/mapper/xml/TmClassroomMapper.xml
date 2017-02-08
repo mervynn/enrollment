@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TmClassroomMapper">
+	<!--实体映射-->
+	<resultMap id="tmClassroomResultMap" type="com.xinyin.baoming.model.vo.TmClassroom">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--教室编号-->
+		<result property="classroomNo" column="classroom_no" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	classroom_no,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件模糊过滤） -->
+	<select id="selectBySelective" resultMap="tmClassroomResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_classroom
+		 WHERE 1=1
+			<if test="id != null">
+				and id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classroomNo != null">
+				and classroom_no like concat('%',#{classroomNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="tmClassroomResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_classroom
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="classroomNo != null">
+				and classroom_no = #{classroomNo,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tmClassroomResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_classroom
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tm_classroom
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TmClassroom">
+		 DELETE FROM tm_classroom
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="classroomNo != null">
+				and classroom_no = #{classroomNo, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TmClassroom">
+		 INSERT INTO tm_classroom
+ 		(id,	classroom_no,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{classroomNo},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TmClassroom">
+		 INSERT INTO tm_classroom
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="classroomNo != null">
+				 classroom_no,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="classroomNo!=null">
+				 #{classroomNo},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TmClassroom">
+		 UPDATE tm_classroom
+ 		 <set> 
+			<if test="classroomNo != null">
+				 classroom_no = #{classroomNo},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tm_classroom
+		 SET 
+			classroom_no = #{classroomNo},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,150 @@
+<!--/ <div class="content-header-extra">
+    <a class="item-ch-extra" href="#">
+        <span class="sparkline-bar" data-height="36px" data-barWidth="3" data-barColor="#5BB75B" data-value="0,5,3,9,6,5,9,7,3,5,2"></span>
+        <div class="data-text text-success">
+            765K <p class="text-muted">来访</p>
+        </div>
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a class="item-ch-extra" href="#">
+        <span class="sparkline-bar" data-height="36px" data-barWidth="3" data-value="0,9,7,9,6,3,5,3,5,5,2"></span>
+        <div class="data-text text-primary">
+            1437 <p class="text-muted">用户</p>
+        </div>
+    </a>
+
+    <div class="divider"></div>
+
+    <a class="item-ch-extra" href="#">
+        <span class="sparkline-bar" data-height="36px" data-barWidth="3" data-barColor="#49AFCD" data-value="0,6,5,9,7,3,5,2,5,3,9"></span>
+        <div class="data-text text-info">
+            4367 <p class="text-muted">订单</p>
+        </div>
+    </a>
+</div> -->
+<h2 class="content-title"><i class="fa fa-home"></i> 欢迎登陆石狮青少年中心手机报名后台管理系统!</h2>
+<form id="changePassword" data-validate="form" class="modal fade" tabindex="-1">
+	<input type="hidden"  name="type"/>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"><strong>修改密码</strong></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="name">旧密码:</label> 
+						<div class="col-sm-7">
+							<input class="form-control" type="password" name="oldPassword" required maxlength="20"/>
+						</div>
+                    </div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="name">新密码:</label> 
+						<div class="col-sm-7">
+							<input class="form-control" type="password" name="newPassword" required maxlength="20"/>
+						</div>
+                    </div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="name">确认新密码:</label> 
+						<div class="col-sm-7">
+							<input class="form-control" type="password" name="sureToNewPassword" required maxlength="20"/>
+						</div>
+                    </div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-cloud" data-dismiss="modal" >
+					 取消 <i class="fa fa-mail-reply"></i>
+				</button>
+				<button class="btn btn-success" type="button">
+					 保存 <i class="fa fa-check"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+//进入修改密码窗口
+function accessPasswordModule(){
+	Reset($("#changePassword"));
+	// 设定保存事件
+	$("#changePassword button.btn-success").off("click");
+	$("#changePassword button.btn-success").on("click",function(){
+		var validFlag = $("#changePassword").valid(); // jquery校验(如required等前端校验)结果
+		var oldPassword = $("#changePassword input[name='oldPassword']").val();
+		var newPassword = $("#changePassword input[name='newPassword']").val();
+		var sureToNewPassword = $("#changePassword input[name='sureToNewPassword']").val();
+		// 新旧密码两次输入相同校验
+		if(!!oldPassword && !!newPassword){
+			if(oldPassword == newPassword){
+				var newPasswordObj = $("#changePassword input[name='newPassword']");
+				$(newPasswordObj).addClass("text-danger");
+				if($(newPasswordObj).next().length==0){
+					$(newPasswordObj).after("<label for='newPassword' class='text-danger'>新密码不能和旧密码相同</label>");
+				}else{
+					$(newPasswordObj).next().text("新密码不能和旧密码相同");
+					$(newPasswordObj).next().show();
+				}
+				validFlag = false;
+			}
+		}
+		// 新密码做两次输入不同校验
+		if(!!newPassword && !!sureToNewPassword){
+			if(newPassword != sureToNewPassword){
+				var sureToNewPasswordObj = $("#changePassword input[name='sureToNewPassword']");
+				$(sureToNewPasswordObj).addClass("text-danger");
+				if($(sureToNewPasswordObj).next().length==0){
+					$(sureToNewPasswordObj).after("<label for='sureToNewPassword' class='text-danger'>新密码两次输入不一致</label>");
+				}else{
+					$(sureToNewPasswordObj).next().text("新密码两次输入不一致");
+					$(sureToNewPasswordObj).next().show();
+				}
+				validFlag = false;
+			}
+		}
+		var obj = $("input[name='oldPassword']");
+		if($(obj).val() != ""){
+			jQuery.post("$request.getContextPath()/sys/user/password/validation.shtml",{password:$(obj).val()},function(msg){
+				$("#changePassword input[name='type']").val(msg);
+				// 所有校验通过时
+				if(validFlag && (msg == "0" || msg == "1" || msg == "2")){
+					changePassword(); // 通过校验执行修改密码操作
+				}else{
+					// 后台校验失败时，提示消息，文本变红
+					if(msg != "0" & msg != "1" & msg != "2"){
+						$(obj).addClass("text-danger");
+						if($(obj).next().length==0){
+	    					$(obj).after("<label for='oldPassword' class='text-danger'>"+msg+"</label>")
+	    				}else{
+	    					$(obj).next().text(msg);
+	    					$(obj).next().show();
+	    				}
+					}
+				}
+			});
+		}
+	});
+}
+
+// 密码校验成功，执行修改
+function changePassword(){
+	bootbox.confirm("确认保存？",function(sure){
+		if(sure){
+			UpladFileForm("$request.getContextPath()/sys/user/password/modify.shtml","changePassword",function(e){
+				$("#changePassword").modal("hide");
+				removePageLoading();
+				if($("#uploadProcessModal").length > 0){
+					$("#uploadProcessModal").modal("hide");
+				}
+				if (this.status == 200) {
+					// 字符串中解析出json并提示
+					bootbox.alert(this.responseText);
+			    }
+			});
+		}
+	});
+}
+</script>

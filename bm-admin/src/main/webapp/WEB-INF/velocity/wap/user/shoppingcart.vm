@@ -1,0 +1,153 @@
+#set($layout="/wap/user/shoppingcart.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>选课车</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <!--测速埋点-->
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base.css" charset="gbk">
+	<link href="$request.getContextPath()/wap/css/header.css" media="all" rel="stylesheet" type="text/css">
+	<link href="$request.getContextPath()/wap/css/shopping-cart5.1.css" media="all" rel="stylesheet" type="text/css">
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+</head>
+  <body id="body" class="s">
+    <a name="top"></a>
+    <header>
+      <div id="m_common_header">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">选课车</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping current" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+    </header>
+    <div id="notEmptyCart" style="display:block">
+      <!-- 20150701 安全环境提示信息 -->
+      <div class="shop-group">
+        <div class="shop-group-item" id="shop-1">
+          <ul class="shp-cart-list">
+            <li id="product2975468114" name="productGroup-1">
+              <div class="shop-btn-com promo-spc">
+              </div>
+			  #set($suffix = ".shtml")
+			  #set($Integer = 0)
+			  #set($totalFee = 0)
+			  #set($amount = 0)
+			  #foreach($obj in $list)
+				#set($totalFee = $!{totalFee} + $Integer.parseInt($!{obj.tuitionFee}))
+				#set($amount = $!{amount} + 1)
+				<div class="items " id="product10402016812" name="item2975468114">
+                    <div class="check-wrapper">
+                      <span class="cart-checkbox  group--1  checked" id="checkIcon10402016812" data-sku="2975468114@@1@@11@@10402016812@@1" 
+						onclick="changeSelected('-1','2975468114','1','11',10402016812,1)"></span>
+                    </div>
+                    <div class="shp-cart-item-core shop-cart-display  ">
+                      <a class="cart-product-cell-1" href="$request.getContextPath()/wap/class/detail/$!obj.id$suffix">
+                        <img class="cart-photo-thumb" alt="" src="$!obj.picture"></a>
+                      <div class="cart-product-cell-2">
+                        <div class="cart-product-name">
+                          <a href="$request.getContextPath()/wap/class/detail/$!obj.id$suffix">
+                            <span>$!obj.remarks</span></a>
+                        </div>
+                        <div class="cart-product-prop eles-flex">
+                          <span class="prop1">
+							#if($obj.teacherId)
+								$obj.teacherId老师为您推荐
+							#end
+						  </span>
+                        </div>
+                        <!-- price move here begin-->
+                        <div class="cart-product-cell-3">
+                          <span class="shp-cart-item-price" id="price297546811410402016812">¥
+                            <strong>$!obj.tuitionFee</strong>.00</span></div>
+                        <div class="cart-product-cell-5">
+                          <span class="num-cont-show">1</span>
+                          <div class="shop-btn-com">
+                            <a class="cart-new-btn edit-mode-in" 
+								#if($!isOldStage == "true")
+									onclick="doDelete($!obj.id);"
+								#else
+									href="$request.getContextPath()/wap/user/shoppingcart/delete/$!obj.id$suffix"
+								#end
+								>
+                              <span class="right-boundary"></span>
+                              <span class="btn-msg-in">删除</span></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+    			  </div>
+                  <div class="clear mart10" id="blankLine10402016812"></div>
+			  #end
+              <div class="shop-footer" id="shopfooter2975468114">
+                <div class="diver-hr-dashed"></div>
+                <span class="shop-footer-total font13">
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="payment_p" style="display:block">
+      <div id="paymentp"></div>
+      <div class="payment-total-bar payment-total-bar-new box-flex-f" id="payment">
+        <div class="shp-cart-info shp-cart-info-new  box-flex-c">
+          <strong id="shpCartTotal" data-fsizeinit="14" class="shp-cart-total" style="font-size: 14px;">合计:
+            <span class="bottom-bar-price" id="cart_realPrice">¥$totalFee</span></strong>
+        </div>
+        <a class="btn-right-block btn-right-block-new  box-flex-c disabled" id="submit" href="./order/edit.shtml">报名
+          <span id="checkedNum">($amount)</span></a>
+      </div>
+    </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script type="text/javascript">
+  	$(function(){
+		if($("#checkedNum").text() == "(0)"){
+			$("#submit").removeAttr("href");
+		}
+	});
+	function doDelete(obj){
+		if(confirm("当前阶段删除所选班级无法找回，确认删除吗？")){
+			location.href="$request.getContextPath()/wap/user/shoppingcart/delete/"+ obj +".shtml";
+		}
+	}
+  </script>
+</html>

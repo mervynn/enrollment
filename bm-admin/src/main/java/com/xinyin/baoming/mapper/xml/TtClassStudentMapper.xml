@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TtClassStudentMapper">
+	<!--实体映射-->
+	<resultMap id="ttClassStudentResultMap" type="com.xinyin.baoming.model.vo.TtClassStudent">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--班级id-->
+		<result property="classId" column="class_id" />
+		<!--学生id-->
+		<result property="studentId" column="student_id" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	class_id,	student_id,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="ttClassStudentResultMap">
+		 SELECT tcs.id,concat(tct.name,tc.code,'班') class_id,ts.name student_id,tcs.create_by,tcs.create_date,tcs.update_by,tcs.update_date,ts.idcard_no remarks
+		 FROM tt_class_student tcs left join tm_class tc
+		 on tcs.class_id = tc.id left join tm_student ts
+		 on tcs.student_id = ts.id left join tm_class_type tct
+		 on tc.class_type_id = tct.id
+		 WHERE 1=1
+			<if test="id != null">
+				and tcs.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classId != null">
+				and concat(tct.name,tc.code,'班') like concat('%',#{classId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and ts.name like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and tcs.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and tcs.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and tcs.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and tcs.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and ts.idcard_no like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="ttClassStudentResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_class_student
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId,jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="ttClassStudentResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_class_student
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tt_class_student
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TtClassStudent">
+		 DELETE FROM tt_class_student
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId, jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TtClassStudent">
+		 INSERT INTO tt_class_student
+ 		(id,	class_id,	student_id,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{classId},#{studentId},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TtClassStudent">
+		 INSERT INTO tt_class_student
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="classId != null">
+				 class_id,
+			</if>
+			<if test="studentId != null">
+				 student_id,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="classId!=null">
+				 #{classId},
+			</if>
+			<if test="studentId!=null">
+				 #{studentId},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TtClassStudent">
+		 UPDATE tt_class_student
+ 		 <set> 
+			<if test="classId != null">
+				 class_id = #{classId},
+			</if>
+			<if test="studentId != null">
+				 student_id = #{studentId},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tt_class_student
+		 SET 
+			class_id = #{classId},
+			student_id = #{studentId},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 删除整表数据 -->
+	<delete id="deleteAll">
+		delete from tt_class_student
+	</delete>
+</mapper>

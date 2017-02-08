@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TsRoleAuthMapper">
+	<!--实体映射-->
+	<resultMap id="tsRoleAuthResultMap" type="com.xinyin.baoming.model.vo.TsRoleAuth">
+		<!--角色id-->
+		<id property="roleId" column="role_id" />
+		<!--菜单ID-->
+		<result property="menuId" column="menu_id" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	menu_id
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tsRoleAuthResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM ts_role_auth
+		 WHERE 1=1
+			<if test="roleId != null">
+				and role_id like concat('%',#{roleId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="menuId != null">
+				and menu_id like concat('%',#{menuId,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tsRoleAuthResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM ts_role_auth
+		 WHERE role_id = #{roleId}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM ts_role_auth
+		 WHERE role_id = #{roleId}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TsRoleAuth">
+		 DELETE FROM ts_role_auth
+		 WHERE 1=1
+			<if test="roleId != null">
+				and role_id = #{roleId, jdbcType=VARCHAR}
+			</if>
+			<if test="menuId != null">
+				and menu_id = #{menuId, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TsRoleAuth">
+		 INSERT INTO ts_role_auth
+ 		(role_id,	menu_id) 
+		 VALUES 
+ 		(#{roleId},#{menuId}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TsRoleAuth">
+		 INSERT INTO ts_role_auth
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="roleId != null">
+				 role_id,
+			</if>
+			<if test="menuId != null">
+				 menu_id,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="roleId!=null">
+				 #{roleId},
+			</if>
+			<if test="menuId!=null">
+				 #{menuId},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TsRoleAuth">
+		 UPDATE ts_role_auth
+ 		 <set> 
+			<if test="menuId != null">
+				 menu_id = #{menuId},
+			</if>
+ 		 </set>
+		 WHERE role_id = #{roleId}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE ts_role_auth
+		 SET 
+			menu_id = #{menuId}
+		 WHERE role_id = #{roleId}
+	</update>
+</mapper>

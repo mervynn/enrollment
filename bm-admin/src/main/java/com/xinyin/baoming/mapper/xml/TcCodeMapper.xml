@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TcCodeMapper">
+	<!--实体映射-->
+	<resultMap id="BaseResultMap" type="com.xinyin.baoming.model.vo.TcCode" >
+	<result column="CODE" property="code"/>
+	<result column="SORT" property="sort"/>
+	<result column="NAME" property="name"/>
+	<result column="ENGLISH_NAME" property="englishName"/>
+	<result column="TYPE" property="type"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    code, sort, `name`, english_name, `type`
+  </sql>
+  <select id="selectSysCode" resultMap="BaseResultMap">
+	SELECT <include refid="Base_Column_List" /> FROM tc_code
+	ORDER BY CODE+1 ASC, `SORT`+1 ASC
+  </select>
+  <!-- 新闻关键词查询 -->
+  <select id="selectSysCodeForNewsKeyWords" resultMap="BaseResultMap">
+	SELECT <include refid="Base_Column_List" /> FROM tc_code
+	WHERE CODE = '0' AND SORT != '0'
+  </select>
+  <select id="selectSysCodeList" resultMap="BaseResultMap" parameterType="com.xinyin.baoming.model.vo.TcCode">
+  	  SELECT
+	  <include refid="Base_Column_List" />
+	  FROM tc_code
+	  WHERE 1=1 
+	 <if test="code != null" >
+	      and code like concat('%',#{code,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="sort != null" >
+	      and sort like concat('%',#{sort,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="name != null" >
+	      and `name` like concat('%',#{name,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="englishName != null" >
+	      and englishName like concat('%',#{englishName,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="type != null" >
+	 	and `type` like concat('%',#{type,jdbcType=VARCHAR},'%') 
+	 </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    select 
+    <include refid="Base_Column_List" />
+    from tc_code
+    where code = #{code,jdbcType=VARCHAR}
+      and sort = #{sort,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    delete from tc_code
+    where code = #{code,jdbcType=VARCHAR}
+      and sort = #{sort,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    insert into tc_code (code, sort, `name`, 
+      english_name, `type`)
+    values (#{code,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{englishName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    insert into tc_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      code,
+      sort,
+      `name`,
+      english_name,
+      `type`,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{code,jdbcType=VARCHAR},
+      #{sort,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR},
+      #{englishName,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    update tc_code
+    <set >
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="englishName != null" >
+        english_name = #{englishName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+      and sort = #{sort,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyin.baoming.model.vo.TcCode" >
+    update tc_code
+    set `name` = #{name,jdbcType=VARCHAR},
+      english_name = #{englishName,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+      and sort = #{sort,jdbcType=VARCHAR}
+  </update>
+</mapper>

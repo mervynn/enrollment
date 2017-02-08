@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TtOrderMapper">
+	<!--实体映射-->
+	<resultMap id="ttOrderResultMap" type="com.xinyin.baoming.model.vo.TtOrder">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--学生id-->
+		<result property="studentId" column="student_id" />
+		<!--订单总金额-->
+		<result property="totalMoney" column="total_money" />
+		<!--订单状态-->
+		<result property="status" column="status" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+		<!--家长手机号码-->
+		<result property="phonenumber" column="phonenumber" />
+		<!--学生证件号码-->
+		<result property="idcardNo" column="idcard_no" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	student_id,	total_money,	status,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件模糊过滤） -->
+	<select id="selectBySelective" resultMap="ttOrderResultMap">
+		 SELECT '合计' id,'' student_id,sum(tto.total_money) total_money,'' status,'' create_by,null create_date,'' update_by,
+		 null update_date,'' remarks,'' idcard_no,'' phonenumber
+		 FROM tt_order tto left join tc_code tc
+		 on tto.status = tc.`sort` and tc.code = '6' left join
+		 (select ts.id,ts.idcard_no,ts.`name`,ta.phonenumber from tm_student ts left join tm_account ta ON ts.account_id = ta.id) tttt 
+		 on tto.student_id = tttt.id
+		 WHERE 1=1
+			<if test="id != null">
+				and tto.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and tttt.name like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="totalMoney != null">
+				and tto.total_money like concat('%',#{totalMoney,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="status != null">
+				and tc.name like concat('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and tto.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and tto.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and tto.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and tto.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and tto.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="phonenumber != null">
+				and tttt.phonenumber like concat('%',#{phonenumber,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="idcardNo != null">
+				and tttt.idcard_no like concat('%',#{idcardNo,jdbcType=VARCHAR},'%')
+			</if>
+		UNION ALL
+		 SELECT tto.id,tttt.name student_id,tto.total_money,tc.name status,tto.create_by,tto.create_date,tto.update_by,
+		 tto.update_date,tto.remarks,tttt.idcard_no,tttt.phonenumber
+		 FROM tt_order tto left join tc_code tc
+		 on tto.status = tc.`sort` and tc.code = '6' LEFT JOIN 
+		 (select ts.id,ts.idcard_no,ts.`name`,ta.phonenumber from tm_student ts left join tm_account ta ON ts.account_id = ta.id) tttt 
+		 on tto.student_id = tttt.id
+		 WHERE 1=1
+			<if test="id != null">
+				and tto.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and tttt.name like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="totalMoney != null">
+				and tto.total_money like concat('%',#{totalMoney,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="status != null">
+				and tc.name like concat('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and tto.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and tto.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and tto.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and tto.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and tto.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="phonenumber != null">
+				and tttt.phonenumber like concat('%',#{phonenumber,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="idcardNo != null">
+				and tttt.idcard_no like concat('%',#{idcardNo,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="ttOrderResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_order
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId,jdbcType=VARCHAR}
+			</if>
+			<if test="totalMoney != null">
+				and total_money = #{totalMoney,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="ttOrderResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_order
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tt_order
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TtOrder">
+		 DELETE FROM tt_order
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId, jdbcType=VARCHAR}
+			</if>
+			<if test="totalMoney != null">
+				and total_money = #{totalMoney, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TtOrder">
+		 INSERT INTO tt_order
+ 		(id,	student_id,	total_money,	status,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{studentId},#{totalMoney},#{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TtOrder">
+		 INSERT INTO tt_order
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="studentId != null">
+				 student_id,
+			</if>
+			<if test="totalMoney != null">
+				 total_money,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="studentId!=null">
+				 #{studentId},
+			</if>
+			<if test="totalMoney!=null">
+				 #{totalMoney},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TtOrder">
+		 UPDATE tt_order
+ 		 <set> 
+			<if test="studentId != null">
+				 student_id = #{studentId},
+			</if>
+			<if test="totalMoney != null">
+				 total_money = #{totalMoney},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tt_order
+		 SET 
+			student_id = #{studentId},
+			total_money = #{totalMoney},
+			status = #{status},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 清空表数据 -->
+	<delete id="deleteAll">
+		delete from tt_order
+	</delete>
+	<!-- 根据学生、班级查询尚未支付或已支付的订单 -->
+	<select id="selectByStudentAndClass" resultMap="ttOrderResultMap">
+		select too.id,too.student_id,too.total_money,too.status
+		from tt_order too,tt_order_detail tod
+		where too.id = tod.id
+		and too.student_id = #{param1,jdbcType=VARCHAR}
+		and tod.class_id = #{param2,jdbcType=VARCHAR}
+		and (too.`status` = '1' or too.`status` = '2')
+	</select>
+</mapper>

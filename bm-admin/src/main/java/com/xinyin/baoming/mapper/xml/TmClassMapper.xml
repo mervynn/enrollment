@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TmClassMapper">
+	<!--实体映射-->
+	<resultMap id="tmClassResultMap" type="com.xinyin.baoming.model.vo.TmClass">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--班级代码-->
+		<result property="code" column="code" />
+		<!--限制最小年龄-->
+		<result property="minAge" column="min_age" />
+		<!--是否只可以旧生报名-->
+		<result property="isOnlyOldStudent" column="is_only_old_student" />
+		<!--招生对象-->
+		<result property="targetGroup" column="target_group" />
+		<!--招生人数-->
+		<result property="limitedAmount" column="limited_amount" />
+		<!--预设名额-->
+		<result property="defaultAmount" column="default_amount" />
+		<!--剩余人数-->
+		<result property="remainAmount" column="remain_amount" />
+		<!--已付款人数-->
+		<result property="paidAmount" column="paid_amount" />
+		<!--上下架状态-->
+		<result property="status" column="status" />
+		<!--学费-->
+		<result property="tuitionFee" column="tuition_fee" />
+		<!--上课时间（星期）-->
+		<result property="classTimeWeek" column="class_time_week" />
+		<!--商品图片1-->
+		<result property="classTimeBegin" column="class_time_begin" />
+		<!--商品图片1-->
+		<result property="classTimeEnd" column="class_time_end" />
+		<!--乐器或老师照片-->
+		<result property="picture" column="picture" />
+		<!--课程类别-->
+		<result property="classTypeId" column="class_type_id" />
+		<!--授课老师id-->
+		<result property="teacherId" column="teacher_id" />
+		<!--教室id-->
+		<result property="classroomId" column="classroom_id" />
+		<!--学期id-->
+		<result property="termId" column="term_id" />
+		<!--乐观锁标识(更新，删除时使用)-->
+		<result property="lock" column="lock" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	code,	min_age,	is_only_old_student,	target_group,	limited_amount,	default_amount,	remain_amount,
+		 paid_amount,	status,	tuition_fee,	class_time_week,	class_time_begin,	class_time_end,	picture,	
+		 class_type_id,	teacher_id,	classroom_id,	term_id,	`lock`,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tmClassResultMap">
+		 SELECT
+		 TMC.id,TMC.code,TMC.min_age,TC1.`NAME` is_only_old_student,TMC.target_group,TMC.limited_amount,TMC.default_amount,TMC.remain_amount,
+		 TMC.paid_amount,TC2.`NAME` status,TMC.tuition_fee,TMC.class_time_week,TMC.class_time_begin,TMC.class_time_end,TMC.picture,	
+		 TCT.`NAME` class_type_id,TT.`NAME` teacher_id,TCL.CLASSROOM_NO classroom_id,TTE.`NAME`	term_id,TMC.`lock`,
+		 TMC.create_by,TMC.create_date,TMC.update_by,TMC.update_date,TMC.remarks
+		 FROM tm_class TMC LEFT JOIN TC_CODE TC1
+		 ON TMC.is_only_old_student = TC1.`SORT` AND TC1.CODE = '1' LEFT JOIN TC_CODE TC2
+		 ON TMC.status = TC2.`SORT` AND TC2.CODE = '2' LEFT JOIN TM_CLASS_TYPE TCT
+		 ON TMC.class_type_id = TCT.ID LEFT JOIN TM_TEACHER TT
+		 ON TMC.teacher_id = TT.ID LEFT JOIN TM_CLASSROOM TCL
+		 ON TMC.classroom_id = TCL.ID LEFT JOIN TM_TERM TTE
+		 ON TMC.term_id = TTE.ID
+		 WHERE 1=1
+			<if test="id != null">
+				and TMC.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="code != null">
+				and TMC.code like concat('%',#{code,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="minAge != null">
+				and TMC.min_age like concat('%',#{minAge,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isOnlyOldStudent != null">
+				and TC1.`NAME` like concat('%',#{isOnlyOldStudent,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="targetGroup != null">
+				and TMC.target_group like concat('%',#{targetGroup,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="limitedAmount != null">
+				and TMC.limited_amount like concat('%',#{limitedAmount,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="defaultAmount != null">
+				and TMC.default_amount like concat('%',#{defaultAmount,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remainAmount != null">
+				and TMC.remain_amount like concat('%',#{remainAmount,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="paidAmount != null">
+				and TMC.paid_amount like concat('%',#{paidAmount,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="status != null">
+				and TC2.`NAME` like concat('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="tuitionFee != null">
+				and TMC.tuition_fee like concat('%',#{tuitionFee,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classTimeWeek != null">
+				and TMC.class_time_week like concat('%',#{classTimeWeek,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classTimeBegin != null">
+				and TMC.class_time_begin like concat('%',#{classTimeBegin,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classTimeEnd != null">
+				and TMC.class_time_end like concat('%',#{classTimeEnd,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="picture != null">
+				and TMC.picture like concat('%',#{picture,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classTypeId != null">
+				and TCT.`NAME` like concat('%',#{classTypeId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="teacherId != null">
+				and TT.`NAME` like concat('%',#{teacherId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classroomId != null">
+				and TCL.CLASSROOM_NO like concat('%',#{classroomId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="termId != null">
+				and TTE.`NAME` like concat('%',#{termId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="lock != null">
+				and TMC.`lock` like concat('%',#{lock,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and TMC.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and TMC.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and TMC.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and TMC.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and TMC.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="tmClassResultMap">
+		 SELECT
+		 TMC.id,TMC.code,TMC.min_age,TC1.`NAME` is_only_old_student,TMC.target_group,TMC.limited_amount,TMC.default_amount,TMC.remain_amount,
+		 TMC.paid_amount,TC2.`NAME` status,TMC.tuition_fee,TMC.class_time_week,TMC.class_time_begin,TMC.class_time_end,TMC.picture,	
+		 TCT.`NAME` class_type_id,TT.`NAME` teacher_id,TCL.CLASSROOM_NO classroom_id,TTE.`NAME`	term_id,TMC.`lock`,
+		 TMC.create_by,TMC.create_date,TMC.update_by,TMC.update_date,TMC.remarks
+		 FROM tm_class TMC LEFT JOIN TC_CODE TC1
+		 ON TMC.is_only_old_student = TC1.`SORT` AND TC1.CODE = '1' LEFT JOIN TC_CODE TC2
+		 ON TMC.status = TC2.`SORT` AND TC2.CODE = '2' LEFT JOIN TM_CLASS_TYPE TCT
+		 ON TMC.class_type_id = TCT.ID LEFT JOIN TM_TEACHER TT
+		 ON TMC.teacher_id = TT.ID LEFT JOIN TM_CLASSROOM TCL
+		 ON TMC.classroom_id = TCL.ID LEFT JOIN TM_TERM TTE
+		 ON TMC.term_id = TTE.ID
+		 WHERE 1=1
+			<if test="id != null">
+				and TMC.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				and TMC.code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="minAge != null">
+				and TMC.min_age = #{minAge,jdbcType=VARCHAR}
+			</if>
+			<if test="isOnlyOldStudent != null">
+				and TMC.is_only_old_student = #{isOnlyOldStudent,jdbcType=VARCHAR}
+			</if>
+			<if test="targetGroup != null">
+				and TMC.target_group = #{targetGroup,jdbcType=VARCHAR}
+			</if>
+			<if test="limitedAmount != null">
+				and TMC.limited_amount = #{limitedAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="defaultAmount != null">
+				and TMC.default_amount = #{defaultAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="remainAmount != null">
+				and TMC.remain_amount = #{remainAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="paidAmount != null">
+				and TMC.paid_amount = #{paidAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and TMC.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="tuitionFee != null">
+				and TMC.tuition_fee = #{tuitionFee,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeWeek != null">
+				and TMC.class_time_week = #{classTimeWeek,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeBegin != null">
+				and TMC.class_time_begin = #{classTimeBegin,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeEnd != null">
+				and TMC.class_time_end = #{classTimeEnd,jdbcType=VARCHAR}
+			</if>
+			<if test="picture != null">
+				and TMC.picture = #{picture,jdbcType=VARCHAR}
+			</if>
+			<if test="classTypeId != null">
+				and TMC.class_type_id = #{classTypeId,jdbcType=VARCHAR}
+			</if>
+			<if test="teacherId != null">
+				and TMC.teacher_id = #{teacherId,jdbcType=VARCHAR}
+			</if>
+			<if test="classroomId != null">
+				and TMC.classroom_id = #{classroomId,jdbcType=VARCHAR}
+			</if>
+			<if test="termId != null">
+				and TMC.term_id = #{termId,jdbcType=VARCHAR}
+			</if>
+			<if test="lock != null">
+				and TMC.`lock` = #{lock,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and TMC.create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and TMC.create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and TMC.update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and TMC.update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and TMC.remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- wap端的查询sql -->
+	<select id="selectBySelectiveForWap" resultMap="tmClassResultMap">
+		 SELECT
+		 TMC.id,TMC.code,TMC.min_age,TC1.`NAME` is_only_old_student,TMC.target_group,TMC.limited_amount,TMC.default_amount,TMC.remain_amount,
+		 TMC.paid_amount,TMC.status,TMC.tuition_fee,TMC.class_time_week,TMC.class_time_begin,TMC.class_time_end,TMC.picture,	
+		 TCT.`NAME` class_type_id,TT.`NAME` teacher_id,TCL.CLASSROOM_NO classroom_id,TTE.`NAME`	term_id,TMC.`lock`,
+		 TMC.create_by,TMC.create_date,TMC.update_by,TMC.update_date,TMC.remarks
+		 FROM tm_class TMC LEFT JOIN TC_CODE TC1
+		 ON TMC.is_only_old_student = TC1.`SORT` AND TC1.CODE = '1' LEFT JOIN TM_CLASS_TYPE TCT
+		 ON TMC.class_type_id = TCT.ID LEFT JOIN TM_TEACHER TT
+		 ON TMC.teacher_id = TT.ID LEFT JOIN TM_CLASSROOM TCL
+		 ON TMC.classroom_id = TCL.ID LEFT JOIN TM_TERM TTE
+		 ON TMC.term_id = TTE.ID
+		 WHERE 1=1
+			<if test="id != null">
+				and TMC.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				and TMC.code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="minAge != null">
+				and TMC.min_age <![CDATA[<=]]> (DATE_FORMAT( FROM_DAYS( TO_DAYS( NOW( ) ) - TO_DAYS( #{minAge,jdbcType=VARCHAR} ) ) , '%Y' )+0)
+			</if>
+			<if test="isOnlyOldStudent != null">
+				and TMC.is_only_old_student = #{isOnlyOldStudent,jdbcType=VARCHAR}
+			</if>
+			<if test="targetGroup != null">
+				and TMC.target_group = #{targetGroup,jdbcType=VARCHAR}
+			</if>
+			<if test="limitedAmount != null">
+				and TMC.limited_amount = #{limitedAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="defaultAmount != null">
+				and TMC.default_amount = #{defaultAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="remainAmount != null">
+				and TMC.remain_amount = #{remainAmount,jdbcType=VARCHAR}
+			</if>
+			<!-- 默认过滤售罄的班级 -->
+			<if test="idListStr !=null">
+				and TMC.remain_amount <![CDATA[>]]> 0 
+			</if>
+			<if test="paidAmount != null">
+				and TMC.paid_amount = #{paidAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and TMC.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="tuitionFee != null">
+				and TMC.tuition_fee = #{tuitionFee,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeWeek != null">
+				and TMC.class_time_week = #{classTimeWeek,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeBegin != null">
+				and TMC.class_time_begin = #{classTimeBegin,jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeEnd != null">
+				and TMC.class_time_end = #{classTimeEnd,jdbcType=VARCHAR}
+			</if>
+			<if test="picture != null">
+				and TMC.picture = #{picture,jdbcType=VARCHAR}
+			</if>
+			<if test="classTypeId != null">
+				and TMC.class_type_id = #{classTypeId,jdbcType=VARCHAR}
+			</if>
+			<if test="teacherId != null">
+				and TMC.teacher_id = #{teacherId,jdbcType=VARCHAR}
+			</if>
+			<if test="classroomId != null">
+				and TMC.classroom_id = #{classroomId,jdbcType=VARCHAR}
+			</if>
+			<if test="termId != null">
+				and TMC.term_id = #{termId,jdbcType=VARCHAR}
+			</if>
+			<if test="lock != null">
+				and TMC.`lock` = #{lock,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and TMC.create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and TMC.create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and TMC.update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and TMC.update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and TMC.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tmClassResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tm_class
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tm_class
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TmClass">
+		 DELETE FROM tm_class
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				and code = #{code, jdbcType=VARCHAR}
+			</if>
+			<if test="minAge != null">
+				and min_age = #{minAge, jdbcType=VARCHAR}
+			</if>
+			<if test="isOnlyOldStudent != null">
+				and is_only_old_student = #{isOnlyOldStudent, jdbcType=VARCHAR}
+			</if>
+			<if test="targetGroup != null">
+				and target_group = #{targetGroup, jdbcType=VARCHAR}
+			</if>
+			<if test="limitedAmount != null">
+				and limited_amount = #{limitedAmount, jdbcType=VARCHAR}
+			</if>
+			<if test="defaultAmount != null">
+				and default_amount = #{defaultAmount, jdbcType=VARCHAR}
+			</if>
+			<if test="remainAmount != null">
+				and remain_amount = #{remainAmount, jdbcType=VARCHAR}
+			</if>
+			<if test="paidAmount != null">
+				and paid_amount = #{paidAmount, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="tuitionFee != null">
+				and tuition_fee = #{tuitionFee, jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeWeek != null">
+				and class_time_week = #{classTimeWeek, jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeBegin != null">
+				and class_time_begin = #{classTimeBegin, jdbcType=VARCHAR}
+			</if>
+			<if test="classTimeEnd != null">
+				and class_time_end = #{classTimeEnd, jdbcType=VARCHAR}
+			</if>
+			<if test="picture != null">
+				and picture = #{picture, jdbcType=VARCHAR}
+			</if>
+			<if test="classTypeId != null">
+				and class_type_id = #{classTypeId, jdbcType=VARCHAR}
+			</if>
+			<if test="teacherId != null">
+				and teacher_id = #{teacherId, jdbcType=VARCHAR}
+			</if>
+			<if test="classroomId != null">
+				and classroom_id = #{classroomId, jdbcType=VARCHAR}
+			</if>
+			<if test="termId != null">
+				and term_id = #{termId, jdbcType=VARCHAR}
+			</if>
+			<if test="lock != null">
+				and `lock` = #{lock, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TmClass">
+		 INSERT INTO tm_class
+ 		(id,	code,	min_age,	is_only_old_student,	target_group,	limited_amount,	default_amount,	remain_amount,	paid_amount,	status,	tuition_fee,	class_time_week,	class_time_begin,	class_time_end,	picture,	class_type_id,	teacher_id,	classroom_id,	term_id,	`lock`,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{code},#{minAge},#{isOnlyOldStudent},#{targetGroup},#{limitedAmount},#{defaultAmount},#{remainAmount},#{paidAmount},#{status},#{tuitionFee},#{classTimeWeek},#{classTimeBegin},#{classTimeEnd},#{picture},#{classTypeId},#{teacherId},#{classroomId},#{termId},#{lock},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TmClass">
+		 INSERT INTO tm_class
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="code != null">
+				 code,
+			</if>
+			<if test="minAge != null">
+				 min_age,
+			</if>
+			<if test="isOnlyOldStudent != null">
+				 is_only_old_student,
+			</if>
+			<if test="targetGroup != null">
+				 target_group,
+			</if>
+			<if test="limitedAmount != null">
+				 limited_amount,
+			</if>
+			<if test="defaultAmount != null">
+				 default_amount,
+			</if>
+			<if test="remainAmount != null">
+				 remain_amount,
+			</if>
+			<if test="paidAmount != null">
+				 paid_amount,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="tuitionFee != null">
+				 tuition_fee,
+			</if>
+			<if test="classTimeWeek != null">
+				 class_time_week,
+			</if>
+			<if test="classTimeBegin != null">
+				 class_time_begin,
+			</if>
+			<if test="classTimeEnd != null">
+				 class_time_end,
+			</if>
+			<if test="picture != null">
+				 picture,
+			</if>
+			<if test="classTypeId != null">
+				 class_type_id,
+			</if>
+			<if test="teacherId != null">
+				 teacher_id,
+			</if>
+			<if test="classroomId != null">
+				 classroom_id,
+			</if>
+			<if test="termId != null">
+				 term_id,
+			</if>
+			<if test="lock != null">
+				 `lock`,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="code!=null">
+				 #{code},
+			</if>
+			<if test="minAge!=null">
+				 #{minAge},
+			</if>
+			<if test="isOnlyOldStudent!=null">
+				 #{isOnlyOldStudent},
+			</if>
+			<if test="targetGroup!=null">
+				 #{targetGroup},
+			</if>
+			<if test="limitedAmount!=null">
+				 #{limitedAmount},
+			</if>
+			<if test="defaultAmount!=null">
+				 #{defaultAmount},
+			</if>
+			<if test="remainAmount!=null">
+				 #{remainAmount},
+			</if>
+			<if test="paidAmount!=null">
+				 #{paidAmount},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="tuitionFee!=null">
+				 #{tuitionFee},
+			</if>
+			<if test="classTimeWeek!=null">
+				 #{classTimeWeek},
+			</if>
+			<if test="classTimeBegin!=null">
+				 #{classTimeBegin},
+			</if>
+			<if test="classTimeEnd!=null">
+				 #{classTimeEnd},
+			</if>
+			<if test="picture!=null">
+				 #{picture},
+			</if>
+			<if test="classTypeId!=null">
+				 #{classTypeId},
+			</if>
+			<if test="teacherId!=null">
+				 #{teacherId},
+			</if>
+			<if test="classroomId!=null">
+				 #{classroomId},
+			</if>
+			<if test="termId!=null">
+				 #{termId},
+			</if>
+			<if test="lock!=null">
+				 #{lock},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TmClass">
+		 UPDATE tm_class
+ 		 <set> 
+			<if test="code != null">
+				 code = #{code},
+			</if>
+			<if test="minAge != null">
+				 min_age = #{minAge},
+			</if>
+			<if test="isOnlyOldStudent != null">
+				 is_only_old_student = #{isOnlyOldStudent},
+			</if>
+			<if test="targetGroup != null">
+				 target_group = #{targetGroup},
+			</if>
+			<if test="limitedAmount != null">
+				 limited_amount = #{limitedAmount},
+			</if>
+			<if test="defaultAmount != null">
+				 default_amount = #{defaultAmount},
+			</if>
+			<if test="remainAmount != null">
+				 remain_amount = #{remainAmount},
+			</if>
+			<if test="paidAmount != null">
+				 paid_amount = #{paidAmount},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="tuitionFee != null">
+				 tuition_fee = #{tuitionFee},
+			</if>
+			<if test="classTimeWeek != null">
+				 class_time_week = #{classTimeWeek},
+			</if>
+			<if test="classTimeBegin != null">
+				 class_time_begin = #{classTimeBegin},
+			</if>
+			<if test="classTimeEnd != null">
+				 class_time_end = #{classTimeEnd},
+			</if>
+			<if test="picture != null">
+				 picture = #{picture},
+			</if>
+			<if test="classTypeId != null">
+				 class_type_id = #{classTypeId},
+			</if>
+			<if test="teacherId != null">
+				 teacher_id = #{teacherId},
+			</if>
+			<if test="classroomId != null">
+				 classroom_id = #{classroomId},
+			</if>
+			<if test="termId != null">
+				 term_id = #{termId},
+			</if>
+			<if test="lock != null">
+				 `lock` = #{lock},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tm_class
+		 SET 
+			code = #{code},
+			min_age = #{minAge},
+			is_only_old_student = #{isOnlyOldStudent},
+			target_group = #{targetGroup},
+			limited_amount = #{limitedAmount},
+			default_amount = #{defaultAmount},
+			remain_amount = #{remainAmount},
+			paid_amount = #{paidAmount},
+			status = #{status},
+			tuition_fee = #{tuitionFee},
+			class_time_week = #{classTimeWeek},
+			class_time_begin = #{classTimeBegin},
+			class_time_end = #{classTimeEnd},
+			picture = #{picture},
+			class_type_id = #{classTypeId},
+			teacher_id = #{teacherId},
+			classroom_id = #{classroomId},
+			term_id = #{termId},
+			`lock` = #{lock},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 商品加锁 -->
+	<update id="lockData" parameterType="java.lang.String">
+		 UPDATE tm_class
+		 SET `lock` = 1
+		 WHERE id = #{id} and (`lock` = 0 or isnull(`lock`))
+	</update>
+	<!-- 删除整表数据 -->
+	<delete id="deleteAll">
+		delete from tm_class
+	</delete>
+	<!-- 通过类别id列表查询相关班级信息 -->
+	<select id="selectByClassTypeList" resultMap="tmClassResultMap">
+		select tc.id, tct.name class_type_id, tc.`code`, tc.remarks
+		from tm_class tc left join tm_class_type tct
+		on tc.class_type_id = tct.id
+		where tc.class_type_id in 
+		<foreach item="item" index="index" collection="list" 
+		open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</select>
+	<!-- 查询订单明细数据 -->
+	<select id="selectOrderDetail" resultMap="tmClassResultMap" parameterType="java.lang.String">
+		select '合计' id,'' class_type_id,'' code,'' classroom_id,'' class_time_week,
+		'' class_time_begin,'' class_time_end,sum(tuition_fee) tuition_fee
+		from tt_order_detail tod left join tm_class tc
+		on tod.class_id = tc.id left join tm_class_type tct
+		on tc.class_type_id = tct.id left join tm_classroom tcl
+		on tc.classroom_id = tcl.id left join tt_order too
+		on tod.id = too.id left join tm_student ts
+		on too.student_id = ts.id
+		where tod.id = #{id,jdbcType=VARCHAR}
+		union all
+		select ts.name id,tct.name class_type_id,tc.code,tcl.classroom_no classroom_id,tc.class_time_week,
+		tc.class_time_begin,tc.class_time_end,tc.tuition_fee
+		from tt_order_detail tod left join tm_class tc
+		on tod.class_id = tc.id left join tm_class_type tct
+		on tc.class_type_id = tct.id left join tm_classroom tcl
+		on tc.classroom_id = tcl.id left join tt_order too
+		on tod.id = too.id left join tm_student ts
+		on too.student_id = ts.id
+		where tod.id = #{id,jdbcType=VARCHAR}
+	</select>
+	<!-- 通过学生id查询已提交和已付款的订单明细数据 -->
+	<select id="selectOrderDetailByStudentId" resultMap="tmClassResultMap" parameterType="java.lang.String">
+		select tc.* from tm_class tc,tt_order too,tt_order_detail tod
+		where tc.id=tod.class_id and too.id = tod.id
+		and too.student_id = #{id,jdbcType=VARCHAR}
+	</select>
+</mapper>

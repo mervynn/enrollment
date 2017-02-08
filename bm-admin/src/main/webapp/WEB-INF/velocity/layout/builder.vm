@@ -1,0 +1,133 @@
+<meta charset="utf-8">
+<title>XinyinTech</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="stilearning">
+
+<meta http-equiv="x-pjax-version" content="v173">
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<!-- fav and touch icons -->
+<link rel="shortcut icon" href="$request.getContextPath()/stilearn2.0/img/custom/favicon.png">
+
+<!-- build:css styles/vendor.css -->
+<!-- bower:css -->
+<link rel="stylesheet" href="$request.getContextPath()/stilearn2.0/bower_components/bootstrap/dist/css/bootstrap.css">
+<link rel="stylesheet" href="$request.getContextPath()/stilearn2.0/bower_components/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="$request.getContextPath()/stilearn2.0/bower_components/animate.css/animate.css">
+<link rel="stylesheet" href="$request.getContextPath()/stilearn2.0/bower_components/Hover/css/hover.css">
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:css(.tmp) styles/main.css -->
+<link id="style-components" href="$request.getContextPath()/stilearn2.0/styles/loaders.css" rel="stylesheet">
+<link id="style-components" href="$request.getContextPath()/stilearn2.0/styles/bootstrap-theme.css" rel="stylesheet">
+<link id="style-components" href="$request.getContextPath()/stilearn2.0/styles/dependencies.css" rel="stylesheet">
+<link id="style-base" href="$request.getContextPath()/stilearn2.0/styles/stilearn.css" rel="stylesheet">
+<link id="style-responsive" href="$request.getContextPath()/stilearn2.0/styles/stilearn-responsive.css" rel="stylesheet">
+<link id="style-helper" href="$request.getContextPath()/stilearn2.0/styles/helper.css" rel="stylesheet">
+<link id="style-sample" href="$request.getContextPath()/stilearn2.0/styles/pages-style.css" rel="stylesheet">
+<link id="style-sample" href="$request.getContextPath()/stilearn2.0/styles/custom.css" rel="stylesheet">
+<!-- build:js scripts/vendor-main.js -->
+<!-- bower:js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jqueryui/ui/jquery-ui.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-usefull.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/pace/pace.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery-pjax/jquery.pjax.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/masonry/masonry.pkgd.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/screenfull/dist/screenfull.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/countUp.js/countUp.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/skycons/skycons.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.lazyload/jquery.lazyload.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/WOW/dist/wow.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-form.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.validation/jquery.validate.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.validation/additional-methods.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/autogrow-textarea/jquery.autogrowtextarea.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/typeahead.js/dist/typeahead.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jQuery-Mask-Plugin/jquery.mask.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.tagsinput/jquery.tagsinput.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/multiselect/js/jquery.multi-select.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/select2/select2.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery-selectboxit/src/javascripts/jquery.selectBoxIt.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/momentjs/moment.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery-minicolors/jquery.minicolors.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/dropzone/downloads/dropzone.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery-steps/build/jquery.steps.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/fullcalendar/fullcalendar.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-editor.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/wysihtml5/dist/wysihtml5-0.3.0.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-wysihtml5/dist/bootstrap-wysihtml5-0.0.2.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-markdown/js/markdown.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-markdown/js/to-markdown.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/excanvas.js -->
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="$request.getContextPath()/stilearn2.0/bower_components/flot/excanvas.min.js"></script><![endif]-->
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-graph.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/raphael/raphael-min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/morris.js/morris.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/flot/jquery.flot.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/flot/jquery.flot.resize.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/flot/jquery.flot.categories.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/flot/jquery.flot.time.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/flot-axislabels/jquery.flot.axislabels.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-table.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/datatables/media/js/jquery.dataTables.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/datatables-tools/js/dataTables.tableTools.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/datatables-bootstrap3/BS3/assets/js/datatables.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.tablesorter/js/jquery.tablesorter.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.tablesorter/js/jquery.tablesorter.widgets.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery.tablesorter/addons/pager/jquery.tablesorter.pager.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/vendor-util.js -->
+<script src="$request.getContextPath()/stilearn2.0/bower_components/holderjs/holder.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- required stilearn template js -->
+<!-- build:js scripts/main.js -->
+<script src="$request.getContextPath()/stilearn2.0/scripts/bootstrap-jasny/js/fileinput.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/js-prototype.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/slip.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/hogan-2.0.0.js"></script>        
+<script src="$request.getContextPath()/stilearn2.0/scripts/theme-setup.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/chat-setup.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/panel-setup.js"></script>
+<!-- endbuild -->
+
+<!-- This scripts will be reload after pjax or if popstate event is active (use with class .re-execute) -->
+<!-- build:js scripts/initializer.js -->
+<script src="$request.getContextPath()/stilearn2.0/scripts/google-code-prettify/run_prettify.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/bootstrap-setup.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/jqueryui-setup.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/dependencies-setup.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/demo-setup.js"></script>
+
+<!-- custom -->
+<script src="$request.getContextPath()/stilearn2.0/scripts/custom/common.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/custom/common_upload.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/custom/bootbox.min.js"></script>
+<script src="$request.getContextPath()/stilearn2.0/scripts/custom/messages_cn.js"></script>
+<!-- endbuild -->

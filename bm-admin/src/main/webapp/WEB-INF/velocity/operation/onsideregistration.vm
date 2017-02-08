@@ -1,0 +1,209 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/operation/onsideregistration.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="form-horizontal">
+					<div class="pull-left form-group">
+    					<label class="col-sm-4 control-label" for="name">证件号码:</label>
+    					<div class="col-sm-8">
+    						<input class="form-control" type="search" id="idcardNo" required number="true"/>
+						</div>
+    				</div>
+					<div class="pull-left">
+    					<label class="col-sm-12 control-label" for="name" id="labName"></label>
+						<input class="form-control" type="hidden" name="studentId" id="studentId" />
+    				</div>
+                </div>
+				<div class="pull-right" style="display:none;" id="btnDiv">
+					<button type="button" class="btn btn-success" id="btnEdit" onclick="addShoppingcart();">
+						添加到选课车 <i class="fa fa-plus"></i></button>
+					<button type="button" class="btn btn-success" id="btnAdd" onclick="accessListModule();"
+						data-toggle="modal" href="#editModal">
+						查看选课车 <i class="fa fa-search"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">课程类别</th>
+						<th style="text-align:center;">班级代码</th>
+						<th style="text-align:center;">授课老师</th>
+						<th style="text-align:center;">班级介绍</th>
+						<th style="text-align:center;">教室</th>
+						<th style="text-align:center;">学期</th>
+						<th style="text-align:center;">限制最小年龄</th>
+						<th style="text-align:center;">是否只可以旧生报名</th>
+						<th style="text-align:center;">招生对象</th>
+						<th style="text-align:center;">招生人数</th>
+						<th style="text-align:center;">预设名额</th>
+						<th style="text-align:center;">剩余人数</th>
+						<th style="text-align:center;">已付款人数</th>
+						<th style="text-align:center;">上下架状态</th>
+						<th style="text-align:center;">学费</th>
+						<th style="text-align:center;">上课时间（星期）</th>
+						<th style="text-align:center;">上课时间</th>
+						<th style="text-align:center;">下课时间</th>
+						<th style="text-align:center;">乐器或老师照片</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="24" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" >
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong>选课车</strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="table-responsive table-responsive-datatables">
+                    			<table class=" table table-hover table-bordered">
+                    				<thead style="background-color:#ecf0f1;">
+                    					<tr>
+                    						<th style="text-align:center;">流水id</th>
+                    						<th style="text-align:center;">学生</th>
+                    						<th style="text-align:center;">班级</th>
+                    						<th style="text-align:center;">加入购物车老师</th>
+                    					</tr>
+                    				</thead><!--/thead-->
+                    				<tbody>
+                    				</tbody><!--/tbody-->
+                    			</table><!--/table tools-->
+                    		</div><!--/table-responsive-->
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" onclick="doBaoming()">
+					确认报名 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+// 查询地址初始化
+globleUrl = "$request.getContextPath()/operation/onsideregistration/";
+$(function(){
+    $('#idcardNo').bind('keypress',function(event){
+		var idcardNo = $('#idcardNo').val();
+        if(event.keyCode == "13"){
+			jQuery.post(globleUrl + "data/" + idcardNo + ".shtml",{},function(res){
+				if(res == null || res == ""){
+					$("#labName").css("color","red");
+					$("#labName").text("证件号码不存在");
+					$("#studentId").val("");
+					$("#btnDiv").hide();
+					//bootbox.alert("证件号码不存在");
+				}else{
+					$("#labName").css("color","");
+					$("#labName").text(JSON.parse(res).name);
+					$("#studentId").val(JSON.parse(res).id);
+					$("#btnDiv").show();
+				}
+			});
+        }
+    });
+});
+// 准备选课车数据
+function accessListModule(){
+	var studentId = $("#studentId").val();
+	jQuery.post(globleUrl + "shoppingcart/" + studentId + ".shtml",{},function(res){
+		var list = JSON.parse(res);
+		var html = "";
+		for(var i = 0;i< list.length;i++){
+			html = html + "<tr style='display: table-row;'><td>" + list[i].id + "</td>" + "<td>" + 
+			list[i].studentId + "</td>" + "<td>" + list[i].classId + "</td>" + "<td>" + 
+			(list[i].operationTeacherId == null?"":list[i].operationTeacherId) + "</td></tr>";
+		}
+		$("#editModal tbody").html(html);
+	});
+}
+
+// 添加班级到选课车
+function addShoppingcart(){
+	var classId;
+	$("table.tablesorter tbody tr").each(function(){
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			classId = $(this).find("td:eq(0)").text();
+			return false;
+		}
+	});
+	var studentId = $("#studentId").val();
+	// 检查是否黑名单
+	jQuery.post("$request.getContextPath()/operation/student/data/" + studentId + ".shtml",function(res){
+		var isAdd = false;
+    	if(JSON.parse(res).isBlacklist == 1){
+			bootbox.confirm("黑名单用户,确认添加班级到选课车？",function(sure){
+				if(sure){
+					jQuery.post(globleUrl + "shoppingcart/add.shtml",{"studentId":studentId,"classId":classId},function(msg){
+        				bootbox.alert(msg);
+        			});
+				}
+			});
+    	}else{
+			jQuery.post(globleUrl + "shoppingcart/add.shtml",{"studentId":studentId,"classId":classId},function(msg){
+				bootbox.alert(msg);
+			});
+		}
+	});
+}
+
+// 报名
+function doBaoming(){
+	bootbox.confirm("确认提交该学生选课车完成报名操作？",function(sure){
+		if(sure){
+			var studentId = $("#studentId").val();
+			jQuery.post(globleUrl + "submit.shtml",{"studentId":studentId},function(msg){
+				$("#editModal").modal("hide");
+				bootbox.alert(msg);
+			});
+		}
+	});
+}
+</script>

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TtShoppingCartMapper">
+	<!--实体映射-->
+	<resultMap id="ttShoppingCartResultMap" type="com.xinyin.baoming.model.vo.TtShoppingCart">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--学生id-->
+		<result property="studentId" column="student_id" />
+		<!--班级id-->
+		<result property="classId" column="class_id" />
+		<!--加入购物车授课老师id-->
+		<result property="operationTeacherId" column="operation_teacher_id" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!--实体映射-->
+	<resultMap id="tmClassResultMap" type="com.xinyin.baoming.model.vo.TmClass">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--班级代码-->
+		<result property="code" column="code" />
+		<!--限制最小年龄-->
+		<result property="minAge" column="min_age" />
+		<!--是否只可以旧生报名-->
+		<result property="isOnlyOldStudent" column="is_only_old_student" />
+		<!--招生对象-->
+		<result property="targetGroup" column="target_group" />
+		<!--招生人数-->
+		<result property="limitedAmount" column="limited_amount" />
+		<!--预设名额-->
+		<result property="defaultAmount" column="default_amount" />
+		<!--剩余人数-->
+		<result property="remainAmount" column="remain_amount" />
+		<!--已付款人数-->
+		<result property="paidAmount" column="paid_amount" />
+		<!--上下架状态-->
+		<result property="status" column="status" />
+		<!--学费-->
+		<result property="tuitionFee" column="tuition_fee" />
+		<!--上课时间（星期）-->
+		<result property="classTimeWeek" column="class_time_week" />
+		<!--商品图片1-->
+		<result property="classTimeBegin" column="class_time_begin" />
+		<!--商品图片1-->
+		<result property="classTimeEnd" column="class_time_end" />
+		<!--乐器或老师照片-->
+		<result property="picture" column="picture" />
+		<!--课程类别-->
+		<result property="classTypeId" column="class_type_id" />
+		<!--授课老师id-->
+		<result property="teacherId" column="teacher_id" />
+		<!--教室id-->
+		<result property="classroomId" column="classroom_id" />
+		<!--学期id-->
+		<result property="termId" column="term_id" />
+		<!--乐观锁标识(更新，删除时使用)-->
+		<result property="lock" column="lock" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	student_id,	class_id,	operation_teacher_id,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 通过学生id查询相关订单信息(商品列表list) -->
+	<select id="selectByStudentId" resultMap="tmClassResultMap" parameterType="java.lang.String">
+		SELECT TC.id,TC.code,TC.min_age,TC.is_only_old_student,TC.target_group,TC.limited_amount,TC.default_amount,TC.remain_amount,
+		TC.paid_amount,	TC.status,	TC.tuition_fee,	TC.class_time_week,	TC.class_time_begin,	TC.class_time_end,	TC.picture,	
+		TC.class_type_id,TT.name teacher_id,	TC.classroom_id,	TC.term_id,	TC.`lock`,	TC.create_by,	TC.create_date,	TC.update_by,	TC.update_date,	TC.remarks
+		FROM tt_shopping_cart TSC LEFT JOIN TM_CLASS TC
+		ON TSC.CLASS_ID = TC.ID LEFT JOIN TM_TEACHER TT
+		ON TSC.operation_teacher_id = TT.id
+		WHERE TSC.STUDENT_ID = #{studentId,jdbcType=VARCHAR}
+	</select>
+	<!-- 通过学生id查询购物车列表 -->
+	<select id="selectShoppingCartByStudentId" resultMap="ttShoppingCartResultMap" parameterType="java.lang.String">
+		SELECT TSC.ID,TS.NAME STUDENT_ID,CONCAT(TCT.NAME,TC.CODE,'班') CLASS_ID,TT.NAME OPERATION_TEACHER_ID
+		FROM tt_shopping_cart TSC LEFT JOIN TM_CLASS TC
+		ON TSC.CLASS_ID = TC.ID LEFT JOIN TM_TEACHER TT
+		ON TSC.operation_teacher_id = TT.id LEFT JOIN TM_STUDENT TS
+		ON TSC.STUDENT_ID = TS.ID LEFT JOIN TM_CLASS_TYPE TCT
+		ON TC.CLASS_TYPE_ID = TCT.ID
+		WHERE TSC.STUDENT_ID = #{studentId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="ttShoppingCartResultMap">
+		 SELECT TSC.id,	TS.NAME student_id,	TC.REMARKS class_id, TT.NAME operation_teacher_id,	TSC.create_by,	
+		 TSC.create_date,	TSC.update_by,	TSC.update_date,	TSC.remarks
+		 FROM tt_shopping_cart TSC LEFT JOIN TM_STUDENT TS
+		 ON TSC.student_id = TS.id LEFT JOIN TM_CLASS TC
+		 ON TSC.class_id = TC.ID LEFT JOIN TM_TEACHER TT
+		 ON TSC.operation_teacher_id = TT.id
+		 WHERE 1=1
+			<if test="id != null">
+				and TSC.id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and TS.NAME like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classId != null">
+				and TC.REMARKS like concat('%',#{classId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="operationTeacherId != null">
+				and TT.NAME like concat('%',#{operationTeacherId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and TSC.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and TSC.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and TSC.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and TSC.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and TSC.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据条件精确匹配） -->
+	<select id="selectExactlyBySelective" resultMap="ttShoppingCartResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_shopping_cart
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId,jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId,jdbcType=VARCHAR}
+			</if>
+			<if test="operationTeacherId != null">
+				and operation_teacher_id = #{operationTeacherId,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createDateStr != null">
+				and create_date = #{createDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDateStr != null">
+				and update_date = #{updateDateStr,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="ttShoppingCartResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tt_shopping_cart
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tt_shopping_cart
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TtShoppingCart">
+		 DELETE FROM tt_shopping_cart
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId, jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId, jdbcType=VARCHAR}
+			</if>
+			<if test="operationTeacherId != null">
+				and operation_teacher_id = #{operationTeacherId, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TtShoppingCart">
+		 INSERT INTO tt_shopping_cart
+ 		(id,	student_id,	class_id,	operation_teacher_id,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{studentId},#{classId},#{operationTeacherId},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TtShoppingCart">
+		 INSERT INTO tt_shopping_cart
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="studentId != null">
+				 student_id,
+			</if>
+			<if test="classId != null">
+				 class_id,
+			</if>
+			<if test="operationTeacherId != null">
+				 operation_teacher_id,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="studentId!=null">
+				 #{studentId},
+			</if>
+			<if test="classId!=null">
+				 #{classId},
+			</if>
+			<if test="operationTeacherId!=null">
+				 #{operationTeacherId},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TtShoppingCart">
+		 UPDATE tt_shopping_cart
+ 		 <set> 
+			<if test="studentId != null">
+				 student_id = #{studentId},
+			</if>
+			<if test="classId != null">
+				 class_id = #{classId},
+			</if>
+			<if test="operationTeacherId != null">
+				 operation_teacher_id = #{operationTeacherId},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tt_shopping_cart
+		 SET 
+			student_id = #{studentId},
+			class_id = #{classId},
+			operation_teacher_id = #{operationTeacherId},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 清空购课车数据 -->
+	<delete id="deleteAll">
+		delete from tt_shopping_cart
+	</delete>
+	<!-- 按班级分组求和，查询所有选课车中的课程数据和未完成订单明细数据 -->
+	<select id="selectByClassGroup" resultMap="ttShoppingCartResultMap">
+		select count(1) remarks, class_id
+		from(select count(1),class_id from tt_shopping_cart
+		GROUP BY class_id
+		union all
+		select count(1),tod.class_id
+		from tt_order too, tt_order_detail tod
+		where too.id = tod.id and too.`status` = '1'
+		GROUP BY tod.class_id) temp
+		group by class_id
+	</select>
+</mapper>

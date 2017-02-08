@@ -1,0 +1,368 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/operation/class.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnChooseAll" onclick="chooseAll();">
+						全选 <i class="fa fa-check"></i></button>
+					<button type="button" class="btn btn-success" id="btnOnSell" onclick="onSell();">
+						上架 <i class="fa fa-bullhorn"></i></button>
+					<button type="button" class="btn btn-success" id="btnStopSell" onclick="stopSell();">
+						下架 <i class="fa fa-inbox"></i></button>
+					<button type="button" class="btn btn-success" id="btnAdd" onclick="accessAddModule();"
+						data-toggle="modal" href="#editModal">
+						添加 <i class="fa fa-plus"></i></button>
+					<button type="button" class="btn btn-success" id="btnEdit" onclick="accessEditModule();"
+						data-toggle="modal" href="#editModal">
+						修改 <i class="fa fa-edit"></i></button>
+					<button type="button" class="btn btn-success" id="btnDel" onclick="doDel();">
+						删除 <i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">课程类别</th>
+						<th style="text-align:center;">班级代码</th>
+						<th style="text-align:center;">授课老师</th>
+						<th style="text-align:center;">班级介绍</th>
+						<th style="text-align:center;">教室</th>
+						<th style="text-align:center;">学期</th>
+						<th style="text-align:center;">限制最小年龄</th>
+						<th style="text-align:center;">是否只可以旧生报名</th>
+						<th style="text-align:center;">招生对象</th>
+						<th style="text-align:center;">招生人数</th>
+						<th style="text-align:center;">预设名额</th>
+						<th style="text-align:center;">剩余人数</th>
+						<th style="text-align:center;">已付款人数</th>
+						<th style="text-align:center;">上下架状态</th>
+						<th style="text-align:center;">学费</th>
+						<th style="text-align:center;">上课时间（星期）</th>
+						<th style="text-align:center;">上课时间</th>
+						<th style="text-align:center;">下课时间</th>
+						<th style="text-align:center;">乐器或老师照片</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="24" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" >
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">班级照片(乐器或老师照片均可):</label>
+								<div class="col-sm-7">
+									<input id="upload" type="file" capture="camera"  />
+                    				<input type="hidden" name="picture" id="pictureUrl" />
+                    				<img class="img_wrap" style="width:70px;height:70px;" src=""/>
+                                </div>
+                             </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">课程类别:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="classTypeId" required>
+										<option value="">请选择</option>
+										#foreach($obj in $classTypeList)
+											<option value="$obj.id">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">班级代码:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="code" required number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">授课老师:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="teacherId" required>
+										<option value="">请选择</option>
+										#foreach($obj in $teacherList)
+											<option value="$obj.id">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">班级介绍:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remarks" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">教室:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="classroomId" required>
+										<option value="">请选择</option>
+										#foreach($obj in $classroomList)
+											<option value="$obj.id">$obj.classroomNo</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学期:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="termId" required>
+										<option value="">请选择</option>
+										#foreach($obj in $termList)
+											<option value="$obj.id">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">限制最小年龄:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="minAge" required number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">是否只可以旧生报名:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="isOnlyOldStudent" required>
+										<option value="">请选择</option>
+										#foreach($obj in $boolearnList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">招生对象:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="targetGroup" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">招生人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="limitedAmount" required number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">预设名额:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="defaultAmount" number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">剩余人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remainAmount" required number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">已付款人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="paidAmount" number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">上下架状态:</label> 
+    							<div class="col-sm-7">
+    								<select class="form-control" name="status" required>
+										<option value="">请选择</option>
+										#foreach($obj in $statusList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学费:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="tuitionFee" required number="true"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">上课星期:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="classTimeWeek" required>
+										<option value="">请选择</option>
+										<option value="周一">周一</option>
+										<option value="周二">周二</option>
+										<option value="周三">周三</option>
+										<option value="周四">周四</option>
+										<option value="周五">周五</option>
+										<option value="周六">周六</option>
+										<option value="周日">周日</option>
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">上课时间:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="time" name="classTimeBegin" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">下课时间:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="time" name="classTimeEnd" required/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" >
+					保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+// 上传地址初始化
+uploadUrl = "$!baseurl/file/base64/upload.shtml";
+// 查询地址初始化
+globleUrl = "$request.getContextPath()/operation/class/";
+title = "班级表";
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal input[name='code']").val(msg.code);
+	$("#editModal input[name='minAge']").val(msg.minAge);
+	$("#editModal select[name='isOnlyOldStudent']").val(msg.isOnlyOldStudent);
+	$("#editModal input[name='targetGroup']").val(msg.targetGroup);
+	$("#editModal input[name='limitedAmount']").val(msg.limitedAmount);
+	$("#editModal input[name='defaultAmount']").val(msg.defaultAmount);
+	$("#editModal input[name='remainAmount']").val(msg.remainAmount);
+	$("#editModal input[name='paidAmount']").val(msg.paidAmount);
+	$("#editModal select[name='status']").val(msg.status);
+	$("#editModal input[name='tuitionFee']").val(msg.tuitionFee);
+	$("#editModal select[name='classTimeWeek']").val(msg.classTimeWeek);
+	$("#editModal input[name='classTimeBegin']").val(msg.classTimeBegin);
+	$("#editModal input[name='classTimeEnd']").val(msg.classTimeEnd);
+	$("#editModal input[name='picture']").val(msg.picture);
+	$("#editModal img[class='img_wrap']").attr("src", msg.picture);
+	$("#editModal select[name='classTypeId']").val(msg.classTypeId);
+	$("#editModal select[name='teacherId']").val(msg.teacherId);
+	$("#editModal select[name='classroomId']").val(msg.classroomId);
+	$("#editModal select[name='termId']").val(msg.termId);
+	$("#editModal input[name='remarks']").val(msg.remarks);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+
+// 上下架准备数据
+function prepareClassDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text() + $(this).find("td:eq(2)").text() + "班";
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+
+// 执行商品上架
+function onSell(){
+	bootbox.confirm("上架选中班级？",function(sure){
+		if(sure){
+			var idArr = prepareClassDate();
+			AjaxPost(globleUrl+"onsell.shtml",{"id":JSON.stringify(idArr)},function(msg){
+				initTableSorter(globleUrl+"data.shtml");
+				btnInit();
+				bootbox.alert(msg,function(){
+					var allRows = $("table.tablesorter tbody").find("tr");
+					$(allRows).each(function(){
+						if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+							$("table.tablesorter").trigger("update");
+							return false;
+						}
+					});
+				});
+			}); 
+		}
+	});
+}
+
+// 执行商品下架
+function stopSell(){
+	bootbox.confirm("下架选中班级？",function(sure){
+		if(sure){
+			var idArr = prepareClassDate();
+			AjaxPost(globleUrl+"stopsell.shtml",{"id":JSON.stringify(idArr)},function(msg){
+				initTableSorter(globleUrl+"data.shtml");
+				btnInit();
+				bootbox.alert(msg,function(){
+					var allRows = $("table.tablesorter tbody").find("tr");
+					$(allRows).each(function(){
+						if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+							$("table.tablesorter").trigger("update");
+							return false;
+						}
+					});
+				});
+			}); 
+		}
+	});
+}
+</script>

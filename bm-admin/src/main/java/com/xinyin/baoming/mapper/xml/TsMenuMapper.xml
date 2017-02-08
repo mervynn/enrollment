@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TsMenuMapper">
+	<!--实体映射-->
+	<resultMap type="com.xinyin.baoming.model.vo.TsMenu" id="selectMenuRootMap">
+			<result column="menu_id" property="menuId" />
+			<result column="parent_menu_id" property="parentMenuId" />
+			<result column="menu_name" property="menuName" />
+			<result column="menu_href" property="menuHref" />
+			<result column="sort" property="sort" />
+			<result property="isMenu" column="is_menu"/>
+			<result property="jspName" column="jsp_name"/>
+			<result property="jsSel" column="js_sel"/>
+			<association property="menus" column="{parentMenuId=menu_id}" 
+				select="selectMenuRoot">
+			</association>
+	</resultMap>
+	<select id="selectMenuRoot" resultMap="selectMenuRootMap">
+		SELECT
+			menu_id,
+			parent_menu_id,
+			menu_name,
+			menu_href,
+			sort,
+			is_menu,
+			jsp_name,
+			js_sel
+		FROM
+			ts_menu
+		WHERE
+			1=1
+			<if test="parentMenuId == null or parentMenuId == ''" >
+				and parent_menu_id is null
+			</if>
+			<if test="parentMenuId != null" >
+				and parent_menu_id = #{parentMenuId,jdbcType=VARCHAR}
+			</if>
+		order by sort desc
+	</select>
+	<delete id="deleteMenu" parameterType="java.lang.String">
+		DELETE FROM ts_menu where menu_id = #{menuId,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteMenuByParentId">
+		DELETE FROM ts_menu where parent_menu_id = #{menuId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insertMenu" parameterType="com.xinyin.baoming.model.vo.TsMenu">
+		insert into ts_menu(
+			menu_id,
+			parent_menu_id,
+			menu_name,
+			menu_href,
+			sort,
+			is_menu,
+			jsp_name,
+			js_sel
+		) values (
+			#{menuId,jdbcType=VARCHAR},
+			#{parentMenuId,jdbcType=VARCHAR},
+			#{menuName,jdbcType=VARCHAR},
+			#{menuHref,jdbcType=VARCHAR},
+			#{sort,jdbcType=INTEGER},
+			#{isMenu,jdbcType=VARCHAR},
+			#{jspName,jdbcType=VARCHAR},
+			#{jsSel,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateMenu" parameterType="com.xinyin.baoming.model.vo.TsMenu">
+		update ts_menu
+		set 
+			<if test="parentMenuId != null" >
+				parent_menu_id = #{parentMenuId,jdbcType=VARCHAR},
+			</if>
+			<if test="menuName != null" >
+				menu_name = #{menuName,jdbcType=VARCHAR},
+			</if>
+			<if test="menuHref != null" >
+				menu_href = #{menuHref,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null" >
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="isMenu != null" >
+				is_menu = #{isMenu,jdbcType=VARCHAR},
+			</if>
+			<if test="jspName != null" >
+				jsp_name = #{jspName,jdbcType=VARCHAR},
+			</if>
+			<if test="jsSel != null" >
+				js_sel = #{jsSel,jdbcType=VARCHAR},
+			</if>
+			menu_id = menu_id
+		where
+			menu_id = #{menuId,jdbcType=VARCHAR}
+	</update>
+	<resultMap type="com.xinyin.baoming.model.vo.TsMenu" id="selectMenuByIdMap">
+		<result column="menu_id" property="menuId"/>
+		<result column="parent_menu_id" property="parentMenuId"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_href" property="menuHref"/>
+		<result column="sort" property="sort"/>
+		<result property="isMenu" column="is_menu"/>
+		<result property="jspName" column="jsp_name"/>
+		<result property="jsSel" column="js_sel"/>
+	</resultMap>
+	<select id="selectMenuById" resultMap="selectMenuByIdMap">
+		SELECT
+			menu_id,
+			parent_menu_id,
+			menu_name,
+			menu_href,
+			sort,
+			is_menu,
+			jsp_name,
+			js_sel
+		FROM ts_menu
+		WHERE menu_id = #{menuId,jdbcType=VARCHAR}
+		order by sort desc
+	</select>
+	<resultMap type="com.xinyin.baoming.model.vo.TsMenu" id="menuMap">
+			<result column="menu_id" property="menuId" />
+			<result column="parent_menu_id" property="parentMenuId" />
+			<result column="menu_name" property="menuName" />
+			<result column="menu_href" property="menuHref" />
+			<result column="sort" property="sort" />
+			<result column="is_menu" property="isMenu"/>
+			<result property="jspName" column="jsp_name"/>
+			<result property="jsSel" column="js_sel"/>
+	</resultMap>
+	<select id="selectUserHasMenu" resultMap="menuMap">
+		SELECT
+			ts_menu.menu_id,
+			ts_menu.parent_menu_id,
+			ts_menu.menu_name,
+			ts_menu.menu_href,
+			ts_menu.is_menu,
+			ts_menu.sort,
+			ts_menu.jsp_name,
+			js_sel,
+			ts_user.username
+		FROM
+			ts_menu
+		INNER JOIN ts_role_auth ON ts_role_auth.menu_id = ts_menu.menu_id
+		INNER JOIN ts_role ON ts_role.role_id = ts_role_auth.role_id
+		INNER JOIN ts_user ON ts_user.role_id = ts_role.role_id
+		WHERE
+			ts_user.username = #{username,jdbcType=VARCHAR}
+		order by ts_menu.sort desc
+	</select>
+	<select id="selectMenu" resultMap="menuMap">
+		SELECT
+			ts_menu.menu_id,
+			ts_menu.parent_menu_id,
+			ts_menu.menu_name,
+			ts_menu.menu_href,
+			ts_menu.is_menu,
+			ts_menu.sort,
+			ts_menu.jsp_name,
+			ts_menu.js_sel
+		FROM
+			ts_menu
+		WHERE
+			<if test="parentMenuId != null" >
+				ts_menu.parent_menu_id = #{parentMenuId,jdbcType=VARCHAR}
+			</if>
+			<if test="menuId != null" >
+				ts_menu.menu_id = #{menuId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<select id="selectDisableJspOpt" resultMap="menuMap">
+		SELECT
+			ts_menu.menu_id,
+			ts_menu.parent_menu_id,
+			ts_menu.menu_name,
+			ts_menu.menu_href,
+			ts_menu.jsp_name,
+			ts_menu.js_sel,
+			ts_menu.is_menu,
+			ts_menu.sort
+		FROM
+			ts_menu
+		WHERE
+			ts_menu.menu_id NOT IN (
+				SELECT
+					ts_role_auth.menu_id
+				FROM
+					ts_role_auth
+				INNER JOIN ts_role ON ts_role.role_id = ts_role_auth.role_id
+				INNER JOIN ts_user ON ts_user.role_id = ts_role.role_id
+				WHERE
+					ts_user.username = #{username,jdbcType=VARCHAR}
+			)
+		AND ts_menu.jsp_name IS NOT NULL
+		AND ts_menu.jsp_name != ''
+	</select>
+</mapper>

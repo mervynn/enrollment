@@ -1,0 +1,182 @@
+#set($layout="/wap/user/order/list.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>订单中心</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base2013.css?v=14" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/neworder.css?v=14" charset="gbk">
+    <link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/header.css?v=14" charset="utf-8">
+</head>
+  <body id="body" style="height: 667px;">
+    <a name="top"></a>
+    <header></header>
+    <title>全部订单-虚实结合</title>
+    <a name="top"></a>
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">订单中心</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class=" current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+    <div class="common-wrapper" id="mainLayout">
+      <!-- 通知中心 -->
+      <div id="remind-tip-pop" class="shipping-pop-floor">
+        <div class="cover-floor"></div>
+        <div id="remind-info-box" class="ship-info-box">
+          <h4 class="ship-tit">运费说明</h4>
+          <div class="ship-iteam">
+            <p>a、上游根据入参商品顺序返回对应的可领或可用券</p>
+            <p>
+            </p>
+          </div>
+          <p class="ship-ftw">我知道了</p></div>
+      </div>
+      <!-- 通知中心 结束-->
+      <div class="order-tab bdb-1px">
+        <ul>
+          <li id="li_orderlist" class="curr">
+            <a href="javascript:;">全部订单</a></li>
+          <li id="li_ordersort">
+            <a href="javascript:;"></a></li>
+        </ul>
+      </div>
+      <div id="div_orderlist">
+        <div id="allOrders" style="position:relative">
+		#set($suffix = ".shtml")
+		#foreach($obj in $list)
+          <div class="m item border-1px mar9" id="21273484874">
+            <div class="mt bdb-1px">
+              <span class="i-icon02"></span>
+              <a name="63689" href="javascript:;" sign="shop" class="shop-a cf">
+                <span class="shop-name"></span>
+                <span class="icon-point"></span>
+              </a>
+              <span class="i-info">
+				#if($!obj.status == 2)
+					<div class="signet"></div>
+				#else
+					<a
+					#if($!isOldStage == "true")
+						onclick="doDelete('$!obj.id');"
+					#else
+						href="./delete/$obj.id$suffix"
+					#end
+					class="i-complete"></a>
+				#end
+                <!--完成戳图片--></span>
+              <div style="clear:both"></div>
+            </div>
+            <div class="mc">
+              <a sign="orderDetail" href="./detail/$obj.id$suffix">
+                <div class="imc-con bdb-1px">
+                  <!--一单一个商品显示图片和信息-->
+				  #if($!obj.orderDetail.size() == 1)
+					<div class="imc-one">
+                    <div class="imco-l">
+                      <div class="imco-l-img-box">
+                        <div class="imco-l-img">
+                          <img src="$!obj.orderDetail.get(0).picture"></div>
+                      </div>
+                    </div>
+                    <div class="imco-r-content">
+                      <div class="imco-r">$!obj.orderDetail.get(0).remarks</div></div>
+                  </div>
+				  #else
+					<div class="c-type-wrap carousel" id="carousel0">
+                      <ul class="step-tab -type" style="width: 207px; transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+                        <!--循环商品列表-->
+						#foreach($temp int $obj.orderDetail)
+							<li>
+                              <div class="liimg">
+                                <img src="$temp.picture">
+                                <!--展示商品图片，单击图片跳转订单详情--></div>
+                            </li>
+						#end
+                      </ul>
+                    </div>
+				  #end
+                  <!--end inner if-->
+                  <!--end outer if-->
+                  <!--实物订单--></div>
+              </a>
+            </div>
+            <div class="mb cf">
+              <span class="true-payed">实付款:</span>
+              <span class="imb-num">¥$obj.totalMoney</span>
+            </div>
+          </div>
+		  #end
+          <!--end foreach--></div>
+        <!--end if--></div>
+      <div class="is-loading" style="height:35px;padding-top:2px">
+        <em></em>
+        <span>加载中...</span></div>
+      <div report-eventid="MHome_BacktoTop" page_name="index" class="bottom-to-top J_ping" id="indexToTop" style="display: none;">
+        <img src="../../img/scroll-to-top-icon.png" style="width: 100%;"></div>
+      <div class="cart-pop-floor" id="pop-delete">
+        <div class="cart-cover-floor"></div>
+        <div class="cart-info-box" style="" id="cartInfoBox1">
+          <div class="cart-info-box-content cart-bdb-1px">
+            <span class="cart-info-box-text">确认删除此订单？</span></div>
+          <div class="cart-btn-box">
+            <a class="cart-btn-box-check" id="del">确认</a>
+            <a class="cart-btn-box-back" id="cancel">取消</a></div>
+        </div>
+      </div>
+      <div class="cart-pop-floor" id="pop-confirm">
+        <div class="cart-cover-floor"></div>
+        <div class="cart-info-box" style="" id="cartInfoBox2">
+          <div class="cart-info-box-content cart-bdb-1px">
+            <span class="cart-info-box-text">是否确认已收到货品？</span></div>
+          <div class="cart-btn-box">
+            <a class="cart-btn-box-check" id="confirm">确定</a>
+            <a class="cart-btn-box-back" id="cancel_confirm">取消</a></div>
+        </div>
+      </div>
+      <span id="_getwidthID" style="visibility: hidden; white-space: nowrap; display: none; font-size: 13px;">
+        <br>ThinkPad 原装笔记本电脑双肩背包（0A33911）适合15.6英寸及以下电脑
+        <br></span></div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script type="text/javascript">
+	function doDelete(obj){
+		if(confirm("当前阶段删除订单无法找回，确认删除吗？")){
+			location.href="./delete/"+ obj +".shtml";
+		}
+	}
+  </script>
+</html>

@@ -1,0 +1,210 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/operation/content.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+    <div class="panel-heading bg-white">
+        <div class="panel-actions" >
+            <button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+                <i class="fa fa-expand"></i>
+            </button>
+            <button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <button data-close="#panel-tablesorter" title="close" class="btn-panel">
+                <i class="fa fa-times"></i>
+            </button>
+        </div><!-- /panel-actions -->
+        <h3 class="panel-title">&nbsp;</h3>
+    </div><!-- /panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+    		<div class="col-xs-12">
+    			<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnChooseAll" onclick="chooseAll();">
+						全选 <i class="fa fa-check"></i></button>
+    				<button type="button" class="btn btn-success" id="btnAdd" onclick="accessAddModule();"
+						data-toggle="modal" href="#editModal">
+						添加 <i class="fa fa-plus"></i></button>
+        			<button type="button" class="btn btn-success" id="btnEdit" onclick="accessEditModule();"
+						data-toggle="modal" href="#editModal">
+						修改 <i class="fa fa-edit"></i></button>
+        			<button type="button" class="btn btn-success" id="btnDel" onclick="doDel();">
+						删除 <i class="fa fa-times"></i></button>
+                </div>
+    		</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+    	</div>
+        <div class="table-responsive table-responsive-datatables">
+        	<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">内容编号</th>
+						<th style="text-align:center;">内容类型</th>
+						<th style="text-align:center;">内容链接地址</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+						<th style="text-align:center;">备注信息</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+                <tfoot>
+                    <tr>
+                        <th colspan="8" class="ts-pager form-horizontal">
+                            #parse("/layout/page.vm")
+                        </th>
+                    </tr>
+                </tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+        </div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" tabindex="-1">
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">内容类型:</label> 
+    							<div class="col-sm-7">
+									<select class="form-control" name="type" required>
+										<option value="">请选择</option>
+										#foreach($obj in $contentType)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">内容链接地址:</label> 
+    							<div class="col-sm-7">
+    								<input class="form-control" type="text" name="uri" maxlength="500" required />
+								</div>
+								<button type="button" class="btn btn-xs btn-info" style="margin-top:6px;" id="btnEdit" onclick="editContent();">
+									自定义 <i class="fa fa-edit"></i>
+								</button>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">备注信息:</label> 
+    							<div class="col-sm-7">
+    								<textarea class="form-control" rows="3" name="remarks"
+										maxlength="255">
+                                    </textarea>
+								</div>
+                            </div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+							 取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button">
+							 保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div id="ueditor" class="modal fade" tabindex="-1">
+			<div class="modal-dialog" style="width:1078px;">
+				<div class="modal-content">
+					<div class="modal-body" style="height:587px;">
+                        <iframe id="iframe" src="$request.getContextPath()/UEditor/index.html" width="100%" height="100%"></iframe>
+                    </div><!--/panel-body-->
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+							 取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" onclick="saveContent()">
+							 上传 <i class="fa fa-cloud-upload"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/operation/content/";
+title = "内容";
+
+// 服务端校验
+function serverValid(validFlag,validSuccess,flag){
+	var obj = $("select[name='type']");
+	if(flag == 1 && $(obj).val() != ""){
+		jQuery.get(globleUrl + "valid/" + $(obj).val() + ".shtml",function(msg){
+			// 所有校验通过时
+			if(!msg && validFlag){
+				validSuccess(flag);
+			}else{
+				// 后台校验失败时，提示消息，文本变红
+				if(msg){
+					$(obj).addClass("text-danger");
+					if($(obj).next().length==0){
+    					$(obj).after("<label for='name' class='text-danger'>"+msg+"</label>")
+    				}else{
+    					$(obj).next().text(msg);
+    					$(obj).next().show();
+    				}
+				}
+			}
+		});
+	}else if(flag != 1 && validFlag){
+		validSuccess(flag);
+	}
+}
+
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal select[name='type']").val(msg.type);
+	$("#editModal input[name='uri']").val(msg.uri);
+	$("#editModal textarea[name='remarks']").val(msg.remarks);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+
+// 内容编辑
+function editContent(){
+	$("#ueditor").modal("show");
+	var uri = $("#editModal input[name='uri']").val();
+	window.frames[0].clearContent();
+	if(uri !="" && uri!= null){
+		AjaxGet("$request.getContextPath()/base/jsoup.shtml",
+    		{url:uri,domType:"tag",targetName:"body"},function(msg){
+    		window.frames[0].insertHtml1(msg);
+    	});
+	}
+}
+
+// 保存内容
+function saveContent(){
+	var html = window.frames[0].getAllHtml();
+	AjaxPost("$request.getContextPath()/base/upload.shtml",{content:html},function(msg){
+		$("#ueditor").modal("hide");
+		$("#editModal input[name='uri']").val(msg);
+	});
+}
+</script>

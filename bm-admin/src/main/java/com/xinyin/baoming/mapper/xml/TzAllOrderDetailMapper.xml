@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TzAllOrderDetailMapper">
+	<!--实体映射-->
+	<resultMap id="tzAllOrderDetailResultMap" type="com.xinyin.baoming.model.vo.TzAllOrderDetail">
+		<!--订单id-->
+		<id property="id" column="id" />
+		<!--班级id-->
+		<result property="classId" column="class_id" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	class_id
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tzAllOrderDetailResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tz_all_order_detail
+		 WHERE 1=1
+			<if test="id != null">
+				and id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="classId != null">
+				and class_id like concat('%',#{classId,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tzAllOrderDetailResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tz_all_order_detail
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tz_all_order_detail
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrderDetail">
+		 DELETE FROM tz_all_order_detail
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="classId != null">
+				and class_id = #{classId, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TzAllOrderDetail">
+		 INSERT INTO tz_all_order_detail
+ 		(id,	class_id) 
+		 VALUES 
+ 		(#{id},#{classId}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrderDetail">
+		 INSERT INTO tz_all_order_detail
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="classId != null">
+				 class_id,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="classId!=null">
+				 #{classId},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrderDetail">
+		 UPDATE tz_all_order_detail
+ 		 <set> 
+			<if test="classId != null">
+				 class_id = #{classId},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tz_all_order_detail
+		 SET 
+			class_id = #{classId}
+		 WHERE id = #{id}
+	</update>
+	<!-- 数据备份到该表 -->
+	<insert id="insertOrderDetail">
+		insert into tz_all_order_detail(select * from tt_order_detail)
+	</insert>
+</mapper>

@@ -1,0 +1,86 @@
+#set($layout="/wap/user/getpassword/three.vm")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="yes" name="apple-touch-fullscreen"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>找回密码</title>
+    <link rel="stylesheet" href="../../css/mfindpwd.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon-precomposed" href="../../img/favicon.png"/>
+</head>
+<body>
+    <header id="header" style="display:block;"><span class="icon icon-goback"></span>找回密码</header>
+    <section class="page">
+        <div class="wrap findpwdPage">
+            <p class="set-text">请填该账号任意学生姓名</p>
+            <div class="input-container set-input">
+                <input id="historyUser" class="acc-input historyUser J_ping" type="text" placeholder="学生姓名" autocomplete="off" report-eventid="MLoginRegister_SetPasswordConsigneeClick">
+                <i class="icon icon-clear"></i>
+            </div>
+            <p class="set-text">请设置新的登录密码</p>
+            <div class="input-container set-input">
+                <input id="passwd" class="acc-input password J_ping" type="text" placeholder="6-20位，不能与旧密码相同" minlength="6" maxlength="20" autocomplete="off" report-eventid="MLoginRegister_SetPasswordInput">
+                <i class="icon icon-clear"></i>
+                <label for="onOff_pwd" class="label-checkbox J_ping" report-eventid="MLoginRegister_SetPasswordExpress">
+                    <input id="onOff_pwd" type="checkbox" checked="checked">
+                    <div class="checkbtn">
+                        <span class="b-text">abc</span>
+                        <span class="b-pwd">...</span>
+                    </div>
+                </label>
+            </div>
+            <p class="set-notice">备注：请将密码设置为6-20位，并且由字母，数字和符号两种以上组合，不能与旧密码相同</p>
+            <a href="javascript:;" id="sureBtn" class="btn J_ping" report-eventid="MLoginRegister_SetPasswordFinish">完成</a>
+        </div>
+    </section>
+    <div class="toast-mask">
+        <div class="toast">
+        </div>
+    </div>
+</body>
+<script>
+</script>
+<script src="../../js/zepto.min.js"></script>
+<script src="../../js/findpwdCommon.min.js"></script>
+<!---找回密码部分公用js-->
+<script>
+//发送修改数据
+var sendData = {};
+$('#sureBtn').on('click', function() {
+    if (!$(this).hasClass('btn-active')) {
+        return false;
+    } else {
+        var passwd = $('#passwd').val();
+        if(!checkNewPasswordForm(passwd)){
+            return false;
+        }else{
+            sendData.receiver = $.trim($('#historyUser').val());
+            sendData.password = passwd;
+            $.ajax({
+                url: './studentresetpwd.shtml',
+                data : sendData,
+                type:'post',
+                dataType:'json',
+                success : function(res){
+                    if(res.code == 0){
+                        window.open(res.succcb,'_self');
+                    }else{
+                        toast(res.msg);
+                    }
+                },
+                error: function(err) {
+                    toast('网络有问题，请求失败');
+                }
+            });
+        }
+    }
+});
+</script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

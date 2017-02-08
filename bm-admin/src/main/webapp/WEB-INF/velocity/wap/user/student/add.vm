@@ -1,0 +1,242 @@
+#set($layout="/wap/user/student/add.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>添加学生资料</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base2013.css" charset="gbk">
+	<link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/address.css" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/header.css" charset="utf-8">
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+   </head>
+  <body id="body">
+    <a name="top"></a>
+    <header>
+      <!-- 通用头 div -->
+      <div id="m_common_header" style="min-height:45px;">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">添加学生资料</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class=" current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+    </header>
+    <form id="addressForm" action="./save.shtml" method="post">
+      <span id="errorMessage"></span>
+      <span id="errorMessage1"></span>
+      <div class="new-ct">
+        <div class="new-addr">
+          <div class="new-info-box">
+            <div class="new-set-info">
+              <span class="new-txt2 new-mg-b5">姓名<font color="red">*</font></span>
+              <span class="new-input-span new-mg-b10">
+                <input type="text" name="name" id="name" maxlength="25" class="new-input" value="" autocomplete="off"></span>
+              <span class="new-txt-err" id="name_error"></span>
+            </div>
+			<div class="new-set-info">
+                <span class="new-txt2 new-mg-b5">个人免冠证件照<font color="red">*</font></span>
+            	<input id="upload" type="file" accept="image *;" capture="camera" style="position:absolute;top:10em;left:0px;opacity:0;width:100%;height:70px;" >
+				<input type="hidden" name="pictureUrl" id="pictureUrl"/>
+				<img class="img_wrap" style="width:70px;height:70px;" src="">
+				<span class="new-txt-err" id="picture_error"></span>
+             </div>
+            <div class="new-ship-addr">
+              <strong class="new-tit">身份证件</strong>
+              <div class="new-mg-t10">
+                <span class="new-tbl-type new-mg-b10">
+                  <span class="new-tbl-cell new-txt-w38">类型<font color="red">*</font></span>
+                  <span class="new-tbl-cell">
+                    <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">居民身份证</div>
+                        <span></span>
+                        <select name="cardType" id="cardType" class="new-select">
+							#foreach($obj in $idcardList)
+								<option value="$!obj.sort">$!obj.name</option>
+							#end
+                        </select>
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              </div>
+			  <div class="new-mg-t10">
+                <span class="new-tbl-type new-mg-b10">
+                  <span class="new-tbl-cell new-txt-w38">号码<font color="red">*</font></span>
+                  <span class="new-tbl-cell">
+                    <span class="new-input-span new-mg-b10">
+                      <input name="idcardNo" id="idcardNo" title="" class="new-input" cols="30" rows="5" ></span>
+                    <span class="new-txt-err" id="idcardNo_error"></span>
+                  </span>
+                </span>
+              </div>
+			  <div class="new-set-info" style="display:none;" id="birthDateDiv">
+                  <span class="new-txt2 new-mg-b5">出生日期<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                    <input type="date" name="birthDate" id="birthDate" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="birthDate_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">性别<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">男</div>
+                        <span></span>
+                        <select name="sex" id="sex" class="new-select">
+						  #foreach($obj in $sexList)
+								<option value="$!obj.sort">$!obj.name</option>
+							#end
+                        </select>
+                      </span>
+                  </span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">户籍是否石狮本地<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">是</div>
+                        <span></span>
+                        <select name="isLocalOrNot" id="isLocalOrNot" class="new-select">
+							<option value="1" selected="">是</option>
+							<option value="0">否</option>
+                        </select>
+                      </span>
+                  </span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">所在学校<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">实验一中</div>
+                        <span></span>
+                        <select name="schoolId" id="schoolId" class="new-select">
+							#foreach($obj in $schoolList)
+								<option value="$!obj.id">$!obj.name</option>
+							#end
+                        </select>
+                      </span>
+                  </span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">就读年级<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">一年</div>
+                        <span></span>
+                        <select name="grade" id="grade" class="new-select">
+						  #foreach($obj in $gradeList)
+								<option value="$!obj.sort">$!obj.name</option>
+						   #end
+                        </select>
+                      </span>
+                  </span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">学籍号</span>
+                  <span class="new-input-span new-mg-b10">
+                    <input name="studentCode" id="studentCode" maxlength="25" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="studentCode_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">家长姓名<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                    <input type="text" name="parentName" id="parentName" maxlength="25" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="parentName_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">家长手机号码<font color="red">*</font></span>
+                  <span class="new-input-span new-mg-b10">
+                    <input type="text" name="parentPhonenumber" id="parentPhonenumber" maxlength="20" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="parentPhonenumber_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">家庭地址</span>
+                  <span class="new-input-span new-mg-b10">
+                    <input name="address" id="address" maxlength="25" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="address_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">家庭电话</span>
+                  <span class="new-input-span new-mg-b10">
+                    <input name="homePhone" id="homePhone" maxlength="25" class="new-input" value="" autocomplete="off"></span>
+                  <span class="new-txt-err" id="homePhone_error"></span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">是否低保户</span>
+                  <span class="new-input-span new-mg-b10">
+                      <span class="new-sel-box new-p-re">
+                        <div id="province_text">否</div>
+                        <span></span>
+                        <select name="isLowincome" id="isLowincome" class="new-select">
+                          #foreach($obj in $judgeList)
+								<option value="$!obj.sort">$!obj.name</option>
+							#end
+                        </select>
+                      </span>
+                  </span>
+              </div>
+			  <div class="new-set-info">
+                  <span class="new-txt2 new-mg-b5">备注</span>
+                  <span class="new-mg-b10">
+                	<div class="new-post_wr">
+                        <textarea name="remarks" id="remarks" rows="5" cols="30" title="" class="new-textarea"></textarea>
+                    </div>
+					 <span class="new-txt-err" id="remarks_error"></span>
+            	</span>
+              </div>
+            </div>
+            <a name="order_submit" id="address_submit" class="new-abtn-type new-mg-t15">保存资料</a></div>
+        </div>
+      </div>
+    </form>
+    <div id="m_common_bottom" style="min-height:170px;">
+      <footer id="m_common_bottom_jd_footer" class="jd-footer">
+		<div class="jd-footer-copyright ">Copyright © 2016 歆音科技xinyin.tech 版权所有 </div>
+	  </footer>
+	</div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/stilearn2.0/scripts/custom/common_upload.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script src="$request.getContextPath()/wap/js/student.js"></script>
+  <script type="text/javascript">
+  	$(function(){
+		// 上传地址初始化
+		uploadUrl = "$request.getContextPath()/file/base64/upload.shtml";
+		// 上传组件初始化
+		demo_h5_upload_ops.init();
+	})
+  </script>
+</html>

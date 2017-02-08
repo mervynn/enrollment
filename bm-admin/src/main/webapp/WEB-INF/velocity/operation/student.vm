@@ -1,0 +1,312 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/operation/student.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" id="btnChooseAll" onclick="chooseAll();">
+						全选 <i class="fa fa-check"></i></button>
+					<button type="button" class="btn btn-success" id="btnAdd" onclick="accessAddModule();"
+						data-toggle="modal" href="#editModal">
+						添加 <i class="fa fa-plus"></i></button>
+					<button type="button" class="btn btn-success" id="btnEdit" onclick="accessEditModule();"
+						data-toggle="modal" href="#editModal">
+						修改 <i class="fa fa-edit"></i></button>
+					<button type="button" class="btn btn-success" id="btnDel" onclick="doDel();">
+						删除 <i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">证件类型</th>
+						<th style="text-align:center;">身份证号码</th>
+						<th style="text-align:center;">姓名</th>
+						<th style="text-align:center;">性别</th>
+						<th style="text-align:center;">是否石狮本地</th>
+						<th style="text-align:center;">家长姓名</th>
+						<th style="text-align:center;">家长手机号码</th>
+						<th style="text-align:center;">所在学校id</th>
+						<th style="text-align:center;">就读年级</th>
+						<th style="text-align:center;">头像</th>
+						<th style="text-align:center;">出生日期</th>
+						<th style="text-align:center;">家庭地址</th>
+						<th style="text-align:center;">学籍号</th>
+						<th style="text-align:center;">是否是低保户</th>
+						<th style="text-align:center;">家庭电话</th>
+						<th style="text-align:center;">账号id</th>
+						<th style="text-align:center;">是否黑名单</th>
+						<th style="text-align:center;">黑名单原因</th>
+						<th style="text-align:center;">黑名单原因图片</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+						<th style="text-align:center;">备注</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="25" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" >
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">姓名:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="name" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">头像:</label>
+								<div class="col-sm-7">
+									<input id="upload" type="file" capture="camera"  />
+                    				<input type="hidden" name="pictureUrl" id="pictureUrl" />
+                    				<img class="img_wrap" style="width:70px;height:70px;" src=""/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">证件类型:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="cardType" required>
+										<option value="">请选择</option>
+										#foreach($obj in $idcardList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">身份证号码:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="idcardNo" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">性别:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="sex" required>
+										<option value="">请选择</option>
+										#foreach($obj in $sexList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">是否石狮本地:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="isLocalOrNot" required>
+										<option value="">请选择</option>
+										#foreach($obj in $judgeList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">家长姓名:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="parentName" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">家长手机号码:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="parentPhonenumber" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">所在学校id:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="schoolId" required>
+										<option value="">请选择</option>
+										#foreach($obj in $schoolList)
+											<option value="$obj.id">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">就读年级:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="grade" required>
+										<option value="">请选择</option>
+										#foreach($obj in $gradeList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">出生日期:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="date" name="birthDate" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">家庭地址:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="address" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学籍号:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="studentCode"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">是否是低保户:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="isLowincome" required>
+										<option value="">请选择</option>
+										#foreach($obj in $judgeList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">家庭电话:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="homePhone" required/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">账号id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="accountId" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">是否黑名单:</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="isBlacklist" >
+										<option value="">请选择</option>
+										#foreach($obj in $judgeList)
+											<option value="$obj.sort">$obj.name</option>
+										#end
+                                    </select>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">黑名单原因:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="blacklistReason" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">黑名单原因图片:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="blacklistReasonUrl" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">备注:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remarks" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" >
+					保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+// 上传地址初始化
+uploadUrl = "$!baseurl/file/base64/upload.shtml";
+// 查询地址初始化
+globleUrl = "$request.getContextPath()/operation/student/";
+title = "学生资料表";
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal select[name='cardType']").val(msg.cardType);
+	$("#editModal input[name='idcardNo']").val(msg.idcardNo);
+	$("#editModal input[name='name']").val(msg.name);
+	$("#editModal select[name='sex']").val(msg.sex);
+	$("#editModal select[name='isLocalOrNot']").val(msg.isLocalOrNot);
+	$("#editModal input[name='parentName']").val(msg.parentName);
+	$("#editModal input[name='parentPhonenumber']").val(msg.parentPhonenumber);
+	$("#editModal select[name='schoolId']").val(msg.schoolId);
+	$("#editModal select[name='grade']").val(msg.grade);
+	$("#editModal input[name='pictureUrl']").val(msg.pictureUrl);
+	$("#editModal img[class='img_wrap']").attr("src", msg.pictureUrl);
+	$("#editModal input[name='birthDate']").val(msg.birthDate);
+	$("#editModal input[name='address']").val(msg.address);
+	$("#editModal input[name='studentCode']").val(msg.studentCode);
+	$("#editModal select[name='isLowincome']").val(msg.isLowincome);
+	$("#editModal input[name='homePhone']").val(msg.homePhone);
+	$("#editModal input[name='accountId']").val(msg.accountId);
+	$("#editModal select[name='isBlacklist']").val(msg.isBlacklist);
+	$("#editModal input[name='blacklistReason']").val(msg.blacklistReason);
+	$("#editModal input[name='blacklistReasonUrl']").val(msg.blacklistReasonUrl);
+	$("#editModal input[name='remarks']").val(msg.remarks);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+</script>

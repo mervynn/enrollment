@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TzAllOrderMapper">
+	<!--实体映射-->
+	<resultMap id="tzAllOrderResultMap" type="com.xinyin.baoming.model.vo.TzAllOrder">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--学生id-->
+		<result property="studentId" column="student_id" />
+		<!--订单总金额-->
+		<result property="totalMoney" column="total_money" />
+		<!--订单状态-->
+		<result property="status" column="status" />
+		<!--录入人-->
+		<result property="createBy" column="create_by" />
+		<!--录入时间-->
+		<result property="createDate" column="create_date" />
+		<!--变更人-->
+		<result property="updateBy" column="update_by" />
+		<!--变更时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	student_id,	total_money,	status,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tzAllOrderResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tz_all_order
+		 WHERE 1=1
+			<if test="id != null">
+				and id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="studentId != null">
+				and student_id like concat('%',#{studentId,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="totalMoney != null">
+				and total_money like concat('%',#{totalMoney,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="status != null">
+				and status like concat('%',#{status,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tzAllOrderResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM tz_all_order
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM tz_all_order
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrder">
+		 DELETE FROM tz_all_order
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="studentId != null">
+				and student_id = #{studentId, jdbcType=VARCHAR}
+			</if>
+			<if test="totalMoney != null">
+				and total_money = #{totalMoney, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TzAllOrder">
+		 INSERT INTO tz_all_order
+ 		(id,	student_id,	total_money,	status,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{studentId},#{totalMoney},#{status},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrder">
+		 INSERT INTO tz_all_order
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="studentId != null">
+				 student_id,
+			</if>
+			<if test="totalMoney != null">
+				 total_money,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="studentId!=null">
+				 #{studentId},
+			</if>
+			<if test="totalMoney!=null">
+				 #{totalMoney},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TzAllOrder">
+		 UPDATE tz_all_order
+ 		 <set> 
+			<if test="studentId != null">
+				 student_id = #{studentId},
+			</if>
+			<if test="totalMoney != null">
+				 total_money = #{totalMoney},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE tz_all_order
+		 SET 
+			student_id = #{studentId},
+			total_money = #{totalMoney},
+			status = #{status},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+	<!-- 数据备份到该表 -->
+	<insert id="insertOrder">
+		insert into tz_all_order(select * from tt_order)
+	</insert>
+</mapper>

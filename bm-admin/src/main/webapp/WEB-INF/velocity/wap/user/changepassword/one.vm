@@ -1,0 +1,142 @@
+#set($layout="/wap/user/changepassword/one.vm")
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>修改密码</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../css/base.css?v=20130806100001" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="../../css/extend.css" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="../../css/loginPassword.css" charset="gbk">
+    <link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="../../css/header.css" charset="utf-8"></head>
+  <body id="body">
+    <a name="top"></a>
+    <header>
+      <div class="header w">
+        <div class="header-btn fr">
+          <a href="$request.getContextPath()/wap/user/center.shtml">
+            <img width="22" height="21" style="margin:1px 0;padding-top:2px;" src="../../img/avatar.png"></a>
+          <a href="$request.getContextPath()/wap/index.shtml">
+            <img src="../../img/home.png" style="margin:2px 0;padding-top:2px;"></a>
+        </div>
+      </div>
+    </header>
+    <div class="pay-pw">
+      <div class="blank"></div>
+      <div class="mt">修改密码</div>
+      <div class="mc">
+        <div class="set-pw">
+          <div class="step-pw">
+            <!--[D]当前步骤时各自在fir,sec,third 类旁加class on -->
+            <ul>
+              <li>
+                <span class="fir on">1</span>
+                <br></li>
+              <li>
+                <span class="bar"></span>
+              </li>
+              <li>
+                <span class="sec">2</span></li>
+            </ul>
+          </div>
+          <!--[D]当前步骤时在加class curr -->
+          <ul class="lst-sec">
+            <li>
+              <span class="curr">验证身份</span></li>
+            <li>
+              <span></span>
+            </li>
+            <li>
+              <span>修改登录密码</span></li>
+          </ul>
+        </div>
+        <ul class="com-ul">
+          <li class="last">
+            <p class="pd-h10">请选择验证身份方式：</p>
+            <p>
+              <select style="width:97%;height:30px" id="selectValidateType">
+                <option selected="" value="mobile">已验证手机</option></select>
+            </p>
+            <!--<p class="pd-h10">用户昵称：jd_5622894</p> -->
+            <p class="pd-h10">已验证手机： $phonenumber</p>
+            <input type="hidden" name="mobile" id="mobile" value="xxx">
+            <input type="hidden" name="type" id="type" value="2">
+            <p>
+            </p>
+			 <p>
+              <input type="button" value="获取短信校验码" id="btnCodesend" class="btn-type tbn-type-mglf0"></p>
+            <p class="paypw-codesdtip" id="notify" style="display:none">短信已经发送到您的手机，如在
+              <strong>
+                <span style="color:red" id="second"></span></strong>秒之内还没有 收到短信验证码，请重新获取验证码</p>
+            <p class="paypw-codesdtip" id="notify_e" style="display:none;color:red">短信验证码发送失败，请在
+              <strong>
+                <span style="color:black" id="second_e"></span></strong>秒之后重新获取短信验证码</p>
+            <p id="mobileError" class="paypw-err"></p>
+           
+            <form id="frm_validateCode" action="./two.shtml" method="post">
+              <p class="pd-h10">请填写短信校验码：</p>
+              <p>
+                <input type="text" class="common-input" name="code" id="code" placeholder="请输入验证码" errorlabel="codeError" notblank="notBlank" valuemissingtxt="请输入验证码"></p>
+              <p id="codeError" class="paypw-err"></p>
+              <p id="errorTip" class="paypw-err"></p>
+              <input id="btnValidateCode" class="sub_btn" value="下一步"></form>
+          </li>
+        </ul>
+      </div>
+	  <div id="m_common_bottom" style="min-height:170px;">
+		<footer id="m_common_bottom_jd_footer" class="jd-footer">
+			<div class="jd-footer-copyright">Copyright © 2016 歆音科技xinyin.tech 版权所有 </div>
+		</footer>
+      </div>
+    </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script src="$request.getContextPath()/wap/js/modifyLoginPassword.js"></script>
+  <script type="text/javascript">
+	$(function(){
+		//发送验证码
+        $('#btnCodesend').click(function(){
+            $("#btnCodesend").removeClass("btn-type tbn-type-mglf0");
+        	$("#btnCodesend").addClass("btn-type-prohibit tbn-type-mglf0");
+        	$("#btnCodesend").attr({"disabled":"disabled"});
+        	$("#mobileError").hide();
+        	endTime = new Date().getTime()/1000 + distantTime;
+			getCode("1");
+        });
+		//输入验证码焦点离开事件
+        $('#code').blur(function(){
+            validateForm('frm_validateCode',
+        	{
+        	loop:false,
+        	targetEnumId:$(this).attr('id'),
+        	errorElClass:"com-inp-bd",
+        	errorShowClass:"paypw-err",
+        	showTip:true,
+        	tipClass:"paypw-msg"
+        	});
+        });
+		
+		//表单提交
+        $('#btnValidateCode').click(function(){
+           if(!validateForm('frm_validateCode',
+            		 {	loop:false,
+                    	targetEnumId:$("#code").attr('id'),
+                    	errorElClass:"com-inp-bd",
+                    	errorShowClass:"paypw-err",
+                    	showTip:true,
+                    	tipClass:"paypw-msg"}))
+        	{
+        	   return ;
+        	}
+        	checkCode("1",$('#frm_validateCode'));
+          });
+		
+		
+	})
+  </script>
+</html>

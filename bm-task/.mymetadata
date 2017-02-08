@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="bm-task"
+  id="myeclipse.1470728207008"
+  context-root="/task"
+  j2ee-spec="6.0"
+  archive="bm-task.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

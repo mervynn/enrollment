@@ -1,0 +1,281 @@
+#set($layout="/wap/class/detail.vm")
+<!DOCTYPE html>
+<html><head>
+  <title>$detail.remarks</title>
+  <meta name="author" content="m.jd.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="$detail.remarks">
+  <meta name="keywords" content="$detail.remarks">
+  <meta name="layoutmode" content="standard">
+  <link rel="apple-touch-icon-precomposed" href="../../img/apple-touch-icon.png">
+  <link rel="stylesheet" type="text/css" href="../../css/main.css" charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../../css/base.css" charset="UTF-8">
+  <link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+</head>
+<body id="body" class="s">
+  <a name="top"></a>
+  <header>
+    <div class="m_common_new_top">
+      <!-- 新版商详头部开始 -->
+      <div id="m_common_header">
+        <header class="jd-header" style="width: 375px;">
+          <div class="jd-header-new-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <!-- <div class="jd-header-title">商品详情</div> -->
+            <ul class="jd-header-title" id="header-tabs">
+              <li class="header-tab-item J_ping" report-pageparam="10402016812" report-eventid="MProductdetail_ProductTab" report-eventlevel="5">
+                <p class="header-tab-title      header-tab-selected" id="detailView">商品</p></li>
+            </ul>
+            <div report-eventid="MCommonHead_NavigateButton" report-pageparam="10402016812" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+            <div class="header-bar-border"></div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-pageparam="10402016812" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-pageparam="10402016812" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-pageparam="10402016812" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class="current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-pageparam="10402016812" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+      <!-- 新版商详头部结束 --></div>
+  </header>
+  <button id="tempforsuite" style="display:none;"></button>
+  <div id="mainLayout">
+    <div id="mainStay" class="new-wt">
+      <div class="miblebox" id="goods-img-box">
+        <div class="hold-div-top" style="height: 44px;"></div>
+        <div class="header-slider" style="width: 375px;">
+          <div class="header-slider-con" style="width: 1125px; height: 1516px; transition: 500ms ease; transform: translate3d(0px, 0px, 0px);">
+            <li class="header-slider-item" style="width: 375px; height: 1516px;">
+              <div class="page-content" id="mainLayout">
+                <!-- 焦点图片 -->
+                <div class="scroll-imgs">
+                  <div id="slide" class="slide" style="height: 320px;">
+                    <ul data-slide-ul="firstUl" style="width: 320px;">
+                      <li data-ul-child="child" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="10402016812" style="transition: all 0ms ease; height: 320px; width: 320px; transform: translate3d(0px, 0px, 0px);">
+                        <img alt="$detail.remarks" src="$detail.picture" class="J_ping" report-eventid="MProductdetail_Photo" report-pageparam="10402016812" report-eventlevel="5"></li>
+                    </ul>
+                    <div class="tittup" id="tittup">
+                      <div class="arrow-box">
+                        <em class="arrow"></em>
+                        <em class="arrow2"></em>
+                      </div>
+                      <span class="inner">滑动查看详情</span></div>
+                    <div class="page-nub">
+                      <em id="slide-nub" class="fz18">1</em>
+                      <em class="nub-bg">/</em>
+                      <em id="slide-sum" class="fz12">1</em></div>
+                  </div>
+                </div>
+                <div class="goods-part bdr-tb price-floor">
+                  <!-- 名称 、价格start -->
+                  <!-- 楼层样式修改 添加bord样式 mjs 20151112-->
+                  <div class="basic-info bdr-b borb">
+                    <!--名称-->
+                    <div class="prod-title">
+                      <a class="detailInfoClick J_ping" report-eventid="MProductdetail_Productinfo" report-pageparam="10402016812" report-eventlevel="5">
+                        <span class="title-text">$!detail.remarks</span></a>
+                    </div>
+					<div class="prod-title">
+                      <a class="detailInfoClick J_ping" report-eventid="MProductdetail_Productinfo" report-pageparam="10402016812" report-eventlevel="5">
+                        <span class="title-text" style="width:195px">$!detail.classTypeId$!detail.code班</span>
+						<span class="title-text"></span>
+						</a>
+                    </div>
+                    <!-- 价格样式更改 mjs 20151118 -->
+                    <div class="prod-price">
+                      <span class="yang-pic"></span>
+                      <span class="yang-pic-price">
+                        <span class="big-price">$!detail.tuitionFee</span>
+                        <span class="small-price">.00</span></span>
+                      <div style="clear:both"></div>
+                    </div>
+                    <!-- 秒杀位置样式调整 mjs 20151113 -->
+                    <div class="prod-seckill">
+                      <!-- 预约人数 --></div>
+                    <!--广告词-->
+                    <!--无链接-->
+                    <div class="prod-act">老师：$!detail.teacherId</div></div>
+                  <!-- 名称 、价格end -->
+                  <!-- 调整样式分割线结束位置 mjs 20151112 --></div>
+                <!-- 调整样式分割线位置 增加mar-t样式 mjs 20151030 -->
+                <div class="goods-part bdr-tb mar-t">
+				  <div class="provide-srv" id="fare">
+                    <span class="part-note-msg">招生对象：</span>
+                    <p class="provider base-txt" id="targetGroup">$!detail.targetGroup</p>
+				  </div>
+				  <div class="provide-srv" id="fare">
+                    <span class="part-note-msg">限制最小年龄：</span>
+                    <p class="provider base-txt" id="minAge">$!detail.minAge 岁</p>
+				  </div>
+				  <div class="provide-srv" id="fare">
+                    <span class="part-note-msg">教室：</span>
+                    <p class="provider base-txt" id="classroomId">$!detail.classroomId</p>
+				  </div>
+				  <div class="provide-srv" id="fare">
+                    <span class="part-note-msg">学期：</span>
+                    <p class="provider base-txt" id="termId">$!detail.termId</p>
+				  </div>
+				  <div class="provide-srv" id="fare">
+                    <span class="part-note-msg">剩余名额：</span>
+                    <p class="provider base-txt" id="remainAmount">$!detail.remainAmount 人</p>
+				  </div>
+                  <!--运费end-->
+                <!-- 样式分割线 -->
+                <!-- 店铺start -->
+                <div class="goods-part bdr-tb mar-t" id="shop-floor">
+                  <div class="shop-part" id="jshopkefu">
+                      <div class="shop-row1">
+                        <span class="shop-row">
+                          <span class="shop-name">上课时间安排</span>
+                      </div>
+                      <div class="shop-tab">
+                        <span class="tabs">
+                          <div class="num">$!detail.classTimeWeek</div>
+                          <div class="vertical-line"></div>
+                        </span>
+                        <span class="tabs">
+                          <div class="num">$!detail.classTimeBegin</div>
+                          <div class="vertical-line"></div>
+                        </span>
+                        <span class="tabs">
+                          <div class="num">$!detail.classTimeEnd</div>
+                      </div>
+                  </div>
+                </div>
+                <!-- 店铺end -->
+            </li>
+            <li class="header-slider-item" style="width: 375px; height: 2291px;">
+              <div class="loading-position">
+                <div class="is-loading" style="display: none;">
+                  <em></em>
+                  <span>加载中...</span></div>
+              </div>
+            </li>
+            <li class="header-slider-item reply-body white-color" id="commentListId" style="width: 375px; height: 573px; overflow: scroll;">
+              <div class="tab-con">
+                <!-- loading img begin-->
+                <div class="is-loading">
+                  <em></em>
+                  <span>加载中...</span></div>
+                <!-- loading img end-->
+                <!-- no more data img begin -->
+                <!-- no more data img end --></div>
+            </li>
+          </div>
+        </div>
+        <div class="hold-div-bottom" style="height:0px;"></div>
+        <!-- 多次点赞提示文案-->
+        <div class="prompt-window useful-window">
+          <span class="prompt-err-icon"></span>
+          <span class="prompt-text">您已经点赞过了</span></div>
+        <div class="prompt-window" id="pop_none_reply" style="display:none">
+          <span class="prompt-text">您已经添加过了</span></div>
+        <!-- 吸底提示文案 开始 -->
+        <div class="bottom-prompt" id="bottom_prompt_msg_div" style="display: none;">
+          <p class="prompt-title" id="prompt_msg">抱歉，所选地区暂时无货!!!</p></div>
+        <!-- 吸底提示文案 结束 -->
+        <div id="cart1" class="cart-concern-btm-fixed four-column" style="display: table;">
+          <div class="concern-cart">
+            <!--Jimi客服(hasJimi&&notOnline)-->
+            <a class="cart-car-icn" id="toCart" href="../../user/shoppingcart.shtml">
+              <em class="btm-act-icn" id="shoppingCart">
+                <i class="order-numbers" id="carNum">$!classAmount</i>
+              </em>
+              <span class="focus-info">选课车</span></a>
+          </div>
+          <div class="action-list">
+            <a class="yellow-color" id="add_cart" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">添加班级</a>
+            <a class="red-color " id="directorder" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);" >去报名</a>
+            <a class="yellow-color J_ping" id="looksimilar" href="//home.m.jd.com/myjd/similar/list.action?skuId=10402016812" style="display: none;" report-eventid="MProductdetail_Similar" report-eventparam="10402016812" report-eventlevel="5">查看相似</a>
+            <a class="red-color J_ping" id="arrivalInform" style="display: none;" report-eventid="MProductdetail_ArrivalNotice" report-eventparam="10402016812" report-eventlevel="5">到货通知</a></div>
+        </div>
+        <div class="pop" style="position: absolute; z-index: 9999; display: none; left: 52.5px;" id="tip">
+          <p>
+            <span class="pop-txt"></span>
+          </p>
+          <div class="pop-txt-area">
+            <span class="pop-txt2" id="tips"></span>
+          </div>
+          <div class="tbl-type">
+            <a href="javascript:void(0)" onclick="$('#tip').hide();$('#_mask').hide();" class="tbl-cell" style="width:50%">知道啦</a>
+            <a href="javascript:void(0)" id="myyuyue" class="tbl-cell" style="width:50%">我的预约</a></div>
+        </div>
+        <div class="cart-pop" id="cart" style="display: none; position: absolute; bottom: 50%; z-index: 9999; left: 73.5px;">
+          <div class="ico-succ">
+            <span class="att-succ">添加成功！</span>
+            <span class="cart-succ">商品已成功加入选课车</span></div>
+        </div>
+      </div>
+      <!--以下全部为新增部分 20150330-->
+      <!-- 回顶部 -->
+  </div>
+  <div style="margin:0 auto 50px;"></div>
+  <input type="hidden" id="classId" value="$!detail.id" />
+</body>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/wap/js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#add_cart").on("click",addCartt);
+	$("#directorder").on("click",gotoEnroll);
+	
+});
+
+// 添加班级
+function addCartt(){
+	// 防止重复提交
+	$("#add_cart").unbind("click");
+	jQuery.post("$request.getContextPath()/wap/user/shoppingcart/save.shtml",{classId:$("#classId").val()},function(res){
+		$("#add_cart").on("click",addCartt);
+		var obj = JSON.parse(res);
+		if(0 == obj.code){
+			$("#carNum").text(obj.totalCount);
+			$("#remainAmount").text(obj.page + " 人");
+			$("#cart").show();
+			setTimeout("$('#cart').hide()",3000);
+		}else{
+			$("#pop_none_reply").find(".prompt-text").text(obj.msg);
+			$("#pop_none_reply").show();
+			setTimeout("$('#pop_none_reply').hide()",1000);
+		}
+	});
+}
+
+// 去报名
+function gotoEnroll(){
+	// 防止重复提交
+	$("#directorder").unbind("click");
+	jQuery.post("$request.getContextPath()/wap/user/shoppingcart/save.shtml",{classId:$("#classId").val()},function(res){
+		$("#directorder").on("click",gotoEnroll);
+		location.href="$request.getContextPath()/wap/user/order/edit.shtml";
+	});
+}
+</script>
+</html>

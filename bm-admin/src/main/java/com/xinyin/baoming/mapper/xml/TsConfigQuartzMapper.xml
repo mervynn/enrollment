@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TsConfigQuartzMapper">
+	<!--实体映射-->
+	<resultMap id="tsConfigQuartzResultMap" type="com.xinyin.baoming.model.vo.TsConfigQuartz">
+		<!--流水id-->
+		<id property="id" column="id" />
+		<!--任务名称-->
+		<result property="triggerName" column="trigger_name" />
+		<!--触发时间(CRON表达式)-->
+		<result property="cronExpression" column="cron_expression" />
+		<!--任务详细说明-->
+		<result property="jobDetailName" column="job_detail_name" />
+		<!--任务java对象-->
+		<result property="targetObject" column="target_object" />
+		<!--方法名称-->
+		<result property="methodName" column="method_name" />
+		<!--并发-->
+		<result property="concurrent" column="concurrent" />
+		<!--任务状态-->
+		<result property="state" column="state" />
+		<!--是spring组件-->
+		<result property="isSpringBean" column="is_spring_bean" />
+		<!--创建者-->
+		<result property="createBy" column="create_by" />
+		<!--创建时间-->
+		<result property="createDate" column="create_date" />
+		<!--更新者-->
+		<result property="updateBy" column="update_by" />
+		<!--更新时间-->
+		<result property="updateDate" column="update_date" />
+		<!--备注信息-->
+		<result property="remarks" column="remarks" />
+	</resultMap>
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	trigger_name,	cron_expression,	job_detail_name,	target_object,	method_name,	concurrent,	state,	is_spring_bean,	create_by,	create_date,	update_by,	update_date,	remarks
+	</sql>
+	<!-- 查询（根据条件过滤） -->
+	<select id="selectBySelective" resultMap="tsConfigQuartzResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM ts_config_quartz
+		 WHERE 1=1
+			<if test="id != null">
+				and id like concat('%',#{id,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="triggerName != null">
+				and trigger_name like concat('%',#{triggerName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="cronExpression != null">
+				and cron_expression like concat('%',#{cronExpression,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="jobDetailName != null">
+				and job_detail_name like concat('%',#{jobDetailName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="targetObject != null">
+				and target_object like concat('%',#{targetObject,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="methodName != null">
+				and method_name like concat('%',#{methodName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="concurrent != null">
+				and concurrent like concat('%',#{concurrent,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="state != null">
+				and state like concat('%',#{state,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="isSpringBean != null">
+				and is_spring_bean like concat('%',#{isSpringBean,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createBy != null">
+				and create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="createDateStr != null">
+				and create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateBy != null">
+				and update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="updateDateStr != null">
+				and update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="remarks != null">
+				and remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%')
+			</if>
+	</select>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="tsConfigQuartzResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM ts_config_quartz
+		 WHERE id = #{id}
+	</select>
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM ts_config_quartz
+		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据匹配字段-->
+	<delete id="deleteBySelective" parameterType="com.xinyin.baoming.model.vo.TsConfigQuartz">
+		 DELETE FROM ts_config_quartz
+		 WHERE 1=1
+			<if test="id != null">
+				and id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="triggerName != null">
+				and trigger_name = #{triggerName, jdbcType=VARCHAR}
+			</if>
+			<if test="cronExpression != null">
+				and cron_expression = #{cronExpression, jdbcType=VARCHAR}
+			</if>
+			<if test="jobDetailName != null">
+				and job_detail_name = #{jobDetailName, jdbcType=VARCHAR}
+			</if>
+			<if test="targetObject != null">
+				and target_object = #{targetObject, jdbcType=VARCHAR}
+			</if>
+			<if test="methodName != null">
+				and method_name = #{methodName, jdbcType=VARCHAR}
+			</if>
+			<if test="concurrent != null">
+				and concurrent = #{concurrent, jdbcType=VARCHAR}
+			</if>
+			<if test="state != null">
+				and state = #{state, jdbcType=VARCHAR}
+			</if>
+			<if test="isSpringBean != null">
+				and is_spring_bean = #{isSpringBean, jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				and create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate, jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				and update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate, jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null">
+				and remarks = #{remarks, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.xinyin.baoming.model.vo.TsConfigQuartz">
+		 INSERT INTO ts_config_quartz
+ 		(id,	trigger_name,	cron_expression,	job_detail_name,	target_object,	method_name,	concurrent,	state,	is_spring_bean,	create_by,	create_date,	update_by,	update_date,	remarks) 
+		 VALUES 
+ 		(#{id},#{triggerName},#{cronExpression},#{jobDetailName},#{targetObject},#{methodName},#{concurrent},#{state},#{isSpringBean},#{createBy},#{createDate},#{updateBy},#{updateDate},#{remarks}) 
+	</insert>
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TsConfigQuartz">
+		 INSERT INTO ts_config_quartz
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="triggerName != null">
+				 trigger_name,
+			</if>
+			<if test="cronExpression != null">
+				 cron_expression,
+			</if>
+			<if test="jobDetailName != null">
+				 job_detail_name,
+			</if>
+			<if test="targetObject != null">
+				 target_object,
+			</if>
+			<if test="methodName != null">
+				 method_name,
+			</if>
+			<if test="concurrent != null">
+				 concurrent,
+			</if>
+			<if test="state != null">
+				 state,
+			</if>
+			<if test="isSpringBean != null">
+				 is_spring_bean,
+			</if>
+			<if test="createBy != null">
+				 create_by,
+			</if>
+			<if test="createDate != null">
+				 create_date,
+			</if>
+			<if test="updateBy != null">
+				 update_by,
+			</if>
+			<if test="updateDate != null">
+				 update_date,
+			</if>
+			<if test="remarks != null">
+				 remarks,
+			</if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="triggerName!=null">
+				 #{triggerName},
+			</if>
+			<if test="cronExpression!=null">
+				 #{cronExpression},
+			</if>
+			<if test="jobDetailName!=null">
+				 #{jobDetailName},
+			</if>
+			<if test="targetObject!=null">
+				 #{targetObject},
+			</if>
+			<if test="methodName!=null">
+				 #{methodName},
+			</if>
+			<if test="concurrent!=null">
+				 #{concurrent},
+			</if>
+			<if test="state!=null">
+				 #{state},
+			</if>
+			<if test="isSpringBean!=null">
+				 #{isSpringBean},
+			</if>
+			<if test="createBy!=null">
+				 #{createBy},
+			</if>
+			<if test="createDate!=null">
+				 #{createDate},
+			</if>
+			<if test="updateBy!=null">
+				 #{updateBy},
+			</if>
+			<if test="updateDate!=null">
+				 #{updateDate},
+			</if>
+			<if test="remarks!=null">
+				 #{remarks},
+			</if>
+		 </trim>
+	</insert>
+	<!-- 修 改（修改有值的字段）-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TsConfigQuartz">
+		 UPDATE ts_config_quartz
+ 		 <set> 
+			<if test="triggerName != null">
+				 trigger_name = #{triggerName},
+			</if>
+			<if test="cronExpression != null">
+				 cron_expression = #{cronExpression},
+			</if>
+			<if test="jobDetailName != null">
+				 job_detail_name = #{jobDetailName},
+			</if>
+			<if test="targetObject != null">
+				 target_object = #{targetObject},
+			</if>
+			<if test="methodName != null">
+				 method_name = #{methodName},
+			</if>
+			<if test="concurrent != null">
+				 concurrent = #{concurrent},
+			</if>
+			<if test="state != null">
+				 state = #{state},
+			</if>
+			<if test="isSpringBean != null">
+				 is_spring_bean = #{isSpringBean},
+			</if>
+			<if test="createBy != null">
+				 create_by = #{createBy},
+			</if>
+			<if test="createDate != null">
+				 create_date = #{createDate},
+			</if>
+			<if test="updateBy != null">
+				 update_by = #{updateBy},
+			</if>
+			<if test="updateDate != null">
+				 update_date = #{updateDate},
+			</if>
+			<if test="remarks != null">
+				 remarks = #{remarks},
+			</if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="java.lang.String">
+		 UPDATE ts_config_quartz
+		 SET 
+			trigger_name = #{triggerName},
+			cron_expression = #{cronExpression},
+			job_detail_name = #{jobDetailName},
+			target_object = #{targetObject},
+			method_name = #{methodName},
+			concurrent = #{concurrent},
+			state = #{state},
+			is_spring_bean = #{isSpringBean},
+			create_by = #{createBy},
+			create_date = #{createDate},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		 WHERE id = #{id}
+	</update>
+</mapper>

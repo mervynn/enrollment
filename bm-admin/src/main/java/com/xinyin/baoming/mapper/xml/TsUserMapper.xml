@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyin.baoming.mapper.TsUserMapper">
+	<!--实体映射-->
+	<resultMap id="BaseResultMap" type="com.xinyin.baoming.model.vo.TsUser" >
+    <id column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="up_user" property="upUser" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    username, password, real_name, phone, up_user, role_id, create_by, create_date,
+    update_by, update_date
+  </sql>
+  <select id="selectAllAdminUserList" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+    FROM TS_USER
+  </select>
+  <select id="selectAdminUserList" resultMap="BaseResultMap" parameterType="com.xinyin.baoming.model.vo.TsUser">
+  	SELECT AU.USERNAME, AU.PASSWORD, AU.REAL_NAME, AU.PHONE, AU.UP_USER, AR.ROLE_NAME ROLE_ID, 
+  	AU.CREATE_BY, AU.CREATE_DATE, AU.UPDATE_BY, AU.UPDATE_DATE
+    FROM TS_USER AU LEFT JOIN TS_ROLE AR ON AU.ROLE_ID = AR.ROLE_ID
+    WHERE 1=1
+      <if test="username != null" >
+       AND AU.USERNAME LIKE CONCAT('%',#{username,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="realName != null" >
+        AND AU.REAL_NAME LIKE CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="phone != null" >
+        AND AU.PHONE LIKE CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="upUser != null" >
+        AND AU.UP_USER LIKE CONCAT('%',#{upUser,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="roleId != null" >
+        AND AR.ROLE_NAME LIKE CONCAT('%',#{roleId,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createBy != null" >
+        AND AU.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="createDateStr != null" >
+        AND AU.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="updateBy != null" >
+        AND AU.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%') 
+      </if>
+      <if test="updateDateStr != null" >
+        AND AU.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%') 
+      </if>
+  </select>
+  <!-- 通过用户名和密码查找用户 -->
+  <select id="queryByUnameAndPword" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from TS_USER
+    where 1=1
+    <if test="param1 != null" >
+    	and username = #{param1,jdbcType=VARCHAR}
+    </if>
+    <if test="param2 != null" >
+    	and password = #{param2,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <!-- 待用 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TS_USER
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TS_USER
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xinyin.baoming.model.vo.TsUser" >
+    insert into TS_USER (username, password, real_name, 
+      phone, up_user, role_id, create_by, create_date, update_by, update_date
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{upUser,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},#{createBy,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP},#{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyin.baoming.model.vo.TsUser" >
+    insert into TS_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="upUser != null" >
+        up_user,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="upUser != null" >
+        #{upUser,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyin.baoming.model.vo.TsUser" >
+    update TS_USER
+    <set >
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="upUser != null" >
+        up_user = #{upUser,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyin.baoming.model.vo.TsUser" >
+    update TS_USER
+    <set> 
+    <if test="password != null" >
+    	password = #{password,jdbcType=VARCHAR},
+    </if>
+    <if test="realName != null" >
+    	real_name = #{realName,jdbcType=VARCHAR},
+    </if>
+    <if test="phone != null" >
+    	phone = #{phone,jdbcType=VARCHAR},
+    </if>
+      <if test="upUser != null" >
+      	up_user = #{upUser,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+      	role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+      	update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+      	update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      </set>
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+</mapper>

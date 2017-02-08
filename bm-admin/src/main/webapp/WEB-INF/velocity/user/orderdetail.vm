@@ -1,0 +1,117 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/user/orderdetail.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<input type="hidden" id="hidExtra" value="$orderId"/>
+	<input type="hidden" id="pageFlag" value="orderDetail"/>
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh1('$!orderId');" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success" onclick="doBalance();">
+						结算 <i class="glyphicon glyphicon-credit-card"></i></button>
+					<button type="button" class="btn btn-success" onclick="javascript:history.go(-1);">
+						返回 <i class="fa fa-mail-reply"></i></button>
+				</div>
+			</div>
+			<div class="col-xs-12" style="height: 10px;">
+			</div>
+		</div>
+		<div class="table-responsive-datatables">
+			<table class="table table-hover table-bordered">
+				<thead style="background-color:#ecf0f1;">
+					<tr>
+						<th style="text-align:center;">学生姓名</th>
+						<th style="text-align:center;">所报项目</th>
+						<th style="text-align:center;">班级代码</th>
+						<th style="text-align:center;">上课教室</th>
+						<th style="text-align:center;">上课星期</th>
+						<th style="text-align:center;">上课开始时间</th>
+						<th style="text-align:center;">上课结束时间</th>
+						<th style="text-align:center;">金额</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot style="background-color:#ecf0f1;">
+					<tr>
+						<th colspan="8" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/user/orderdetail/";
+/**
+ * 刷新数据列表
+ */
+function refresh1(extra){
+	pageLoading();
+	initTable(1,extra);
+}
+
+/**
+ * 初始化数据列表
+ * @param url 请求url
+ * @param ref 刷新按钮触发标识
+ * @param extra 额外参数
+ */
+function initTable(ref,extra){
+	$("table").tablesorter().tablesorterPager({ // 默认按第一列升序
+        container: $("tfoot"),
+        ajaxUrl: globleUrl+"data.shtml?page={page+1}&size={size}&{sortList:col}&{filterList:fcol}&extra="+extra + "&random="+Math.random(),
+        ajaxObject: {
+        	dataType: 'json'
+        },
+        ajaxProcessing: function(data){
+			if(ref==1){
+				removePageLoading();
+			}
+        	return data;
+        }
+	});
+}
+
+// 行选择
+function doSelection(obj){
+	return false;
+}
+
+// 结算
+function doBalance(){
+	var orderId = $("#hidExtra").val();
+	bootbox.confirm("确认结算订单："+ orderId + "？",function(sure){
+		if(sure){
+			AjaxPost("$request.getContextPath()/user/order/balance/"+ orderId +".shtml","",function(msg){
+				bootbox.alert(msg,function(){
+					history.go(-1);
+				});
+			}); 
+		}
+	})
+}
+
+</script>

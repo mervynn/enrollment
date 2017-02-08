@@ -1,0 +1,252 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/zip/allclass.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end
+<!-- TableSorter -->
+<div id="panel-tablesorter" class="panel panel-default">
+	<div class="panel-heading bg-white">
+		<div class="panel-actions" >
+			<button  title="refresh" class="btn-panel" onclick="refresh();" id="refresh">
+				<i class="fa fa-refresh"></i>
+			</button>
+			<button data-expand="#panel-tablesorter" title="expand" class="btn-panel">
+				<i class="fa fa-expand"></i>
+			</button>
+			<button data-collapse="#panel-tablesorter" title="collapse" class="btn-panel">
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<button data-close="#panel-tablesorter" title="close" class="btn-panel">
+				<i class="fa fa-times"></i>
+			</button>
+		</div><!-- /panel-actions -->
+		<h3 class="panel-title">&nbsp;</h3>
+	</div><!-- /panel-heading -->
+	<div class="panel-body">
+		<div class="table-responsive table-responsive-datatables">
+			<table class="tablesorter table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th style="text-align:center;">流水id</th>
+						<th style="text-align:center;">班级代码</th>
+						<th style="text-align:center;">限制最小年龄</th>
+						<th style="text-align:center;">是否只可以旧生报名</th>
+						<th style="text-align:center;">招生对象</th>
+						<th style="text-align:center;">招生人数</th>
+						<th style="text-align:center;">预设名额</th>
+						<th style="text-align:center;">剩余人数</th>
+						<th style="text-align:center;">已付款人数</th>
+						<th style="text-align:center;">上下架状态</th>
+						<th style="text-align:center;">学费</th>
+						<th style="text-align:center;">上课时间（星期）</th>
+						<th style="text-align:center;">商品图片1</th>
+						<th style="text-align:center;">商品图片1</th>
+						<th style="text-align:center;">乐器或老师照片</th>
+						<th style="text-align:center;">课程类别</th>
+						<th style="text-align:center;">授课老师id</th>
+						<th style="text-align:center;">教室id</th>
+						<th style="text-align:center;">学期id</th>
+						<th style="text-align:center;">乐观锁标识(更新，删除时使用)</th>
+						<th style="text-align:center;">录入人</th>
+						<th style="text-align:center;">录入时间</th>
+						<th style="text-align:center;">变更人</th>
+						<th style="text-align:center;">变更时间</th>
+						<th style="text-align:center;">备注</th>
+					</tr>
+				</thead><!--/thead-->
+				<tbody>
+				</tbody><!--/tbody-->
+				<tfoot>
+					<tr>
+						<th colspan="25" class="ts-pager form-horizontal">
+							#parse("/layout/page.vm")
+						</th>
+				</tr>
+				</tfoot><!--/tfoot-->
+			</table><!--/table tools-->
+		</div><!--/table-responsive-->
+		<form id="editModal" data-validate="form" class="modal fade" >
+			<input type="hidden" name="id"/>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"><strong></strong></h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">班级代码:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="code" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">限制最小年龄:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="minAge" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">是否只可以旧生报名:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="isOnlyOldStudent" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">招生对象:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="targetGroup" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">招生人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="limitedAmount" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">预设名额:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="defaultAmount" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">剩余人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remainAmount" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">已付款人数:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="paidAmount" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">上下架状态:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="status" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学费:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="tuitionFee" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">上课时间（星期）:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classTimeWeek" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">商品图片1:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classTimeBegin" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">商品图片1:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classTimeEnd" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">乐器或老师照片:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="picture" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">课程类别:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classTypeId" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">授课老师id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="teacherId" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">教室id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="classroomId" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">学期id:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="termId" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">乐观锁标识(更新，删除时使用):</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="lock" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name">备注:</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" name="remarks" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-cloud" data-dismiss="modal" >
+					取消 <i class="fa fa-mail-reply"></i>
+						</button>
+						<button class="btn btn-success" type="button" >
+					保存 <i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div><!--/panel-body-->
+</div><!--/panel-tablesorter-->
+<script type="text/javascript">
+globleUrl = "$request.getContextPath()/zip/allclass/";
+title = "班级归档表";
+// 编辑窗口数据初始化-回调函数
+function editInitCallBack(msg){
+	$("#editModal input[name='id']").val(msg.id);
+	$("#editModal input[name='code']").val(msg.code);
+	$("#editModal input[name='minAge']").val(msg.minAge);
+	$("#editModal input[name='isOnlyOldStudent']").val(msg.isOnlyOldStudent);
+	$("#editModal input[name='targetGroup']").val(msg.targetGroup);
+	$("#editModal input[name='limitedAmount']").val(msg.limitedAmount);
+	$("#editModal input[name='defaultAmount']").val(msg.defaultAmount);
+	$("#editModal input[name='remainAmount']").val(msg.remainAmount);
+	$("#editModal input[name='paidAmount']").val(msg.paidAmount);
+	$("#editModal input[name='status']").val(msg.status);
+	$("#editModal input[name='tuitionFee']").val(msg.tuitionFee);
+	$("#editModal input[name='classTimeWeek']").val(msg.classTimeWeek);
+	$("#editModal input[name='classTimeBegin']").val(msg.classTimeBegin);
+	$("#editModal input[name='classTimeEnd']").val(msg.classTimeEnd);
+	$("#editModal input[name='picture']").val(msg.picture);
+	$("#editModal input[name='classTypeId']").val(msg.classTypeId);
+	$("#editModal input[name='teacherId']").val(msg.teacherId);
+	$("#editModal input[name='classroomId']").val(msg.classroomId);
+	$("#editModal input[name='termId']").val(msg.termId);
+	$("#editModal input[name='lock']").val(msg.lock);
+	$("#editModal input[name='remarks']").val(msg.remarks);
+}
+
+// 删除准备数据
+function delDate(){
+	var idArr=[];
+	$("table.tablesorter tbody tr").each(function(){
+		var id = $(this).find("td:eq(0)").text();
+		var name = $(this).find("td:eq(1)").text();
+		if($(this).find("td:eq(0)").css("background-color") == colorRgb){
+			idArr.push({"id":id,"name":name});
+		}
+	});
+	return idArr;
+}
+</script>

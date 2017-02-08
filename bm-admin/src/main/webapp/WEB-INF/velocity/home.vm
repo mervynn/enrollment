@@ -1,0 +1,7 @@
+#if($!session.getAttribute("HTTP_X_PJAX") == "true")
+	#set($layout="/home.vm")
+	$session.setAttribute("HTTP_X_PJAX","false")
+#end&nbsp;
+<!--<div style="text-align:left;">
+	<h1>热烈庆祝游戏热ios版登录App Store</h1>
+</div>-->

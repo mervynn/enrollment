@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.gh.dao.SysConfigQuartzMapper" >
+  <resultMap id="BaseResultMap" type="com.gh.model.vo.SysConfigQuartz" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="trigger_name" property="triggerName" jdbcType="VARCHAR" />
+    <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR" />
+    <result column="job_detail_name" property="jobDetailName" jdbcType="VARCHAR" />
+    <result column="target_object" property="targetObject" jdbcType="VARCHAR" />
+    <result column="method_name" property="methodName" jdbcType="VARCHAR" />
+    <result column="concurrent" property="concurrent" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="is_spring_bean" property="isSpringBean" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `trigger_name`, cron_expression, job_detail_name, target_object, method_name, 
+    concurrent, `state`, is_spring_bean, create_by, create_date, update_by, update_date, 
+    remarks
+  </sql>
+  <select id="selectSysConfigQuartzList" resultMap="BaseResultMap" parameterType="com.gh.model.vo.SysConfigQuartz">
+  	  SELECT
+	  <include refid="Base_Column_List" />
+	  FROM SYS_CONFIG_QUARTZ
+	  WHERE 1=1 
+	 <if test="id != null" >
+	      and id like concat('%',#{id,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="triggerName != null" >
+	      and TRIGGER_NAME like concat('%',#{triggerName,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="cronExpression != null" >
+	      and CRON_EXPRESSION like concat('%',#{cronExpression,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="jobDetailName != null" >
+	      and JOB_DETAIL_NAME like concat('%',#{jobDetailName,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="targetObject != null" >
+	      and TARGET_OBJECT like concat('%',#{targetObject,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="methodName != null" >
+	      and METHOD_NAME like concat('%',#{methodName,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="concurrent != null" >
+	      and CONCURRENT like concat('%',#{concurrent,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="state != null" >
+	      and state like concat('%',#{state,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="isSpringBean != null" >
+	      and IS_SPRING_BEAN like concat('%',#{isSpringBean,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createBy != null" >
+	 	and create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createDateStr != null" >
+	 	and create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateBy != null" >
+	 	and update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateDateStr != null" >
+	 	and update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="remarks != null" >
+	 	and remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%') 
+	 </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_config_quartz
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_config_quartz
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gh.model.vo.SysConfigQuartz" >
+    insert into sys_config_quartz (id, `trigger_name`, cron_expression, 
+      job_detail_name, target_object, method_name, 
+      concurrent, `state`, is_spring_bean, 
+      create_by, create_date, update_by, 
+      update_date, remarks)
+    values (#{id,jdbcType=VARCHAR}, #{triggerName,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
+      #{jobDetailName,jdbcType=VARCHAR}, #{targetObject,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{concurrent,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{isSpringBean,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gh.model.vo.SysConfigQuartz" >
+    insert into sys_config_quartz
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      `trigger_name`,
+      cron_expression,
+      job_detail_name,
+      target_object,
+      method_name,
+      concurrent,
+      `state`,
+      is_spring_bean,
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+      remarks,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=VARCHAR},
+      #{triggerName,jdbcType=VARCHAR},
+      #{cronExpression,jdbcType=VARCHAR},
+      #{jobDetailName,jdbcType=VARCHAR},
+      #{targetObject,jdbcType=VARCHAR},
+      #{methodName,jdbcType=VARCHAR},
+      #{concurrent,jdbcType=VARCHAR},
+      #{state,jdbcType=VARCHAR},
+      #{isSpringBean,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR},
+      #{updateDate,jdbcType=TIMESTAMP},
+      #{remarks,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gh.model.vo.SysConfigQuartz" >
+    update sys_config_quartz
+    <set >
+      <if test="triggerName != null" >
+        `trigger_name` = #{triggerName,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null" >
+        cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="jobDetailName != null" >
+        job_detail_name = #{jobDetailName,jdbcType=VARCHAR},
+      </if>
+      <if test="targetObject != null" >
+        target_object = #{targetObject,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="concurrent != null" >
+        concurrent = #{concurrent,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpringBean != null" >
+        is_spring_bean = #{isSpringBean,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gh.model.vo.SysConfigQuartz" >
+    update sys_config_quartz
+    set `trigger_name` = #{triggerName,jdbcType=VARCHAR},
+      cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      job_detail_name = #{jobDetailName,jdbcType=VARCHAR},
+      target_object = #{targetObject,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      concurrent = #{concurrent,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=VARCHAR},
+      is_spring_bean = #{isSpringBean,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

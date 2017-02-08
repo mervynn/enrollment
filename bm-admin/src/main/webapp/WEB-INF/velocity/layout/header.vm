@@ -1,0 +1,31 @@
+<!-- header brand -->
+<div class="header-brand">
+    <div class="panel-sitename">
+        <h2><a href="$request.getContextPath()/login.shtml" data-pjax=".content-body">
+				<span class="color-teal"><strong>Xinyin</strong></span><strong>.Tech</strong>
+			</a>
+		</h2>
+    </div>
+</div><!-- header brand -->
+
+<!-- header-profile -->
+<div class="header-profile">
+    <div class="profile-nav">
+		<span class="profile-username">您好，$!request.getSession().getAttribute('admin_login_user').username</span>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="fa fa-angle-down"></span>
+        </a>
+        <ul class="dropdown-menu animated flipInX pull-right" role="menu">
+			<!--
+            <li><a href="#"><i class="fa fa-user"></i> 个人信息</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> 邮箱收信</a></li>
+            <li><a href="#"><i class="fa fa-tasks"></i> 任务列表</a></li>
+            <li class="divider"></li> -->
+			<li><a href="#changePassword" data-toggle="modal" onclick="accessPasswordModule();" ><i class="fa fa-lock"></i> 修改密码</a></li>
+            <li><a href="$request.getContextPath()/logout.shtml"><i class="fa fa-sign-out"></i> 登出系统</a></li>
+		</ul>
+    </div>
+    <div class="profile-picture">
+        <img alt="me" src="$request.getContextPath()/stilearn2.0/images/dummy/profile.jpg">
+    </div>
+</div><!-- header-profile -->

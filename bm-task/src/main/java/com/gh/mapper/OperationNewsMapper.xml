@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.gh.dao.OperationNewsMapper" >
+  <resultMap id="BaseResultMap" type="com.gh.model.vo.OperationNews" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_recommend" property="isRecommend" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="picture_mode" property="pictureMode" jdbcType="VARCHAR" />
+    <result column="pic" property="type" jdbcType="VARCHAR" />
+    <result column="pic_url1" property="picUrl1" jdbcType="VARCHAR" />
+    <result column="pic_url2" property="picUrl2" jdbcType="VARCHAR" />
+    <result column="pic_url3" property="picUrl3" jdbcType="VARCHAR" />
+    <result column="original_uri" property="originalUri" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sort, title, summary, type, pic_url1, pic_url2, pic_url3 , original_uri, create_by, 
+    create_date, update_by, update_date, remarks, is_recommend, content
+  </sql>
+  <select id="selectNewsList" resultMap="BaseResultMap" parameterType="com.gh.model.vo.OperationNews">
+  	  SELECT ONN.ID, ONN.SORT, ONN.TITLE, ONN.SUMMARY, SC1.NAME TYPE, ONN.TYPE PICTURE_MODE, 
+  	  ONN.PIC_URL1, ONN.PIC_URL2, ONN.PIC_URL3, ONN.ORIGINAL_URI, SC2.NAME IS_RECOMMEND,
+	  ONN.CREATE_BY, ONN.CREATE_DATE, ONN.UPDATE_BY, ONN.UPDATE_DATE, ONN.REMARKS
+	  FROM OPERATION_NEWS ONN LEFT JOIN SYS_CODE SC1 ON ONN.TYPE = SC1.SORT AND SC1.CODE = '12'
+	  LEFT JOIN SYS_CODE SC2 ON ONN.IS_RECOMMEND = SC2.SORT AND SC2.CODE = '11'
+	  WHERE 1=1 
+	 <if test="id != null" >
+	      and ONN.id like concat('%',#{id,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="sort != null">
+	      and ONN.sort like concat('%',#{sort,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="isRecommend != null">
+	      and SC2.NAME like concat('%',#{isRecommend,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="title != null" >
+	      and ONN.title like concat('%',#{title,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="summary != null" >
+	      and ONN.summary like concat('%',#{summary,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="type != null" >
+	      and SC1.NAME like concat('%',#{type,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="picUrl1 != null" >
+	      and ONN.pic_url1 like concat('%',#{picUrl1,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="picUrl2 != null" >
+	      and ONN.pic_url2 like concat('%',#{picUrl2,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="picUrl3 != null" >
+	      and ONN.pic_url3 like concat('%',#{picUrl3,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="originalUri != null" >
+	      and ONN.original_uri like concat('%',#{originalUri,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createBy != null" >
+	 	and ONN.create_by like concat('%',#{createBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="createDateStr != null" >
+	 	and ONN.create_date like concat('%',#{createDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateBy != null" >
+	 	and ONN.update_by like concat('%',#{updateBy,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="updateDateStr != null" >
+	 	and ONN.update_date like concat('%',#{updateDateStr,jdbcType=VARCHAR},'%') 
+	 </if>
+	 <if test="remarks != null" >
+	 	and ONN.remarks like concat('%',#{remarks,jdbcType=VARCHAR},'%') 
+	 </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from operation_news
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from operation_news
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteHistoryNews" >
+  	DELETE FROM OPERATION_NEWS
+	WHERE NOT EXISTS (SELECT 1 FROM 
+	(SELECT ID FROM(
+	SELECT ID FROM OPERATION_NEWS
+	ORDER BY IS_RECOMMEND DESC,ID DESC) TTT
+	LIMIT 0,${param2}) TEMP
+	WHERE OPERATION_NEWS.ID = TEMP.ID)
+	AND OPERATION_NEWS.CREATE_DATE <![CDATA[<]]> DATE_SUB(CURDATE(),INTERVAL #{param1,jdbcType=INTEGER} DAY)
+  </delete>
+  <insert id="insert" parameterType="com.gh.model.vo.OperationNews" >
+    insert into operation_news (id, sort, title, summary, type,
+      pic_url1,pic_url2,pic_url3, original_uri, create_by, 
+      create_date, update_by, update_date, is_recommend, content, remarks)
+    values (#{id,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
+      #{type, jdbcType=VARCHAR}, #{picUrl1,jdbcType=VARCHAR}, #{picUrl2,jdbcType=VARCHAR}, #{picUrl3,jdbcType=VARCHAR}, 
+      #{originalUri,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{isRecommend,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gh.model.vo.OperationNews" >
+    insert into operation_news
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      sort,
+      title,
+      summary,
+      content,
+      type,
+      pic_url1,
+      pic_url2,
+      pic_url3,
+      original_uri,
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+      is_recommend
+      remarks,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=VARCHAR},
+      #{sort,jdbcType=VARCHAR},
+      #{title,jdbcType=VARCHAR},
+      #{summary,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR},
+      #{picUrl1,jdbcType=VARCHAR},
+      #{picUrl2,jdbcType=VARCHAR},
+      #{picUrl3,jdbcType=VARCHAR},
+      #{originalUri,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR},
+      #{updateDate,jdbcType=TIMESTAMP},
+      #{isRecommend,jdbcType=VARCHAR},
+      #{remarks,jdbcType=VARCHAR},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gh.model.vo.OperationNews" >
+    update operation_news
+    <set >
+      <if test="sort != null" >
+        sort = #{sort, jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null" >
+        is_recommend = #{isRecommend,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl1 != null" >
+        pic_url1 = #{picUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl2 != null" >
+        pic_url2 = #{picUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl3 != null" >
+        pic_url3 = #{picUrl3,jdbcType=VARCHAR},
+      </if>
+      <if test="originalUri != null" >
+        original_uri = #{originalUri,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gh.model.vo.OperationNews" >
+    update operation_news
+    set sort = #{sort,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      is_recommend = #{isRecommend,jdbcType=VARCHAR},
+      pic_url1 = #{picUrl1,jdbcType=VARCHAR},
+      pic_url2 = #{picUrl2,jdbcType=VARCHAR},
+      pic_url3 = #{picUrl3,jdbcType=VARCHAR},
+      original_uri = #{originalUri,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

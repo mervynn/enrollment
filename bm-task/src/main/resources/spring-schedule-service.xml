@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:task="http://www.springframework.org/schema/task"  
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.1.xsd
+                           http://www.springframework.org/schema/task
+    					   http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+    <!-- 基于DB的计划任务配置 -->
+    <bean id="quartzManagerBean" class="com.gh.util.quartz.QuartzManager">
+        <property name="scheduler" ref="schedulerManager" />
+    </bean>
+    <bean id="quartzManagerJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzManagerBean" />
+        <property name="targetMethod" value="reScheduleJob" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <!-- 主定时计划 -->
+    <bean id="quartzManagerTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="quartzManagerJobDetail" />
+        <!-- 延时1分钟 执行任务 -->
+        <property name="startDelay" value="0" />
+        <!-- 任务执行周期 5分钟 -->
+        <property name="cronExpression" value="0/10 * * * * ?" />
+    </bean>
+    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
+    <bean id="schedulerManager" lazy-init="false" autowire="no"
+        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="quartzManagerTrigger" />
+            </list>
+        </property>
+    </bean>
+</beans>

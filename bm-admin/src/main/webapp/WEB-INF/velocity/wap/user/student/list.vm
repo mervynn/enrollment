@@ -1,0 +1,189 @@
+#set($layout="/wap/user/student/list.vm")
+<html>
+  <head>
+    <title>学生资料管理</title>
+    <meta name="author" content="m.jd.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/base2013.css?v=14" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/address.css?v=14" charset="gbk">
+    <link rel="stylesheet" type="text/css" href="$request.getContextPath()/wap/css/header.css?v=14" charset="utf-8">
+	<link rel="icon" href="$request.getContextPath()/wap/favicon.ico" type="image/x-icon" />
+</head>
+	<style type="text/css">
+		.cart-checkbox {
+        	display: block;
+        	width: 20px;
+        	height: 20px;
+        	margin: 0 auto;
+        	background: url(../../img/shopping.cart.spirits.icns1.png) 0
+        		1px no-repeat;
+        	background-size: 50px 150px
+        }
+        
+        .cart-checkbox.checked {
+        	background-position: -25px 0
+        }
+		
+		.toast-mask {
+        	left: 0;
+        	bottom: 0;
+        	z-index: 999;
+        	display: none
+        }
+        
+        .toast {
+        	top: 50%;
+        	left: 50%;
+        	position: absolute;
+        	padding: .1rem .15rem;
+        	font-size: .14rem;
+        	color: #fff;
+        	border-radius: 2px;
+        	background-color: rgba(0, 0, 0, .8);
+        	-webkit-transform: translate(-50%, -50%);
+        	transform: translate(-50%, -50%)
+        }
+        
+        .maskfadeout {
+        	display: block;
+        	-webkit-animation: fadeout 3s linear;
+        	animation: fadeout 3s linear;
+        	-webkit-animation-iteration-count: 1;
+        	animation-iteration-count: 1
+        }
+    </style>
+  <body id="body">
+    <a name="top"></a>
+    <header>
+      <!-- 通用头 div -->
+      <div id="m_common_header" style="min-height:45px;">
+        <header class="jd-header">
+          <div class="jd-header-bar">
+            <div id="m_common_header_goback" class="jd-header-icon-back">
+              <span></span>
+            </div>
+            <div class="jd-header-title">学生资料管理</div>
+            <div report-eventid="MCommonHead_NavigateButton" report-eventparam="" page_name="" id="m_common_header_jdkey" class="jd-header-icon-shortcut J_ping">
+              <span></span>
+            </div>
+          </div>
+          <ul id="m_common_header_shortcut" class="jd-header-shortcut" style="display: none">
+            <li id="m_common_header_shortcut_m_index">
+              <a class="J_ping" report-eventid="MCommonHead_home" report-eventparam="" page_name="" href="$request.getContextPath()/wap/index.shtml">
+                <span class="shortcut-home"></span>
+                <strong>首页</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_CategorySearch" report-eventparam="" page_name="" id="m_common_header_shortcut_category_search">
+              <a href="$request.getContextPath()/wap/classtype.shtml">
+                <span class="shortcut-categories"></span>
+                <strong>分类搜索</strong></a>
+            </li>
+            <li class="J_ping" report-eventid="MCommonHead_Cart" report-eventparam="" page_name="" id="m_common_header_shortcut_p_cart">
+              <a href="$request.getContextPath()/wap/user/shoppingcart.shtml" id="html5_cart">
+                <span class="shortcut-cart"></span>
+                <strong>选课车</strong></a>
+            </li>
+            <li id="m_common_header_shortcut_h_home" class=" current">
+              <a class="J_ping" report-eventid="MCommonHead_MYJD" report-eventparam="" page_name="" href="$request.getContextPath()/wap/user/center.shtml">
+                <span class="shortcut-my-account"></span>
+                <strong>个人中心</strong></a>
+            </li>
+          </ul>
+        </header>
+      </div>
+    </header>
+    <div class="new-ct">
+      <div class="new-addr">
+        <ul class="new-mu_l2w">
+			#set($url = ".shtml")
+			#foreach($obj in $list)
+				<li class="new-mu_l2">
+					<input type="hidden" value="$!obj.id"/>
+                    <p class="new-tit new-p-re">
+                      <span class="new-txt">$!obj.name</span>
+                      <span class="new-txt-rd2">$!obj.idcardNo</span>
+					  #if($!defaultStudent == $!obj.id)
+						<span class="cart-checkbox checked" style="float:right;margin-right:4em;"></span>
+                        <span name="checked" style="float:right;color:#a40000;margin-right:-5.5em;">默认学生</span>
+					  #else
+						<span class="cart-checkbox" style="float:right;margin-right:4em;"></span>
+					  #end
+                    </p>
+                    <span class="new-mu_l2a new-p-re">
+                      <span class="new-mu_l2cw">$!obj.address</span>
+                      <div class="new-addr-btn">
+                        <a href="./modify/$!obj.id$url">编辑</a>
+                        <span class="new-addr-bar">|</span>
+                        <a onclick="doDeleteInfo('$!obj.id', '$!obj.name');">删除</a></div>
+                    </span>
+                </li>
+			#end
+          
+        </ul>
+        <a  class="new-abtn-type new-mg-tb30" onclick="validBeforeAddStu()">添加学生</a></div>
+    </div>
+	<div class="toast-mask">
+        <div class="toast">
+        </div>
+    </div>
+  </body>
+  <script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+  <script src="$request.getContextPath()/wap/js/common.js"></script>
+  <script type="text/javascript">
+  	$(".cart-checkbox").on("click",function(){
+		if(!$(this).hasClass("checked")){
+			$("span[name='todo']").attr("name","");
+			$(this).attr("name","todo");
+			jQuery.post("../center/setdefaultstudent.shtml",{studentId:$(this).parent().parent().find("input").val()},function(msg){
+				if(JSON.parse(msg).code == 0){
+					$(".checked").next().remove();
+					$(".checked").removeClass("checked");
+					$("span[name='todo']").addClass("checked");
+					$("span[name='todo']").parent().append("<span name='checked' style='float:right;color:#a40000;margin-right:-6em;'>默认学生</span>");
+				}
+			});
+		}
+	});
+	// 添加校验
+	function validBeforeAddStu(){
+		if($("li.new-mu_l2").length>=2){
+			toast("最多只能添加两个学生");
+		}else{
+			location.href="./add.shtml";
+		}
+	}
+	
+	function toast(t) {
+        setTimeout(function() {
+            $(".toast").html(t), $(".toast-mask").show().addClass("maskfadeout")
+        }, 100), clearTimeout(n);
+        var n = setTimeout(function() {
+            clearTimeout(n), $(".toast-mask").hide().removeClass("maskfadeout")
+        }, 3e3);
+        $(".toast-mask").on("click", function() {
+            $(this).hide().removeClass("maskfadeout"), clearTimeout(n)
+        })
+    }
+	
+	function doDeleteInfo(id,name){
+		if(confirm("确认删除"+name+"的学生数据吗？")){
+			// 校验学生数据是否存在于购物车，订单表，报班表中
+			$.post("$request.getContextPath()/wap/user/student/validbeforedelete/"+id+".shtml",function(msg){
+				if(msg == "1"){
+					toast("您的选课车数据未清空，无法删除学生信息！");
+				}else if(msg == "2"){
+					toast("您的订单数据未清空，无法删除学生信息！");
+				}else if(msg == "3"){
+					toast("您的报班数据未清空，无法删除学生信息！");
+				}else{
+					location.href="./delete/"+id+".shtml";
+				}
+			});
+		}
+	}
+  </script>
+  </script>
+</html>

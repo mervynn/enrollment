@@ -1,0 +1,15 @@
+{
+  "name": "jquery-steps",
+  "homepage": "https://github.com/rstaib/jquery-steps",
+  "version": "1.0.4",
+  "_release": "1.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.4",
+    "commit": "d41a105e4a266cd00af07175128153c9a4103181"
+  },
+  "_source": "https://github.com/rstaib/jquery-steps.git",
+  "_target": "~1.0.4",
+  "_originalSource": "https://github.com/rstaib/jquery-steps.git",
+  "_direct": true
+}

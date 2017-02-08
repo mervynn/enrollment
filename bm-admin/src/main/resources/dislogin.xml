@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dislogin>
+    <!-- 首页登录login -->
+	<url>/login.shtml</url>
+	<!-- 退出 -->
+	<url>/logout.shtml</url>
+	<!-- base64方式上传图片 -->
+	<url>/file/base64/upload.shtml</url>
+	<!-- 流方式上传图片 -->
+	<url>/file/stream/upload.shtml</url>
+	<!-- 读取外部图片 -->
+	<url>/file/read.shtml</url>
+	<!-- PJAX -->
+	<url>/base/pjax.shtml</url>
+	<!-- UPLOAD -->
+	<url>/base/upload.shtml</url>
+	<!-- JSOUP -->
+	<url>/base/jsoup.shtml</url>
+</dislogin>

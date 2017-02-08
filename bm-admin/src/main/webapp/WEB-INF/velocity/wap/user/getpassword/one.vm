@@ -1,0 +1,73 @@
+#set($layout="/wap/user/getpassword/one.vm")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="yes" name="apple-touch-fullscreen"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <title>找回密码</title>
+    <link rel="stylesheet" href="../../css/mfindpwd.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon-precomposed" href="../../img/favicon.png"/>
+</head>
+<body>
+    <header id="header" style="display:block;"><span class="icon icon-goback"></span>找回密码</header>
+    <section class="page">
+        <div class="wrap findpwdPage">
+            <div class="input-container">
+                <label class="lable-name" for="username">账号</label>
+                <input id="username" class="acc-input username J_ping" type="text" placeholder="用户名/邮箱/手机号" value="" autocomplete="off" report-eventid="MLoginRegister_FindPasswordUser">
+                <i class="icon icon-clear"></i>
+            </div>
+            <div class="input-container">
+                <input id="imgVerify" class="acc-input imgVerify J_ping" type="text" placeholder="请输入验证码" maxlength="6" report-eventid="MLoginRegister_FindPasswordVerify">
+                <i class="icon icon-clear"></i>
+                <span class="img-code"><img id="imgCode" src="" alt=""></span>
+            </div>
+            <a href="javascript:;" id="sureBtn" class="btn J_ping" report-eventid="MLoginRegister_FindPasswordNext">下一步</a>
+        </div>
+    </section>
+    <div class="toast-mask">
+        <div class="toast">
+        </div>
+    </div>
+</body>
+<script src="../../js/zepto.min.js"></script>
+<script src="../../js/findpwdCommon.min.js"></script>
+<!---找回密码部分公用js-->
+<script>
+var sendData = {};
+$('#sureBtn').on('click', function() {
+    if (!$(this).hasClass('btn-active')) {
+        return false;
+    }else{
+        sendData.name = $.trim($('#username').val());
+        sendData.code = $.trim($('#imgVerify').val());
+        $.ajax({
+            url: './checkaccount.shtml',
+            type: 'post',
+            data : sendData,
+            dataType : 'json',
+            success: function(res) {
+                if(res.code == 0){
+                    window.location = res.succcb;
+                }else{
+                    toast(res.msg);
+                    $('#imgVerify').val('');
+                    $('#sureBtn').removeClass('btn-active');
+                    refreshAuth();
+                }
+            },
+            error: function(err) {
+                toast('网络有问题，请求失败');
+            }
+        });
+    }
+});
+</script>
+<script src="$request.getContextPath()/stilearn2.0/bower_components/jquery/jquery.js"></script>
+<script src="$request.getContextPath()/wap/js/common.js"></script>
+</html>

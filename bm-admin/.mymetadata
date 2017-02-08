@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="bm-admin"
+  id="myeclipse.1470728204183"
+  context-root="/admin"
+  j2ee-spec="6.0"
+  archive="bm-admin.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+
